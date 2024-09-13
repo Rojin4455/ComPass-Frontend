@@ -4,14 +4,15 @@ import Banner from '../../components/User/Home/Banner/Banner';
 import RecommendedMovies from '../../components/User/Home/RecommendedMovies/RecommendedMovies';
 import NowShowing from '../../components/User/Home/NowShowing/NowShowing';
 import ComingSoon from '../../components/User/Home/ComingSoon/ComingSoon';
-import axiosInstance from '../../axiosConfig';
-import { useDispatch,useSelector } from 'react-redux';
+import useAxiosInstance from '../../axiosConfig';
+import { useDispatch } from 'react-redux';
 import { setUser,setError  } from '../../slices/userSlice';
 
 function UserHome() {
   const [data, setData] = useState(null);
-  const user = useSelector((state) => state.user.user)
+  // const user = useSelector((state) => state.user.user)
   const dispatch = useDispatch()
+  const axiosInstance = useAxiosInstance();
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -19,38 +20,14 @@ function UserHome() {
     if (dataString) {
       const parsedData = Object.fromEntries(new URLSearchParams(dataString));
       setData(parsedData);
-      console.log("Received data: ", parsedData);
     }
   }, []);
 
-  // useEffect(() => {
-  //   const setCookie = async () => {
-  //     try {
-  //       const response = await axiosInstance.post('set-token/', {
-  //         'user_id': data['user_id'],
-  //       });
-  //       console.log(response);
-  //       return response;
-  //     } catch (error) {
-  //       console.error("Error setting cookie:", error);
-  //       return null;
-  //     }
-  //   };
-  
-  //   if (data) {
-  //     setCookie().then(response => {
-  //       if (response && response.status === 200) {  // Check response.status
-  //         console.log("Action dispatched in home page", response.data.requestData);
-  //         dispatch(setUser(response.data.requestData));
-
-  //       }
-  //     });
-  //   }
-  // }, [data]);
 
 
   useEffect(() => {
-    const setCookie = async () => {
+    const setToken = async () => {
+      if (data){
       try {
         const response = await axiosInstance.post('set-token/', {
           user_id: data.user_id,
@@ -69,6 +46,7 @@ function UserHome() {
           dispatch(setUser({ user, access_token, refresh_token }));
 
           console.log('Token set and user state updated successfully:', response);
+          window.history.replaceState({}, document.title, window.location.pathname);
         } else {
           // Handle unexpected response status
           console.error('Unexpected response:', response);
@@ -80,9 +58,10 @@ function UserHome() {
         dispatch(setError('Error setting cookie: ' + error.message));
       }
     };
+  }
 
     // Call the setCookie function when the component mounts
-    setCookie();
+    setToken();
   }, [data, dispatch]);
 
 

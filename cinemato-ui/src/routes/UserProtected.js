@@ -1,11 +1,13 @@
 import React from "react";
-import {Navigate,Outlet} from 'react-router-dom';
+import {Navigate,Outlet,useNavigate} from 'react-router-dom';
 import { useSelector } from "react-redux";
 import { jwtDecode } from "jwt-decode";
 
 
-const UserProtectedRoute = ({element}) => {
-
+const UserProtectedRoute = () => {
+    const user = useSelector((state) => state.user)
+    console.log("current user in profile: ",user)
+    const navigate = useNavigate();
     const isTokenExpired = (token) => {
         if (!token) return true; // No token means it's "expired" or invalid
       
@@ -24,14 +26,16 @@ const UserProtectedRoute = ({element}) => {
     const access_token = useSelector((state) => state.user.access_token)
     if (access_token) {
         if (isTokenExpired(access_token)) {
-            
+            console.log("Token is Expired")
+            navigate("/")
         }else{
-            console.log("token is expired")
+            console.log("token is valid");
+            return <Outlet/>;
         }
 
     }else{
         console.log("No Token in user state");
-        <Navigate to='/'/>
+        navigate("/")
     }
 }
 

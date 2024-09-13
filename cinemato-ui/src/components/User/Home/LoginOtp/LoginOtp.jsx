@@ -72,10 +72,9 @@ function LoginOtp({ isOpen, onClose, onSubmit, email, phone }) {
                 const access_token = response.data.token.access
                 const refresh_token = response.data.token.refresh
 
-                console.log("state datas",user,access_token,refresh_token)
                 dispatch(setUser({user,access_token,refresh_token}))
-                console.error('OTP verification Success', response);
-
+                console.log("otp verification success");
+                
 
                 onClose();
             } else {

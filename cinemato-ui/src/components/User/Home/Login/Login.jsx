@@ -10,10 +10,8 @@ function Login({ isOpen, onClose, onSubmit }) {
   const [phone, setPhone] = useState('');
   const [error, setError] = useState('');
   const axiosInstance = useAxiosInstance();
-  console.log("DEDE");
-  console.log("client id: ",process.env.REACT_APP_GOOGLE_OAUTH2_CLIENT_ID);
+
   const REDIRECT_URI = 'auth/api/login/google/';
-  console.log("google url: ",process.env.REACT_APP_BASE_API_URL,REDIRECT_URI);
   
   
   
@@ -28,7 +26,6 @@ function Login({ isOpen, onClose, onSubmit }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-    console.log("first submit");
     
     // Validate email and phone
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -86,7 +83,7 @@ function Login({ isOpen, onClose, onSubmit }) {
     
     const GOOGLE_AUTH_URL = 'https://accounts.google.com/o/oauth2/v2/auth';
     const REDIRECT_URI = 'auth/api/login/google/';
-  
+    
     const scope = [
       'https://www.googleapis.com/auth/userinfo.email',
       'https://www.googleapis.com/auth/userinfo.profile'
@@ -95,7 +92,7 @@ function Login({ isOpen, onClose, onSubmit }) {
     const params = {
       response_type: 'code',
       client_id: process.env.REACT_APP_GOOGLE_OAUTH2_CLIENT_ID,
-      redirect_uri: `${process.env.REACT_APP_BASE_API_URL}/${REDIRECT_URI}`,
+      redirect_uri: `${process.env.REACT_APP_BASE_API_URL}${REDIRECT_URI}`,
       prompt: 'select_account',
       access_type: 'offline',
       scope

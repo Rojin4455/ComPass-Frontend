@@ -4,6 +4,7 @@ import storage from 'redux-persist/lib/storage'; // Default to localStorage for 
 
 const initialState = {
     user: null,
+    profilePhoto: null,
     status: 'anonymous',
     error: null,
     access_token: null,
@@ -15,16 +16,19 @@ const userSlice = createSlice({
     initialState,
     reducers: {
         setUser: (state, action) => {
-            state.user = action.payload.user;
-            state.status = 'logined';
-            state.access_token = action.payload.access_token;
-            state.refresh_token = action.payload.refresh_token;
+            state.user = action.payload.user || state.user;
+            state.status = 'login';
+            state.access_token = action.payload.access_token || state.access_token;
+            state.refresh_token = action.payload.refresh_token || state.refresh_token;
+            state.profilePhoto = action.payload.profilePhoto || state.profilePhoto;
         },
         clearUser: (state) => {
             state.user = null;
             state.status = 'anonymous';
             state.access_token = null;
             state.refresh_token = null;
+            state.profilePhoto = null
+
         },
         setLoading: (state) => {
             state.status = 'loading';

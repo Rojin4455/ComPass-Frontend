@@ -52,19 +52,9 @@ function Header() {
   };
 
   const handleProfile = async () => {
-    console.log('erllll',axiosInstance)
-    try {
-      const response =await axiosInstance.post('test/')
-      console.log("responseee",response)
-      if (response.status === 200){
-        console.log('success in user profile')
+
         navigate('/profile')
-      }else{
-        console.log("User is not authorised")
-      }
-    }catch(error){
-      console.log("something went wrongggggggggggggg", error)
-    }
+
   }
 
   return (
@@ -116,8 +106,9 @@ function Header() {
                 className="px-4 py-2 bg-third text-black rounded-full"
                 onClick={handleProfile}
               >
-                Hey, {user.user.email.split('@')[0]}
-              </button>
+                
+                Hey, {(user.user.username ? user.user.username : user.user.email?user.user.email.split("@")[0]:"")}
+                </button>
             ) : (
               <button
                 onClick={handleLogin}

@@ -2,7 +2,7 @@ import React from 'react'
 import { BrowserRouter as Router } from 'react-router-dom';
 import UserRoutes from './routes/UserRoutes';
 import { GoogleOAuthProvider } from '@react-oauth/google';
-
+import AdminRoutes from './routes/AdminRoutes';
 
 function App() {
   const apiUrl = process.env.REACT_APP_BASE_URL;
@@ -14,6 +14,7 @@ function App() {
   <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
     <Router>
       <UserRoutes/>
+      <AdminRoutes/>
     </Router>
   </GoogleOAuthProvider>
     
