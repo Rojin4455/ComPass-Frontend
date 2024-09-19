@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import useAxiosInstance from '../../../axiosConfig';
 import { createListenerMiddleware } from '@reduxjs/toolkit';
 import { FaUserCircle, FaCamera } from 'react-icons/fa';
+import Loading from '../AdminAddMovies/Loading';
 
 
 function AdminUsersList() {
@@ -11,6 +12,9 @@ function AdminUsersList() {
   const axiosInstance = useAxiosInstance();
   const BASE_URL = process.env.REACT_APP_BASE_API_URL;
   const [totalPages,setTotalPages] = useState(0)
+  const [userStatus,setUserStatus] = useState(false)
+  const [totalCount,setTotalCount] = useState(0)
+  const [loading, setLoading] = useState(false)
   console.log("users: ",users);
   
 
@@ -29,6 +33,7 @@ function AdminUsersList() {
     const fetchUsers = async () =>{
     
     try{
+        setLoading(true)
         const response = await axiosInstance.post('/admin/allusers/',{
           "currentPage":currentPage,
           'usersPerPage':usersPerPage,
@@ -38,30 +43,35 @@ function AdminUsersList() {
             console.log("Success",response.data)
             setUsers(response.data.allUsers)
             setTotalPages(Math.ceil(response.data.totalCount/usersPerPage))
+            setTotalCount(response.data.totalCount)
         }else{
             console.log("error response",response)
         }
     }catch(error){
         console.error("something went wrong",error)
+    }finally{
+      setLoading(false)
     }
 }
     fetchUsers();
-  },[currentPage])
+  },[currentPage,userStatus])
   // Handle status change
   const handleStatusChange = (userId) => {
 
     const changeStatus = async () => {
       try {
-        const response = await axiosInstance.put(`/admin/set-status/${userId}`);
+        console.log("user id in frontend: ",userId)
+        const response = await axiosInstance.put(`/admin/change-status/${userId}/`);
         
         if (response.status === 200) {
           console.log("Status changed successfully");
           
+          userStatus ? setUserStatus(false) : setUserStatus(true)
           // Update the local state only after a successful response
           setUsers((prevUsers) =>
             prevUsers.map((user) =>
               user.id === userId
-                ? { ...user, status: user.status === 'Active' ? 'Blocked' : 'Active' }
+                ? { ...user, status: user.is_active === false ? 'Blocked' : 'Active' }
                 : user
             )
           );
@@ -81,11 +91,16 @@ function AdminUsersList() {
   return (
     <div className="p-4">
       {/* Header section */}
+     {loading?( 
+      <Loading loading={loading}/>
+    ):(
+      <>
       <div className="flex justify-between items-center mb-4">
         <button className="text-lg font-semibold px-4 py-2 bg-gray-200 rounded-md">
-          All ({users.length}) ▼
+          All ({totalCount}) ▼
         </button>
       </div>
+      
 
       {/* Users Table */}
       <div className="overflow-x-auto">
@@ -123,20 +138,20 @@ function AdminUsersList() {
                 )}
             </td>
 
-                <td className="px-4 py-2">{user.email}</td>
+                <td className="px-4 py-2">{user.email?user.email:"N.A"}</td>
                 <td className="px-4 py-2">{new Date(user.date_joined).toLocaleDateString()}</td>
                 <td className="px-4 py-2">{user.phone?user.phone:"N.A"}</td>
-                <td className="px-4 py-2 text-primary">{user.is_active?"True":"False"}</td>
+                <td className="px-4 py-2 text-primary">{user.is_active?"Active":"Inctive"}</td>
                 <td className="px-4 py-2">
                   <button
                     className={`px-4 py-2 rounded-md ${
-                      user.status === 'Active'
+                      user.is_active === true
                         ? 'bg-red-700 text-white'
                         : 'bg-green-700 text-white'
                     }`}
                     onClick={() => handleStatusChange(user.id)}
                   >
-                    {user.status === 'Active' ? 'Block' : 'Unblock'}
+                    {user.is_active === true ? 'Block' : 'Unblock'}
                   </button>
                 </td>
               </tr>
@@ -159,6 +174,8 @@ function AdminUsersList() {
           </button>
         ))}
       </div>
+      </>
+      )}
     </div>
   );
 }

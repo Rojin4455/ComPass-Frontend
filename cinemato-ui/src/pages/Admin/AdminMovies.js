@@ -1,5 +1,7 @@
 import React from 'react'
 import Header from '../../components/Admin/Header/Header'
+// import AdminMovies from '../../components/Admin/AdminListedMovies/AdminListedMovies'
+import AdminListedMovies from '../../components/Admin/AdminListedMovies/AdminListedMovies'
 
 
 function AdminMovies() {
@@ -7,7 +9,7 @@ function AdminMovies() {
     <div>
       <Header page="admin/movies/"/>
       <div className='pt-20'>
-      <p>Hello movies </p>
+      <AdminListedMovies/>
         
         </div>
       

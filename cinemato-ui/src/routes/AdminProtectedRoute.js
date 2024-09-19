@@ -6,7 +6,8 @@ import { jwtDecode } from "jwt-decode";
 
 const AdminProtectedRoute = () => {
   const user = useSelector((state) => state.user);
-  const access_token = user?.access_token;  // Get access_token from user state
+  const access_token = user?.access_token; // Get access_token from user state
+  const is_admin = user?.is_admin
   const navigate = useNavigate();
 
   const isTokenExpired = (token) => {
@@ -31,6 +32,9 @@ const AdminProtectedRoute = () => {
     } else if (isTokenExpired(access_token)) {
       console.log("Token is Expired");
       navigate("/");  // Redirect to homepage or login if token is expired
+    } else if(!is_admin) {
+      console.log("User have no permission to access adminside")
+      navigate('/')
     }
   }, [access_token, navigate]);
 

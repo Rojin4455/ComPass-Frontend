@@ -1,9 +1,14 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
 import useAxiosInstance from '../../axiosConfig'
 import { setUser,clearUser } from '../../slices/userSlice';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import {jwtDecode} from 'jwt-decode';
+
+
+
 
 
 
@@ -21,8 +26,25 @@ function AdminLogin() {
   const axiosInstance = useAxiosInstance();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const token = useSelector((state) => state.user?.access_token)
 
+  useEffect(() => {
 
+    if (token) {
+      // Decode the token to check its expiration
+      const decodedToken = jwtDecode(token);
+      const currentTime = Math.floor(Date.now() / 1000); // Current time in seconds
+
+      if (decodedToken.exp < currentTime) {
+        // Token is expired, remove it and navigate to the login page
+        dispatch(clearUser());
+        
+      } else {
+        // Token is valid, navigate to the home page
+        navigate('/admin/home');
+      }
+    }
+  },[])
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -63,8 +85,9 @@ function AdminLogin() {
           const user = response.data.email
           const access_token = response.data.access
           const refresh_token = response.data.refresh
+          const is_admin = response.data.is_admin
 
-          dispatch(setUser({user,access_token,refresh_token}))
+          dispatch(setUser({user,access_token,refresh_token,is_admin}))
           console.log("otp verification success");
           navigate('home/')
           

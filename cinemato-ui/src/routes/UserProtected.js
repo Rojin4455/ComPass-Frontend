@@ -27,7 +27,7 @@ const UserProtectedRoute = () => {
     if (access_token) {
         if (isTokenExpired(access_token)) {
             console.log("Token is Expired")
-            navigate("/")
+            navigate("/", { replace: true })
         }else{
             console.log("token is valid");
             return <Outlet/>;

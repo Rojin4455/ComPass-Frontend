@@ -5,19 +5,21 @@ import { combineReducers } from 'redux';
 import { persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage'; // Default to localStorage for web
 import userProfileReducer from '../slices/userProfileSlice';
+import adminFilterReducer from '../slices/adminMovieFilterSlice'
 
 
 // Combine reducers if you have more slices
 const rootReducer = combineReducers({
     user: userReducer,
     userprofile: userProfileReducer,
+    adminfilter:adminFilterReducer
 });
 
 // Create persist configuration
 const persistConfig = {
     key: 'root',
     storage,
-    whitelist: ['user','userProfile'], // Only persist the user slice
+    whitelist: ['user','userProfile','adminfilter'], // Only persist the user slice
 };
 
 

@@ -9,6 +9,7 @@ const initialState = {
     error: null,
     access_token: null,
     refresh_token: null,
+    is_admin: null
 };
 
 const userSlice = createSlice({
@@ -21,6 +22,7 @@ const userSlice = createSlice({
             state.access_token = action.payload.access_token || state.access_token;
             state.refresh_token = action.payload.refresh_token || state.refresh_token;
             state.profilePhoto = action.payload.profilePhoto || state.profilePhoto;
+            state.is_admin = action.payload.is_admin || state.is_admin;
         },
         clearUser: (state) => {
             state.user = null;
@@ -28,6 +30,7 @@ const userSlice = createSlice({
             state.access_token = null;
             state.refresh_token = null;
             state.profilePhoto = null
+            state.is_admin = null
 
         },
         setLoading: (state) => {
