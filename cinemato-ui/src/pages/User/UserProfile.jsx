@@ -36,7 +36,7 @@ function UserProfile() {
   }
 
   userProfile();
-  })
+  },[])
   
 
   const renderProfileContent = () => {

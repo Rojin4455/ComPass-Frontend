@@ -56,8 +56,9 @@ function Login({ isOpen, onClose, onSubmit }) {
         } else if (phone) {
           requestData.phone = phone;
         }
+        console.log(requestData)
         const response = await axiosInstance.post('request-otp/',requestData);
-        console.log("response",response.status);
+        console.log("response");
         
         if (response.status === 200) {
             console.log("submitted successfully");
@@ -70,7 +71,7 @@ function Login({ isOpen, onClose, onSubmit }) {
             setError('Failed to send OTP. Please try again.');
         }
     } catch (error) {
-        console.error('Error sending OTP:', error);
+        console.error('Error sending OTP:', error.response);
         setError('Failed to send OTP. Please try again.');
     }
 

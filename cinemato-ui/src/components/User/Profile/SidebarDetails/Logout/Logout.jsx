@@ -6,6 +6,8 @@ import { clearUser } from '../../../../../slices/userSlice';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import {setContent} from '../../../../../slices/userProfileSlice'
+import { persistor } from '../../../../../store/store';
+import { store } from '../../../../../store/store';
 
 function Logout() {
     const axiosInstance = useAxiosInstance();
@@ -20,14 +22,17 @@ function Logout() {
                 if(response.status === 200) {
                     
                     dispatch(clearUser())
-                    dispatch(setContent('personalDetails'))
+                    console.log("State after clearUser:", store.getState());
+                    localStorage.removeItem('persist:root');
+                    await persistor.purge()
+                    // dispatch(setContent('personalDetails'))
                     console.log("logout successfully : ",response)
                     navigate('/')
                 }else{
                     console.log("something went wrong",response)
                 }
             }catch(error){
-                console.log("erroe happens: ",error);
+                console.log("error happens: ",error);
                 
             }
         }

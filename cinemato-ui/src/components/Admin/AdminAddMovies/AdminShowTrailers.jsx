@@ -20,7 +20,7 @@ function AdminShowTrailers({showTrailer,selectedTrailer,handleCloseModal}) {
                     <div className="relative w-full h-full">
                         <iframe
                             src={`https://www.youtube.com/embed/${selectedTrailer.key}?autoplay=1`}
-                            title={selectedTrailer.name}
+                            title={selectedTrailer}
                             className="w-full h-full"
                             frameBorder="0"
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"

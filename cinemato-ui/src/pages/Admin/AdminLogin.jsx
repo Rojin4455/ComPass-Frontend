@@ -6,6 +6,7 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import {jwtDecode} from 'jwt-decode';
+import { toast } from 'react-toastify';
 
 
 
@@ -85,17 +86,20 @@ function AdminLogin() {
           const user = response.data.email
           const access_token = response.data.access
           const refresh_token = response.data.refresh
-          const is_admin = response.data.is_admin
+          const is_admin = true
 
           dispatch(setUser({user,access_token,refresh_token,is_admin}))
+          toast.success("Successfully logging in")
           console.log("otp verification success");
           navigate('home/')
           
         }else{
           console.log("failed response: ",response)
+          toast.error("Something went wrong")
         }
       }catch(error){
         console.error("something went wrong: ",error)
+        toast.error("something went wrong")
       }
     }
 

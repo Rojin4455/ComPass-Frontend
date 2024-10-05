@@ -53,7 +53,7 @@ function Header() {
 
   const handleProfile = async () => {
 
-        navigate('/profile')
+        navigate('profile/')
 
   }
 

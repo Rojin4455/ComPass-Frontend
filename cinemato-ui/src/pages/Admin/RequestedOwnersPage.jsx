@@ -1,17 +1,15 @@
 import React from 'react'
 import Header from '../../components/Admin/Header/Header'
-import ListTheaterOwners from '../../components/Admin/ThraterOwners/ListTheaterOwners'
-
-function AdminTheater() {
+import RequestedOwnersList from '../../components/Admin/ThraterOwners/RequestedOwnersList'
+function RequestedOwnersPage() {
   return (
     <div>
       <Header page="admin/theaters/"/>
       <div className='pt-20'>
-      <ListTheaterOwners/>  
+        <RequestedOwnersList/>
         </div>
-      
     </div>
   )
 }
 
-export default AdminTheater
+export default RequestedOwnersPage

@@ -3,7 +3,9 @@ import 'tailwindcss/tailwind.css';
 import useAxiosInstance from '../../../../axiosConfig';
 import { useDispatch, useSelector } from 'react-redux';
 import { setUser,clearUser } from '../../../../slices/userSlice';
-
+// import { toast } from 'react-toastify';
+import {toast} from 'sonner'
+// import ToastNotifier from '../../../../utils/ToastNotifier'
 
 
 
@@ -71,18 +73,24 @@ function LoginOtp({ isOpen, onClose, onSubmit, email, phone }) {
                 const user = response.data.requestData
                 const access_token = response.data.token.access
                 const refresh_token = response.data.token.refresh
-                const is_admin = response.data.requestData.is_admin
-                dispatch(setUser({user,access_token,refresh_token,is_admin}))
+                const is_user = true
+                
+                dispatch(setUser({user,access_token,refresh_token,is_user}))
                 console.log("otp verification success");
+                toast.success("OTP verification success"); // Success toast
+                onClose();
+
                 
 
                 onClose();
             } else {
                 // Handle any error messages from the response
                 console.error('OTP verification failed:', response.data.message);
+                toast.error(`OTP verification failed: ${response.data.message}`);
             }
         } catch (error) {
             console.error('Error submitting OTP:', error);
+            toast.error(`${error.response.data.message}`);
         }
     }
 
@@ -116,7 +124,7 @@ function LoginOtp({ isOpen, onClose, onSubmit, email, phone }) {
                 
                  // Directly call the afterSubmit function
             } else {
-                console.error('OTP Resend failed:', response.data.message);
+                console.error('OTP Resend failed:', response.response.data.message);
             }
         } catch (error) {
             console.error('Error resending OTP:', error);

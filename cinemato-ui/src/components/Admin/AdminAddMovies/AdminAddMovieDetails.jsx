@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import useAxiosInstance from '../../../axiosConfig';
+import useAxiosInstance from '../../../axiosBaseConfig';
+import useAxiosConfigInstance from '../../../axiosConfig';
 import { IoClose } from "react-icons/io5";
 
 import AdminShowTrailers from './AdminShowTrailers';
@@ -8,9 +9,11 @@ import ShowCastAndCrew from './ShowCastAndCrew';
 import { FaRegPlayCircle } from "react-icons/fa";
 import Loading from './Loading';
 import { MdTranslate } from 'react-icons/md';
+import { toast } from 'sonner';
 
 function AdminAddMovieDetails() {
     const axiosInstance = useAxiosInstance();
+    const AxiosConfigInstance = useAxiosConfigInstance()
     const { id } = useParams();
     const [movie, setMovie] = useState(null); // State to store movie data
     const [trailers, setTrailer] = useState([]); // State to store trailers
@@ -26,7 +29,7 @@ function AdminAddMovieDetails() {
     const visibleCast = showAllCast ? castAndCrew.cast : castAndCrew.cast.slice(0, 10);
     const visibleCrew = showAllCrew ? castAndCrew.crew : castAndCrew.crew.slice(0, 10);
 
-    const [isMovieListed, setIsMovieListed] = useState(true);
+    const [isMovieListed, setIsMovieListed] = useState(false);
 
     useEffect(() => {
         const fetchMovieById = async (movieId) => {
@@ -34,7 +37,6 @@ function AdminAddMovieDetails() {
                 const movieResponse = await axiosInstance.get(`https://api.themoviedb.org/3/movie/${movieId}?api_key=7cedc204afadbacc97f11b62930feaa3`);
                 if (movieResponse.status === 200) {
                     setMovie(movieResponse.data);
-                    console.log("movie datas: ",movieResponse.data);
                     
                 } else {
                     console.log("Error response", movieResponse);
@@ -46,7 +48,6 @@ function AdminAddMovieDetails() {
                     const playableTrailer = trailersResponse.data.results.find(trailer => trailer.site === "YouTube" && trailer.type === "Trailer");
                     if (playableTrailer) {
                         setTrailer(playableTrailer);
-                        console.log("trailer: ",playableTrailer);
                         
                     } else {
                         console.log("No playable trailers found.");
@@ -64,7 +65,6 @@ function AdminAddMovieDetails() {
                     // castAndCrew.filter((cast.) => {
 
                     // })
-                    console.log('cast and crew',castAndCrewResponse.data)
                 } else {
                     console.log("Error response", castAndCrewResponse);
                 }
@@ -79,6 +79,26 @@ function AdminAddMovieDetails() {
 
         fetchMovieById(id);
     }, []);
+
+
+
+    // useEffect(() => {
+    //   const IsMovieListed = async () => {
+    //     try {
+    //       const response = await axiosInstance.get(`movie/check-movie/${id}`);
+    //       if (response.status === 200) {
+    //         setIsMovieListed(false);  // Movie is not listed
+    //       } else if (response.status === 202) {
+    //         setIsMovieListed(true);   // Movie is listed
+    //       }
+    //     } catch (error) {
+    //       console.error("Something went wrong:", error.message || error);
+    //     }
+    //   };
+    
+    //   IsMovieListed();  // Corrected function call
+    // }, [movie]);
+    
 
     // Handle loading state
     if (loading) {
@@ -123,9 +143,29 @@ function AdminAddMovieDetails() {
         if (!isMovieListed){
         handleToggleMovieList();
         }else{
-
+        handleToggleMovieUnList();
         }
       };
+
+    const handleToggleMovieUnList = async () => {
+      try{
+        const response = await AxiosConfigInstance.post('movie/remove-movie/',{
+          id:tmdb_id
+        })
+        if (response.status === 200){
+          console.log("movie unlisted successfully",response);
+          toast.success("movie unlisted successfully")
+          
+        }else{
+          console.error("error response", response)
+          toast.error("something went wrong")
+        }
+
+      }catch(error){
+        console.error("error response in catch",error)
+        toast.error("Something Went Wrong")
+      }
+    }
 
 
     const handleToggleMovieList = async () => {
@@ -169,7 +209,7 @@ function AdminAddMovieDetails() {
             })),
       ];
 
-      const video_key = selectedTrailer?.key? selectedTrailer.key : null
+      const video_key = trailers?.key? trailers.key : null
 
       const backdroprUrl = `https://image.tmdb.org/t/p/original${backdrop_path}`
       const posterUrl = `https://image.tmdb.org/t/p/w500${poster_path}`
@@ -177,7 +217,7 @@ function AdminAddMovieDetails() {
 
 
         try{
-            const response = await axiosInstance.post('movie/add-movie/',{
+            const response = await AxiosConfigInstance.post('movie/add-movie/',{
                 title,
                 tmdb_id,
                 release_date,
@@ -195,12 +235,20 @@ function AdminAddMovieDetails() {
 
             if (response.status === 201){
               console.log("Movie Addedd Successfully")
-            
-            }else{
-              console.error("error response", response)
+              toast.success("Movie Listed Successfully")
+
             }
-        }catch{
-          console.error("something went wrong")
+
+        }catch(error){
+
+        if(error.response && error.response.status === 409){
+          console.log("movie is already listed",error)
+          toast.error(error.response.data.message)
+        }else{
+          toast.error("Something Went Wrong!")
+
+          console.error("error response", error)
+        }
 
         }
 

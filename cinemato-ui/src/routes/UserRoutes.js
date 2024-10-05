@@ -8,11 +8,7 @@ function UserRoutes() {
   return (
     <Routes>
         <Route path='/' element={<UserHome/>}/>
-          <Route element={ <UserProtectedRoute/> }>
-            <Route path='profile/' element={ <UserProfile/>} />
-
-          <Route/>
-        </Route>
+            <Route path='/profile' element={ <UserProtectedRoute><UserProfile/></UserProtectedRoute>} />
     </Routes>
   )
 }

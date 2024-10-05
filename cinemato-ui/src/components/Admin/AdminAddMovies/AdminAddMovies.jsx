@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import useAxiosInstance from '../../../axiosConfig'; // Adjust path as needed
+import useAxiosInstance from '../../../axiosBaseConfig'; // Adjust path as needed
 import { IoFilter } from "react-icons/io5";
 import { useSelector,useDispatch } from 'react-redux';
 import { MdFormatListBulletedAdd } from "react-icons/md";
@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { getGenreNames, getLanguageName } from '../../../utils/genreAndLanguageUtils';
 import AdminFilterMovies from './AdminFilterMovies';
 import Loading from './Loading';
+// import axios from 'axios';
 
 
 function AdminAddMovies() {

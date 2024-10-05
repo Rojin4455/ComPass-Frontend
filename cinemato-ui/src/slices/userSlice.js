@@ -9,7 +9,9 @@ const initialState = {
     error: null,
     access_token: null,
     refresh_token: null,
-    is_admin: null
+    is_admin: null,
+    is_user:null,
+    is_owner:null,
 };
 
 const userSlice = createSlice({
@@ -23,6 +25,9 @@ const userSlice = createSlice({
             state.refresh_token = action.payload.refresh_token || state.refresh_token;
             state.profilePhoto = action.payload.profilePhoto || state.profilePhoto;
             state.is_admin = action.payload.is_admin || state.is_admin;
+            state.is_user = action.payload.is_user || state.is_user;
+            state.is_owner = action.payload.is_owner || state.is_owner;
+            
         },
         clearUser: (state) => {
             state.user = null;
@@ -31,7 +36,8 @@ const userSlice = createSlice({
             state.refresh_token = null;
             state.profilePhoto = null
             state.is_admin = null
-
+            state.is_user = null
+            state.is_owner = null
         },
         setLoading: (state) => {
             state.status = 'loading';

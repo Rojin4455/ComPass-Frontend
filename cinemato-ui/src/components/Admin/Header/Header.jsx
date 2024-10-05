@@ -6,13 +6,18 @@ import { MdPerson, MdLocationPin } from "react-icons/md";
 import { FaTheaterMasks } from "react-icons/fa";
 import { IoIosArrowDown } from "react-icons/io";
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { clearUser } from '../../../slices/userSlice';
+import useAxiosInstance from '../../../axiosConfig';
 
 function Header(props) {
   // const [selectedOption, setSelectedOption] = useState('Home');
   const navigate = useNavigate();
   const {page} = props;
+  const [showModal,setShowModal] = useState(false)
+  const axiosInstance = useAxiosInstance();
+  const dispatch = useDispatch()
 
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   
   const handleSelect = (option) => {
@@ -23,12 +28,34 @@ function Header(props) {
   const handleProfileClick = () => {
     // Add logic to navigate to profile or open profile menu
     console.log('Admin profile clicked');
-    setIsDropdownOpen(!isDropdownOpen); // Toggle dropdown
+    
+    
 
   };
 
   const handleLogout=()=>{
     console.log("logout clicked")
+    setShowModal(true)
+  }
+
+  const handleLogoutConfirm= async ()=>{
+    console.log("user logounte");
+    try{
+      const response = await axiosInstance.post("user/logout/")
+      
+      if(response.status === 200) {
+          
+          dispatch(clearUser())
+          console.log("logout successfully : ",response)
+          navigate('/admin/')
+      }else{
+          console.log("something went wrong",response)
+      }
+  }catch(error){
+      console.log("erroe happens: ",error);
+      
+  }
+    
   }
 
   return (
@@ -78,16 +105,16 @@ function Header(props) {
         {/* Right side: Admin Profile */}
         <div className="relative flex items-center gap-4">
   <button
-    onClick={handleProfileClick}
-    className="flex items-center gap-2 px-3 py-2 bg-third text-black rounded-full"
+    onClick={handleLogout}
+    className="flex items-center gap-2 px-3 py-2 bg-danger text-white rounded-full"
   >
-    <MdPerson />
-    Admin
-    <IoIosArrowDown />
+    {/* <MdPerson /> */}
+    Logout
+    {/* <IoIosArrowDown /> */}
   </button>
 
   {/* Dropdown menu */}
-  {isDropdownOpen && (
+  {/* {isDropdownOpen && (
     <div className="absolute mt-1 w-36 bg-white rounded-md shadow-lg right-0">
       <button
         className="absolute top-2 right-2 text-gray-400 hover:text-gray-600"
@@ -107,12 +134,38 @@ function Header(props) {
         </li>
       </ul>
     </div>
-  )}
+  )} */}
+</div>
+<div className='ml-8'>
+<MdPerson size={35} className='text-white' onClick={handleProfileClick}/>
 </div>
 
 
   
       </nav>
+
+      {showModal && (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+        <div className="bg-white p-6 rounded shadow-md">
+            <h2 className="text-lg font-bold mb-4">Confirm Logout</h2>
+            <p>Are you sure you want to log out?</p>
+            <div className="flex justify-end mt-4">
+                <button
+                    className="bg-gray-300 px-4 py-2 rounded mr-2"
+                    onClick={() => setShowModal(false)} // Close modal on "No"
+                >
+                    No
+                </button>
+                <button
+                    className="bg-primary text-white px-4 py-2 rounded"
+                    onClick={handleLogoutConfirm} // Call logout on "Yes"
+                >
+                    Yes
+                </button>
+            </div>
+        </div>
+    </div>
+)}
     </header>
   );
 }
