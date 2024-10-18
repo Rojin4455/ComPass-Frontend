@@ -1,0 +1,18 @@
+
+.sonner-toast-success .sonner-toast-content {
+    color: #22c55e;
+  }
+  
+  
+  .sonner-toast-warning .sonner-toast-content {
+    color: #fbbf24;
+  }
+  
+  .sonner-toast-error .sonner-toast-content {
+    color: #ef4444;
+  }
+  
+  .sonner-toast-info .sonner-toast-content {
+    color: #3b82f6;
+  }
+  

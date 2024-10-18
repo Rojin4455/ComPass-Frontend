@@ -1,19 +1,22 @@
 import React,{useState} from 'react'
 import { IoHome } from "react-icons/io5";
 import { MdLocalMovies } from "react-icons/md";
-import { MdPerson } from "react-icons/md";
+import { FaCircleUser } from "react-icons/fa6";
 import { GiTheater } from "react-icons/gi";
 import { IoFastFoodOutline } from "react-icons/io5";
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import useAxiosInstance from '../../../axiosConfig';
 import { clearUser } from '../../../slices/userSlice';
+import ProfileModal from './ProfileModal';
 
 function Header(props) {
 
   const navigate = useNavigate();
   const {page} = props;
   console.log("page: ",page);
+  const email = useSelector((state) => state.user.user)
+  console.log("email: ",email)
   
   const [showModal,setShowModal] = useState(false)
   const axiosInstance = useAxiosInstance();
@@ -96,7 +99,7 @@ function Header(props) {
         {/* Center: Logo */}
         <div className=" flex-col">
             <img
-              src="../../assets/logo-new1.png"
+              src="/assets/logo-new1.png"
               alt="Logo"
               className="w-40"
             />
@@ -133,25 +136,27 @@ function Header(props) {
   )} */}
 </div>
 <div className='flex items-center'>
-  <button
+  {/* <button
     onClick={handleLogout}
     className="gap-2 px-3 py-2 bg-danger text-white rounded-full"
   >
-    {/* <MdPerson /> */}
     Logout
-    {/* <IoIosArrowDown /> */}
-  </button>
-<div className='ml-8'>
-<MdPerson size={35} className='text-black' onClick={handleProfileClick}/>
+  </button> */}
+{/* <div>
+<FaCircleUser size={35} className='text-black cursor-pointer text-primary'  onClick={() => setShowModal(true)}/>
+</div> */}
+{/* {showModal && ( */}
+<ProfileModal email={email} onLogout={handleLogoutConfirm} />
+{/* )} */}
 </div>
-</div>
+
 
 
 
   
       </nav>
 
-      {showModal && (
+      {/* {showModal && (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
         <div className="bg-white p-6 rounded shadow-md">
             <h2 className="text-lg font-bold mb-4">Confirm Logout</h2>
@@ -172,7 +177,7 @@ function Header(props) {
             </div>
         </div>
     </div>
-)}
+)} */}
     </header>
   );
 }

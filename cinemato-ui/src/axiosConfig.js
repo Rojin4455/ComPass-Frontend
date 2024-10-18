@@ -10,7 +10,6 @@ const useAxiosInstance = () => {
   const access_token = useSelector((state) => state.user.access_token);
   const refresh_token = useSelector((state) => state.user.refresh_token);
   const {is_admin,is_user,is_owner} = useSelector((state) => state.user)
-  console.log("admin user theater", is_admin,is_user,is_owner);
   
   const dispatch = useDispatch();
   const navigate = useNavigate(); // Hook to navigate to different routes
@@ -20,8 +19,8 @@ const useAxiosInstance = () => {
   });
 
 
+
   const getCsrfToken = () => {
-    console.log("csrf:",Cookies.get('csrftoken'))
     return Cookies.get('csrftoken'); // This reads the csrftoken from cookies
   };
   // Request Interceptor

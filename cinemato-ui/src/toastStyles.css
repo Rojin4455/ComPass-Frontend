@@ -1,0 +1,40 @@
+.warning-toast {
+  background-color: #fff3cd; 
+  border-left: 4px solid #ffc107; 
+  color: #856404;
+  padding: 12px;
+  border-radius: 4px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.success-toast {
+  background-color: #d4edda; 
+  border-left: 4px solid #28a745;
+  color: #155724; 
+  padding: 12px;
+  border-radius: 4px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.error-toast {
+  background-color: #f8d7da; 
+  border-left: 4px solid #dc3545; 
+  color: #721c24; 
+  padding: 12px;
+  border-radius: 4px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.default-toast {
+  background-color: #e2e3e5; 
+  border-left: 4px solid #6c757d; 
+  color: #383d41;
+  padding: 12px;
+  border-radius: 4px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.toast-text {
+  font-weight: bold;
+  font-size: 16px;
+}

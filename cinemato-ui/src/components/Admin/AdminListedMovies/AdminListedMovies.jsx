@@ -7,8 +7,9 @@ import { useNavigate } from "react-router-dom";
 import { RiFunctionAddLine } from "react-icons/ri";
 import Loading from "../AdminAddMovies/Loading";
 import { RiDeleteBin3Fill } from "react-icons/ri";
-import { toast } from "sonner";
+// import { toast } from "sonner";
 import AdminListedMovieDetails from "./AdminListedMovieDetails";
+import showToast from "../../../utils/ToastNotifier";
 
 
 function AdminMovies() {
@@ -71,16 +72,16 @@ function AdminMovies() {
       })
       if (response.status === 200){
         console.log("movie unlisted successfully",response);
-        toast.success("movie removed successfully")
+        showToast("success","movie removed successfully")
         setIsRemoved(true)        
       }else{
         console.error("error response", response)
-        toast.error("something went wrong")
+        showToast("error","something went wrong")
       }
 
     }catch(error){
       console.error("error response in catch",error)
-      toast.error("Something Went Wrong")
+      showToast("error","Something Went Wrong")
     }
   }
 

@@ -53,14 +53,16 @@ function Header() {
 
   const handleProfile = async () => {
 
-        navigate('profile/')
+        navigate('/profile/')
 
   }
+
+  console.log("user instance in header: ",user)
 
   return (
     <>
       <header className="fixed top-0 left-0 w-full bg-white shadow-md z-50 py-2">
-        <nav className="flex justify-between items-center relative px-4 md:px-8 lg:px-12">
+        <nav className="flex justify-between items-center relative px-4 md:px-8 lg:px-12 h-16">
           {/* Left side: Home and Movies buttons */}
           <div className="flex items-center gap-4">
             <button
@@ -82,9 +84,9 @@ function Header() {
           {/* Center: Logo */}
           <div className="flex-grow flex justify-center items-center">
             <img
-              src="assets/logo-new1.png"
+              src="/assets/logo-new1.png"
               alt="Logo"
-              className="w-40"
+              className="min-h-[90%] max-w-40"
             />
           </div>
 
@@ -101,7 +103,7 @@ function Header() {
             </button>
             
             {/* Replace Login Button with User's Email if Logged In */}
-            {user && user.user ? (
+            {user && user.user && user.is_user? (
               <button 
                 className="px-4 py-2 bg-third text-black rounded-full"
                 onClick={handleProfile}

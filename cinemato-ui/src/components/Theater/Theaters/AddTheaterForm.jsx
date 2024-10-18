@@ -4,9 +4,10 @@ import { FaLocationArrow } from "react-icons/fa6";
 import { IoCloseOutline } from "react-icons/io5";
 import useAxiosInstance from '../../../axiosConfig';
 import PlacesAutoComplete from './GoogleMap/PlacesAutoComplete';
-import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
-
+import showToast from '../../../utils/ToastNotifier';
+import { useContext } from 'react';
+import { PlacesContext } from '../../../context/placesContext';
 
 
 
@@ -29,6 +30,11 @@ const AddTheaterForm = () => {
     parking: false,
     photo: null,
   });
+
+  
+  const isLoaded = useContext(PlacesContext)
+  console.log("places context: ", isLoaded)
+
 
 
 
@@ -151,7 +157,7 @@ const AddTheaterForm = () => {
   
       if (response.status === 201) {
         console.log('Theater created successfully', response);
-        toast.success('Theater created successfully. After admin approval, you can add screens.');
+        showToast('success','Theater created successfully. After admin approval, you can add screens.');
         navigate('/owner/theaters/')
       } else {
         console.log('Error found:', response);
@@ -183,10 +189,12 @@ const AddTheaterForm = () => {
   <label className="block text-sm font-medium text-gray-700">Location (Google Autocomplete)</label>
   
 
-
+{isLoaded && (
+<>
   <PlacesAutoComplete setTheaterData={setTheaterData} theaterData={theaterData}/>
   {errors.location && <p className="text-red-500 text-sm">{errors.location}</p>}
-  
+</>
+)}
   {/* Uncomment and adjust the PlacesAutocomplete when integrating */}
   {/* <PlacesAutocomplete
     value={theaterData.location}

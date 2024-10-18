@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { jwtDecode } from "jwt-decode";// Fix import for jwt-decode
 import useAxiosInstance from '../../../axiosConfig';
 import { setUser,clearUser } from '../../../slices/userSlice';
-import { toast } from 'sonner';
+import showToast from '../../../utils/ToastNotifier';
 
 function OwnerLogin() {
   const [formData, setFormData] = useState({
@@ -22,9 +22,11 @@ function OwnerLogin() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const token = useSelector((state) => state.user?.access_token);
+  const is_owner = useSelector((state) => state.user?.is_owner)
+
 
   useEffect(() => {
-    if (token) {
+    if (token && is_owner) {
       const decodedToken = jwtDecode(token);
       const currentTime = Math.floor(Date.now() / 1000);
 
@@ -62,16 +64,17 @@ function OwnerLogin() {
 
         if (response.status === 200) {
           const { user, token } = response.data;
+          dispatch(clearUser())
           dispatch(setUser({ user: user.email, access_token: token.access, refresh_token: token.refresh, is_owner:true,id: user.id }));
-          toast.success("Successfully logged in")
+          showToast("success","Successfully logged in")
           navigate('owner/home/');
         }
       } catch (error) {
         if (error.response && error.response.status === 400) {
-          toast.success(error.response.data.error.non_field_errors[0])
+          showToast("success",error.response.data.error.non_field_errors[0])
           console.error("Validation error:", error.response.data.error.non_field_errors[0]);
         }else{
-          toast.error("Invalid Credentials")
+          showToast('error',"Invalid Credentials")
         }
       }
 

@@ -7,15 +7,20 @@ import { persistor, store } from "./store/store";
 import { PersistGate } from "redux-persist/integration/react";
 // import { ToastContainer } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
+// import ToastNotifier from '../src/utils/ToastNotifier'
+import './toastStyles.css';
 import { Toaster } from "sonner";
-import ToastNotifier from '../src/utils/ToastNotifier'
+import PlacesContextFunction from "./context/placesContext"; // Import the correct provider
+
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
+  <PlacesContextFunction>
   <Provider store={store}>
     <PersistGate loading={null} persistor={persistor}>
       <App />
-      <ToastNotifier/>
+      {/* <ToastNotifier/> */}
     </PersistGate>
   </Provider>
+  </PlacesContextFunction>
 );

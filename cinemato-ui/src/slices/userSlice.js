@@ -61,10 +61,10 @@ const userSlice = createSlice({
 export const { setUser, clearUser, setLoading, setError, setTokens, clearTokens } = userSlice.actions;
 
 // Persist configuration
-const persistConfig = {
-    key: 'user',
-    storage,
-};
+// const persistConfig = {
+//     key: 'user',
+//     storage,
+// };
 
 // Export the persisted reducer
-export default persistReducer(persistConfig, userSlice.reducer);
+export default userSlice.reducer;

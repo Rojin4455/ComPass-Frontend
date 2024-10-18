@@ -21,10 +21,10 @@ const userProfile = createSlice({
 
 export const {setContent} = userProfile.actions;
 
-const persistConfig = {
-    key: 'user-profile',
-    storage
-}
+// const persistConfig = {
+//     key: 'user-profile',
+//     storage
+// }
 
 
-export default persistReducer(persistConfig,userProfile.reducer);
+export default userProfile.reducer;

@@ -128,11 +128,11 @@ function AdminUsersList() {
             ) : (
                 <FaUserCircle className="w-12 h-12 text-gray-400" />
             )} */}
-            {user.profile_pic ? (
+            {user.image_url ? (
                 
                     <div className="relative w-15 h-17">
                         <img
-                            src={`${BASE_URL}media/${user.profile_pic}`}  // Full URL to the image
+                            src={`${user.image_url}`}  // Full URL to the image
                             alt="Profile"
                             className="w-14 h-14 rounded-full object-cover"
                         />

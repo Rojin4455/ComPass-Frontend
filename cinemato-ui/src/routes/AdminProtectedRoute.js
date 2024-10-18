@@ -46,14 +46,19 @@ const AdminProtectedRoute = ({children}) => {
 
 
 const access_token = useSelector((state) => state.user.access_token);
+const is_admin = useSelector((state) => state.user.is_admin);
 const navigate = useNavigate();
 
 useEffect(() => {
   if (!access_token){
     navigate("/admin/")
   }  },[])
-  if (access_token){
+  if (access_token && is_admin){
+    
   return children
+}
+if (!is_admin) {
+  navigate("/admin/")
 }
 }
 

@@ -9,7 +9,10 @@ import ShowCastAndCrew from './ShowCastAndCrew';
 import { FaRegPlayCircle } from "react-icons/fa";
 import Loading from './Loading';
 import { MdTranslate } from 'react-icons/md';
-import { toast } from 'sonner';
+// import { toast } from 'sonner';
+import showToast from '../../../utils/ToastNotifier';
+
+
 
 function AdminAddMovieDetails() {
     const axiosInstance = useAxiosInstance();
@@ -154,16 +157,16 @@ function AdminAddMovieDetails() {
         })
         if (response.status === 200){
           console.log("movie unlisted successfully",response);
-          toast.success("movie unlisted successfully")
+          showToast("success","movie unlisted successfully")
           
         }else{
           console.error("error response", response)
-          toast.error("something went wrong")
+          showToast("error","something went wrong")
         }
 
       }catch(error){
         console.error("error response in catch",error)
-        toast.error("Something Went Wrong")
+        showToast("error","Something Went Wrong")
       }
     }
 
@@ -235,7 +238,7 @@ function AdminAddMovieDetails() {
 
             if (response.status === 201){
               console.log("Movie Addedd Successfully")
-              toast.success("Movie Listed Successfully")
+              showToast("success","Movie Listed Successfully")
 
             }
 
@@ -243,9 +246,9 @@ function AdminAddMovieDetails() {
 
         if(error.response && error.response.status === 409){
           console.log("movie is already listed",error)
-          toast.error(error.response.data.message)
+          showToast("error",error.response.data.message)
         }else{
-          toast.error("Something Went Wrong!")
+          showToast("error","Something Went Wrong!")
 
           console.error("error response", error)
         }

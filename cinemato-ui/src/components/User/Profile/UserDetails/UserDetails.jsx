@@ -10,8 +10,10 @@ function UserDetails() {
     const dispatch = useDispatch();
     const axiosInstance = useAxiosInstance();
     const BASE_URL = process.env.REACT_APP_BASE_API_URL;
-
     const fileInputRef = useRef(null);
+
+    console.log("user: ",user )
+
 
     const handleProfileChange = () => {
         // Open the file picker when profile image is clicked
@@ -19,9 +21,11 @@ function UserDetails() {
     };
 
     const handleImageUpload = async (event) => {
+
+        console.log("here")
         const file = event.target.files[0];
         if (!file) return;
-
+    
         // Prepare the form data to send the image to the backend
         const formData = new FormData();
         formData.append('profile_pic', file); // Adjust the field name according to your backend's expectation
@@ -32,7 +36,7 @@ function UserDetails() {
                     'Content-Type': 'multipart/form-data',
                 },
             });
-
+            console.log(response)
             // Assuming the updated profile photo URL comes back in response.data.profilePhoto
             if (response.data.profilePhoto) {
                 // Update the Redux state with the new profile photo
@@ -45,14 +49,13 @@ function UserDetails() {
             console.error('Error updating profile picture:', error);
         }
     };
-
     return (
         <div className="flex items-center p-4 bg-white py-5 pl-24">
             <div className="relative mr-4" onClick={handleProfileChange}>
                 {user?.profilePhoto ? (
                     <div className="relative w-16 h-16">
                         <img
-                            src={`${BASE_URL}${user.profilePhoto}`}  // Full URL to the image
+                            src={`${user.profilePhoto}`}  // Full URL to the image
                             alt="Profile"
                             className="w-16 h-16 rounded-full object-cover"
                         />

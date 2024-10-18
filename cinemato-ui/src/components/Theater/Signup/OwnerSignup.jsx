@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
 import useAxiosInstance from '../../../axiosConfig';
-import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
-
-
+import showToast from '../../../utils/ToastNotifier';
+import { toast } from 'sonner';
 function OwnerSignup() {
   const [formData, setFormData] = useState({
     fullName: '',
@@ -67,7 +66,7 @@ function OwnerSignup() {
             })
             if (response.status === 201){
                 console.log("owner created successfully",response)
-                toast.success("Owner Created Successfully. You can login after the admin approves")
+                showToast("success","Owner Created Successfully. You can login after the admin approves")
                 navigate('/owner/login/')
                 
             }else{
@@ -76,7 +75,7 @@ function OwnerSignup() {
             }
         }catch(error){
             console.error("something went wrong", error)
-            toast.error("Something went wrong")
+            showToast("error","Something went wrong")
         }
       setErrors({});
       console.log('Form Data:', formData);

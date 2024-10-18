@@ -61,6 +61,23 @@ const Theaters = () => {
   }
 
 
+  const handleTheaterDetails = async (theaterId) => {
+    try {
+      const response = await axiosInstance.get(`theater/theater-details/${theaterId}`)
+      if (response.status === 200){
+        console.log("theater response got success:123 ",response)
+        navigate(`/owner/theater-details/${theaterId}/`)
+
+      }else{
+        console.error("error response: ",response)
+
+      }
+    }catch(error){
+      console.error("something went wring: ",error)
+    }
+  }
+
+
   return (
     
     <div className="pt-[6rem] p-4">
@@ -96,11 +113,12 @@ const Theaters = () => {
       key={index}
       className={`relative bg-gray-200 rounded-lg shadow-lg p-4 ${
         !theater.is_approved && "opacity-80 pointer-events-none "
-      }`}
+      }` }
+      onClick={theater.is_approved ? () => handleTheaterDetails(theater.id) : null} 
     >
       {/* Theater Image */}
       <img
-        src={`${BASE_URL}${theater.photo}`}
+        src={`${theater.image_url}`}
         alt={theater.name}
         className="w-full h-60 object-cover rounded-t-lg"
       />

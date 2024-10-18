@@ -9,8 +9,9 @@ import { HiMiniArrowLeft } from "react-icons/hi2";
 import { useNavigate, useParams } from "react-router-dom";
 import useAxiosConfigInstance from "../../../axiosConfig";
 
-import { toast } from "sonner";
+// import { toast } from "sonner";
 import { useLocation } from "react-router-dom";
+import showToast from "../../../utils/ToastNotifier";
 
 
 
@@ -98,17 +99,17 @@ function AdminListedMovieDetails() {
       })
       if (response.status === 200){
         console.log("movie unlisted successfully",response);
-        toast.success("movie unlisted successfully")
+        showToast("success","movie unlisted successfully")
         navigate('/admin/movies/')
         
       }else{
         console.error("error response", response)
-        toast.error("something went wrong")
+        showToast("error","something went wrong")
       }
 
     }catch(error){
       console.error("error response in catch",error)
-      toast.error("Something Went Wrong")
+      showToast("error","Something Went Wrong")
     }
   }
 

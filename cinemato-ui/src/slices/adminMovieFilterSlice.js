@@ -26,10 +26,10 @@ const adminFilterSlice = createSlice({
 
 export const {setFilter,clearFilter} = adminFilterSlice.actions;
 
-const persistConfig = {
-    key:'adminFilter',
-    storage
-}
+// const persistConfig = {
+//     key:'adminFilter',
+//     storage
+// }
 
-export default persistReducer(persistConfig, adminFilterSlice.reducer);
+export default adminFilterSlice.reducer;
 

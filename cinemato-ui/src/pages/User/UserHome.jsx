@@ -41,9 +41,11 @@ function UserHome() {
           const user = requestData;
           const access_token = token.access;
           const refresh_token = token.refresh;
+          const is_user = true
 
           // Dispatch the setUser action to update the Redux state
-          dispatch(setUser({ user, access_token, refresh_token }));
+          console.log("user, access, refresh",user,access_token,refresh_token)
+          dispatch(setUser({ user, access_token, refresh_token,is_user }));
 
           console.log('Token set and user state updated successfully:', response);
           window.history.replaceState({}, document.title, window.location.pathname);

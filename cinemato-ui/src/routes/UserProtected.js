@@ -75,6 +75,7 @@ import { setUser } from "../slices/userSlice";
 const UserProtectedRoute = ({children}) => {
 
   const access_token = useSelector((state) => state.user.access_token);
+  const is_admin = useSelector((state) => state.user.is_user);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -82,8 +83,10 @@ const UserProtectedRoute = ({children}) => {
       navigate("/")
     }  },[])
     if (access_token){
-      console.log("access token is there")
     return children
+  }
+  if (!is_admin) {
+    navigate("/")
   }
 }
 

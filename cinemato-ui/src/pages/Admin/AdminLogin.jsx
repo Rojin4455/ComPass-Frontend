@@ -6,8 +6,7 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import {jwtDecode} from 'jwt-decode';
-import { toast } from 'react-toastify';
-
+import showToast from '../../utils/ToastNotifier';
 
 
 
@@ -28,10 +27,13 @@ function AdminLogin() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const token = useSelector((state) => state.user?.access_token)
+  const is_admin = useSelector((state) => state.user?.is_admin)
+  const is_user = useSelector((state) => state.user?.is_user)
+  const is_owner = useSelector((state) => state.user?.is_owner)
 
   useEffect(() => {
 
-    if (token) {
+    if (token && is_admin) {
       // Decode the token to check its expiration
       const decodedToken = jwtDecode(token);
       const currentTime = Math.floor(Date.now() / 1000); // Current time in seconds
@@ -76,7 +78,6 @@ function AdminLogin() {
 
     if (formData.email && formData.password){
       try{
-        console.log("dddd")
         const response = await axiosInstance.post('admin/login/',{
           "email":formData.email,
           "password":formData.password
@@ -87,19 +88,17 @@ function AdminLogin() {
           const access_token = response.data.access
           const refresh_token = response.data.refresh
           const is_admin = true
-
+          dispatch(clearUser())
           dispatch(setUser({user,access_token,refresh_token,is_admin}))
-          toast.success("Successfully logging in")
-          console.log("otp verification success");
+          showToast("success","Successfully logging in")
           navigate('home/')
           
         }else{
-          console.log("failed response: ",response)
-          toast.error("Something went wrong")
+          showToast('error',"Something went wrong")
         }
       }catch(error){
         console.error("something went wrong: ",error)
-        toast.error("something went wrong")
+        showToast('error',"something went wrong")
       }
     }
 

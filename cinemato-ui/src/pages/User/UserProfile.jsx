@@ -11,6 +11,7 @@ import { useDispatch } from 'react-redux'
 import useAxiosInstance from '../../axiosConfig'
 import { setUser } from '../../slices/userSlice'
 
+
 function UserProfile() {
   const profileContent = useSelector((state) => state.userprofile.content)
   const axiosInstance = useAxiosInstance();
@@ -24,11 +25,10 @@ function UserProfile() {
       const response =await axiosInstance.get('user-profile/')
       if (response.status === 200){
         if (response.data.user_details.profile){
-          dispatch(setUser({profilePhoto:response.data.user_details.profile}))
+          dispatch(setUser({...user,profilePhoto:response.data.user_details.profile}))
         }
-        console.log('success in user profile')
       }else{
-        console.log("User is not authorised")
+        console.error("error response: ",response)
       }
     }catch(error){
       console.log("something went wrong", error)
@@ -38,7 +38,6 @@ function UserProfile() {
   userProfile();
   },[])
   
-
   const renderProfileContent = () => {
     switch (profileContent) {
       case "movieAlerts":

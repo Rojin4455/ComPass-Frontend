@@ -1,9 +1,8 @@
 import React, { useState,useEffect } from 'react'
 import useAxiosInstance from '../../../axiosConfig';
-import { toast } from 'sonner';
 import { IoIosArrowRoundBack } from "react-icons/io";
 import { useNavigate } from 'react-router-dom';
-
+import showToast from '../../../utils/ToastNotifier';
 
 function RequestedOwnersList() {
   // Sample state with owners
@@ -11,6 +10,24 @@ function RequestedOwnersList() {
 
   const axiosInstance = useAxiosInstance();
   const navigate = useNavigate()
+
+  
+
+
+
+  // Function to handle approving an owner (remove from list)
+  const handleApprove = async (ownerId) => {
+    try {
+      await axiosInstance.patch(`admin/theater-owners/${ownerId}/approve/`);
+      showToast('success','Owner approved successfully');
+      // Update the UI after approval
+      setOwners(owners.map(owner => owner.id === ownerId ? { ...owner, is_approved: true } : owner));
+    } catch (error) {
+      console.error('Error approving owner:', error);
+      showToast('error','Failed to approve owner');
+    }
+  };
+
 
   useEffect(() => {
     const fetchOwners = async () => {
@@ -26,21 +43,6 @@ function RequestedOwnersList() {
 
     fetchOwners();
   }, []);
-
-
-
-  // Function to handle approving an owner (remove from list)
-  const handleApprove = async (ownerId) => {
-    try {
-      await axiosInstance.patch(`admin/theater-owners/${ownerId}/approve/`);
-      toast.success('Owner approved successfully');
-      // Update the UI after approval
-      setOwners(owners.map(owner => owner.id === ownerId ? { ...owner, is_approved: true } : owner));
-    } catch (error) {
-      console.error('Error approving owner:', error);
-      toast.error('Failed to approve owner');
-    }
-  };
   console.log(owners)
   return (
     <div className="container mx-auto p-4">

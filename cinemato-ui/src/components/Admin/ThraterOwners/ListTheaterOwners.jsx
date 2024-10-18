@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { toast } from 'sonner';
 import useAxiosInstance from '../../../axiosConfig';
 import { VscGitPullRequestNewChanges } from "react-icons/vsc";
 import { useNavigate } from 'react-router-dom';
+import { FaChampagneGlasses } from 'react-icons/fa6';
+import showToast from '../../../utils/ToastNotifier';
 
 
 function ListTheaterOwners() {
@@ -27,30 +28,30 @@ function ListTheaterOwners() {
   }, []);
 
   // Approve a theater owner
-  // const handleApprove = async (ownerId) => {
-  //   try {
-  //     await axiosInstance.patch(`admin/theater-owners/${ownerId}/approve/`);
-  //     toast.success('Owner approved successfully');
-  //     // Update the UI after approval
-  //     setOwners(owners.map(owner => owner.id === ownerId ? { ...owner, is_approved: true } : owner));
-  //   } catch (error) {
-  //     console.error('Error approving owner:', error);
-  //     toast.error('Failed to approve owner');
-  //   }
-  // };
+  const handleApprove = async (ownerId) => {
+    try {
+      await axiosInstance.patch(`admin/theater-owners/${ownerId}/approve/`);
+      showToast("success",'Owner approved successfully');
+      // Update the UI after approval
+      setOwners(owners.map(owner => owner.id === ownerId ? { ...owner, is_approved: true } : owner));
+    } catch (error) {
+      console.error('Error approving owner:', error);
+      showToast("error",'Failed to approve owner');
+    }
+  };
 
   // Disapprove a theater owner
-  // const handleDisapprove = async (ownerId) => {
-  //   try {
-  //     await axiosInstance.patch(`admin/theater-owners/${ownerId}/disapprove/`);
-  //     toast.success('Owner disapproved successfully');
-  //     // Update the UI after disapproval
-  //     setOwners(owners.map(owner => owner.id === ownerId ? { ...owner, is_approved: false } : owner));
-  //   } catch (error) {
-  //     console.error('Error disapproving owner:', error);
-  //     toast.error('Failed to disapprove owner');
-  //   }
-  // };
+  const handleDisapprove = async (ownerId) => {
+    try {
+      await axiosInstance.patch(`admin/theater-owners/${ownerId}/disapprove/`);
+      showToast("success",'Owner disapproved successfully');
+      // Update the UI after disapproval
+      setOwners(owners.map(owner => owner.id === ownerId ? { ...owner, is_approved: false } : owner));
+    } catch (error) {
+      console.error('Error disapproving owner:', error);
+      showToast("error",'Failed to disapprove owner');
+    }
+  };
 
 
   const getRequestedOwners = async () => {
@@ -61,7 +62,7 @@ function ListTheaterOwners() {
     try{
     const response = await axiosInstance.get(`admin/owner-details/${ownerId}`)
     if (response.status === 200){
-      toast.success("owner details found successfully")
+      showToast("success","owner details found successfully")
       
       navigate(`/admin/owner-details/${response.data.owner_data.id}`)
     }else{
@@ -74,9 +75,22 @@ function ListTheaterOwners() {
 
   return (
     <div className="container mx-auto p-6">
-  <h1 className="text-3xl font-bold mb-8 text-center">Theater Owners</h1>
+      
+  <h1 className="text-3xl font-bold mb-8 text-center">Theater Owner</h1>
   {owners.length === 0 ? (
+    <>
     <p className="text-center text-gray-500">No theater owners found.</p>
+    <div className="flex justify-center items-center mt-10">
+  <button
+    className="flex items-center gap-2 bg-primary text-white border-2 border-primary rounded-lg px-6 py-3 shadow-lg hover:bg-primaryhover hover:bg-primaryhover: '#284757',
+ transition-all transform hover:scale-105"
+ onClick={getRequestedOwners}
+  >
+    <VscGitPullRequestNewChanges size={24} />
+    All Requests
+  </button>
+</div>
+    </>
   ) : (
     <>
 <div className="flex justify-end mb-6">
@@ -96,13 +110,14 @@ function ListTheaterOwners() {
         <div
           key={owner.id}
           className="bg-white shadow-lg rounded-lg overflow-hidden transition-transform transform hover:scale-105"
-          onClick={() => getOwner(owner.id)}
+          
         >
           {/* Owner Image (optional if you have owner images) */}
           {/* <img className="w-full h-40 object-cover" src={ownerImage} alt={owner.first_name} /> */}
 
           {/* Owner Information */}
           <div className="p-6">
+            <div onClick={() => getOwner(owner.id)}>
             <h2 className="text-2xl font-bold text-gray-800 mb-2">{owner.first_name}</h2>
             <p className="text-gray-600 mb-2">
               <strong>Business:</strong> {owner.business_name}
@@ -113,6 +128,7 @@ function ListTheaterOwners() {
             <p className="text-gray-600 mb-4">
               <strong>Email:</strong> {owner.email}
             </p>
+            </div>
 
             {/* <p className="text-lg mb-4">
               <strong>Status:</strong>{" "}
@@ -134,23 +150,24 @@ function ListTheaterOwners() {
               </p>
 
               {/* Approve/Disapprove Buttons */}
-              {/* <div className="space-x-2">
-                {owner.is_approved ? (
-                  <button
-                    className="bg-red-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-red-600 transition-colors"
-                    onClick={() => handleDisapprove(owner.id)}
-                  >
-                    Disapprove
-                  </button>
-                ) : (
-                  <button
-                    className="bg-green-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-green-600 transition-colors"
-                    onClick={() => handleApprove(owner.id)}
-                  >
-                    Approve
-                  </button>
-                )}
-              </div> */}
+              <div className="space-x-2">
+  {owner.is_approved ? (
+    <button
+      className="bg-red-500 text-white px-6 py-2 rounded-full"
+      onClick={() => handleDisapprove(owner.id)}
+    >
+      Disapprove
+    </button>
+  ) : (
+    <button
+      className="bg-green-500 text-white px-6 py-2 rounded-full shadow-lg hover:bg-green-600 transition ease-in-out duration-300 transform hover:-translate-y-1 hover:scale-105 focus:ring-2 focus:ring-green-300 focus:outline-none"
+      onClick={() => handleApprove(owner.id)}
+    >
+      Approve
+    </button>
+  )}
+</div>
+
             </div>
           </div>
         </div>
@@ -165,6 +182,6 @@ function ListTheaterOwners() {
 
 
   );
-}
+}   
 
 export default ListTheaterOwners;

@@ -13,6 +13,7 @@ function Login({ isOpen, onClose, onSubmit }) {
 
   const REDIRECT_URI = 'auth/api/login/google/';
   
+
   
   
   if (!isOpen) return null;
@@ -50,18 +51,15 @@ function Login({ isOpen, onClose, onSubmit }) {
     try {
 
         const requestData = {};
-
         if (email) {
           requestData.email = email;
         } else if (phone) {
           requestData.phone = phone;
         }
-        console.log(requestData)
         const response = await axiosInstance.post('request-otp/',requestData);
-        console.log("response");
         
         if (response.status === 200) {
-            console.log("submitted successfully");
+          console.log("submitted successfully");
             if (email){
               onSubmit({"email":email,"phone":""})
             }else if(phone){
@@ -79,8 +77,6 @@ function Login({ isOpen, onClose, onSubmit }) {
   
   const onGoogleLoginSuccess = () => {
     
-    console.log('Google button clicked');
-
     
     const GOOGLE_AUTH_URL = 'https://accounts.google.com/o/oauth2/v2/auth';
     const REDIRECT_URI = 'auth/api/login/google/';
