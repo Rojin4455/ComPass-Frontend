@@ -15,7 +15,6 @@ function PlacesContextFunction({children}) {
       googleMapsApiKey: process.env.REACT_APP_GOOGLE_API_KEY,
       libraries: libraries,
     });
-    console.log('isloded',isLoaded);
 const [placesIsLoaded,setPlacesIsLoaded] = useState(isLoaded)
   
 

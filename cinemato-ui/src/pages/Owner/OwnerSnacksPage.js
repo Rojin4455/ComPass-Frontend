@@ -1,12 +1,12 @@
 import React from 'react'
 import Header from '../../components/Theater/Header/Header'
-import Snacks from '../../components/Theater/Snacks/Snacks'
+import AddSnacks from '../../components/Theater/Snacks/AddSnacks'
 
 function OwnerSnacksPage() {
   return (
     <div>
-      <Header page='owner/snacks/'/>
-        <Snacks/>
+      <Header page='owner/snacks-list/'/>
+        <AddSnacks/>
     </div>
   )
 }

@@ -74,6 +74,9 @@ function UserDetails() {
                 {user.user && user.user.phone ? (<p>{user.user.phone}</p>) : (<p>Phone not provided</p>)}
             </div>
 
+
+            
+
             {/* Hidden file input for uploading the image */}
             <input
                 type="file"

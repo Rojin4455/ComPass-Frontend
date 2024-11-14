@@ -24,19 +24,16 @@ function AdminAddMovies() {
   const dispatch = useDispatch()
   const navigate = useNavigate();
 
-    // Dropdown states
     const [languageDropdown, setLanguageDropdown] = useState(false);
     const [genreDropdown, setGenreDropdown] = useState(false);
   
-    // Selected filter states
     const [selectedLanguage, setSelectedLanguage] = useState('Lan');
     const [selectedGenre, setSelectedGenre] = useState('Gen');
     const [changeFilter, setChangeFilter] = useState(false)
 
 
-  // Fetch movies using infinite scrolling
   const fetchMovies = async () => {
-    if (loading) return; // Prevent multiple API calls at once
+    if (loading) return;
     setLoading(true);
     if (changeFilter){
       setPage(1)
@@ -49,9 +46,8 @@ function AdminAddMovies() {
       if (response.status === 200) {
         const fetchedMovies = response.data.results;
 
-        // If less than 12 movies are returned, it means there are no more pages
         if (fetchedMovies.length < 12) {
-          setHasMore(false); // No more data to fetch
+          setHasMore(false); 
         }
 
         if (changeFilter){
@@ -59,7 +55,6 @@ function AdminAddMovies() {
           
           setChangeFilter(false)
         }else{
-        // Append new movies to the current list
         setMovies((prevMovies) => [...prevMovies, ...fetchedMovies]);
         }
       }
@@ -79,17 +74,15 @@ function AdminAddMovies() {
 
   useEffect(() => {
     const handleScroll = () => {
-      // Check if the user is near the bottom of the page
       if (window.innerHeight + document.documentElement.scrollTop + 1 >= document.documentElement.scrollHeight && hasMore) {
-        setPage((prevPage) => prevPage + 1); // Increment page number to load next set of movies
+        setPage((prevPage) => prevPage + 1);
       }
     };
 
     window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll); // Cleanup scroll listener on component unmount
+    return () => window.removeEventListener('scroll', handleScroll);
   }, [hasMore]);
 
-  // Fetch new movies when page changes
   useEffect(() => {
     if (page > 1) {
       fetchMovies();
@@ -120,7 +113,6 @@ function AdminAddMovies() {
   }
   return (
     <div className="admin-add-movies p-4">
-      {/* Top left heading and search with filters */}
       <div className="fixed left-0 top-16 w-full bg-white z-10 p-4  shadow-md">
         <div className="flex justify-between items-center mb-4">
           <h1 className="text-2xl font-bold">Explore Movies</h1>
@@ -143,24 +135,21 @@ function AdminAddMovies() {
         </div>
       </div>
 
-      {/* Movie cards in a grid */}
       <div className="grid grid-cols-6 gap-10 p-10 mt-16">
   {movies
-    .filter(movie => movie.poster_path) // Filter out movies without a poster
+    .filter(movie => movie.poster_path)
     .map((movie, index) => (
       <div
         key={`${movie.id}-${index}`}
         className="relative group bg-white rounded-lg overflow-hidden shadow-lg transition-transform duration-300 transform hover:scale-105 hover:shadow-xl cursor-pointer"
-        onClick={() => handleShowDetails(movie.id)} // Trigger function on click
+        onClick={() => handleShowDetails(movie.id)}
       >
-        {/* Movie Poster */}
         <img
           src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
           alt={movie.title}
           className="w-full h-80 object-cover"
         />
 
-        {/* Hover effect - Add Movie Button */}
         <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-opacity duration-300 flex flex-col items-center justify-end p-4">
         
 
@@ -170,14 +159,12 @@ function AdminAddMovies() {
           </button>
         </div>
 
-        {/* Movie title, genre, and language */}
         <div className="p-4">
           <h3 className="text-lg font-bold text-gray-800">{movie.title}</h3>
           <p className="text-sm text-gray-600">{getGenreNames(movie.genre_ids)}</p>
           <p className="text-sm text-gray-600">{getLanguageName(movie.original_language)}</p>
         </div>
 
-        {/* Highlight border on hover */}
         <div className="absolute inset-0 border-2 border-transparent group-hover:border-secondary transition-all duration-300 rounded-lg"></div>
       </div>
     ))}

@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import useAxiosInstance from '../../../axiosConfig';
 import { clearUser } from '../../../slices/userSlice';
 import ProfileModal from './ProfileModal';
+import { setContent } from '../../../slices/OwnerScreenSlice';
 
 function Header(props) {
 
@@ -88,8 +89,8 @@ function Header(props) {
             Movies
           </button>
           <button
-            onClick={() => handleSelect('owner/snacks/')}
-            className={`flex items-center gap-2 px-4 py-2 rounded-full ${page === 'owner/snacks/' ? 'bg-primary text-white' : 'bg-white text-black'}`}
+            onClick={() => {handleSelect('owner/snacks-list/') ; dispatch(setContent({snackContent:'owner'}))}}
+            className={`flex items-center gap-2 px-4 py-2 rounded-full ${page === 'owner/snacks-list/' ? 'bg-primary text-white' : 'bg-white text-black'}`}
           >
             <IoFastFoodOutline />
             Snacks

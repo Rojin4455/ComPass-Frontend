@@ -10,6 +10,10 @@ import { useParams } from 'react-router-dom';
 import { FaSquareParking } from "react-icons/fa6";
 import { IoFastFood } from "react-icons/io5";
 import { HiMiniUserGroup } from "react-icons/hi2";
+import { useDispatch } from 'react-redux';
+import { setContent } from '../../../slices/OwnerScreenSlice';
+import { setScreen } from '../../../slices/screenFullDetailsSlice';
+import SnackDetailModal from './SnackDetailModal';
 
 
 
@@ -22,9 +26,11 @@ const TheaterDetails = () => {
   const [theater, setTheaterData] = useState({});
   const [screens,setScreens] = useState({})
   const axiosInstance = useAxiosInstance();
+  const [snacks, setSnacks] = useState([])
   const BASE_URL = process.env.REACT_APP_BASE_API_URL
   const navigate = useNavigate()
   const { id } = useParams();
+  const dispatch = useDispatch()
 
   useEffect(() => {
     setLoading(true);
@@ -33,8 +39,8 @@ const TheaterDetails = () => {
         const response = await axiosInstance.get(`theater/theater-details/${id}`);
         if (response.status === 200) {
           setTheaterData(response.data.data);
+          dispatch(setScreen({theater:response.data.data.id}))
           setScreens(response.data.screen_datas)
-          console.log(response)
         } else {
           console.log("Error response", response);
         }
@@ -47,42 +53,82 @@ const TheaterDetails = () => {
   }, []);
 
 
+  useEffect(() => {
+    const fetchAddedSnacks = async () => {
+        try{
+          const response = await axiosInstance.get(`theater/theater/get-added-snack/${id}/`)
+          if (response.status === 200) {
+            console.log('success response: ',response)
+
+            const snackItems = response.data.data.flatMap((item) => ({
+              id: item.id,
+              name: item.snack_item.name,
+              description: item.snack_item.description,
+              is_vegetarian: item.snack_item.is_vegetarian,
+              image_url: item.snack_item.image_url,
+              calories: item.snack_item.calories,
+              category_name: item.snack_item.category_name,
+              price: item.price,
+              stock: item.stock,
+            }));
+
+
+            setSnacks(snackItems)
+
+          }else{
+            console.error("error response: ",response)
+          }
+        }catch(error){
+          console.error("something went wrong: ",error)
+        }
+    }
+
+    fetchAddedSnacks()
+  },[])
+
+
   const handleAddScreen = async () => {
     navigate(`/owner/list-screens/${id}`)
   }
 
-  console.log("theater:", theater.name);
 
 
 
   const handleScreenDetails = (id) => {
     navigate('/owner/screen-details/')
-    console.log("ID: ",id)
   }
   
+
+  const onAddSnack = () => {
+    dispatch(setContent({snackContent:'theater'}))
+    
+    navigate('/owner/theater-add-snacks/')
+
+  }
+
+
+  const [selectedSnack, setSelectedSnack] = useState(null);
+
+  // Function to handle showing the modal
+  const handleSnackClick = (snack) => {
+    setSelectedSnack(snack);
+  };
+
+  // Function to handle closing the modal
+  const closeModal = () => {
+    setSelectedSnack(null);
+  }
 
   return (
     <>
       <Loading loading={loading} />
       {theater ? (
         <div className="container mx-auto p-4 mt-[6rem]">
-          {/* Theater Information */}
           <div className="bg-white shadow-md rounded-lg p-6 mb-6">
-            {/* Theater Image */}
-            {/* <div className="flex justify-center mb-4">
-              <img
-                src={`${BASE_URL}${theater.photo}`}
-                alt={theater.name}
-                className="rounded-lg shadow-md w-full md:w-3/4 lg:w-1/2"
-              />
-            </div> */}
 
-            {/* Theater Name */}
             <h2 className="text-3xl font-bold text-center mb-6">{theater.name}</h2>
 
-            {/* Theater Details in Column Layout */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {/* Location */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 gap-x-60">
               <div className="flex items-center">
                 <FaMapMarkerAlt className="text-xl text-red-500 mr-3" />
                 <p className="text-gray-700">
@@ -90,7 +136,6 @@ const TheaterDetails = () => {
                 </p>
               </div>
 
-              {/* Phone */}
               <div className="flex items-center">
                 <FaPhoneAlt className="text-xl text-green-500 mr-3" />
                 <p className="text-gray-700">
@@ -98,7 +143,6 @@ const TheaterDetails = () => {
                 </p>
               </div>
 
-              {/* Email */}
               <div className="flex items-center">
                 <MdEmail className="text-xl text-blue-500 mr-3" />
                 <p className="text-gray-700">
@@ -106,7 +150,6 @@ const TheaterDetails = () => {
                 </p>
               </div>
 
-              {/* Parking */}
               <div className="flex items-center">
                 <FaSquareParking className={`text-xl mr-3 ${theater.is_parking ? 'text-orange-500' : 'text-gray-500'}`} />
                 <p className="text-gray-700">
@@ -114,7 +157,6 @@ const TheaterDetails = () => {
                 </p>
               </div>
 
-              {/* Food and Beverages */}
               <div className="flex items-center">
                 <IoFastFood className={`text-xl mr-3 ${theater.is_food_and_beverages ? 'text-yellow-500' : 'text-gray-500'}`} />
                 <p className="text-gray-700">
@@ -122,7 +164,6 @@ const TheaterDetails = () => {
                 </p>
               </div>
 
-              {/* Screen Types */}
               <div className="flex items-center">
                 <FaFilm className="text-xl text-purple-500 mr-3" />
                 <p className="text-gray-700">
@@ -132,7 +173,41 @@ const TheaterDetails = () => {
             </div>
           </div>
 
-          {/* Screen Information */}
+
+          <div className="bg-white shadow-md rounded-lg p-6 mb-6 flex items-center">
+      <button
+        className="flex flex-col items-center justify-center bg-gray-200 text-gray-700 rounded-md w-20 h-20 shadow-lg hover:bg-gray-300 transition-all duration-300 mr-4"
+        onClick={onAddSnack}
+      >
+        <BsPlusSquareDotted className="text-3xl font-bold" />
+        <span className="text-xs mt-1">Add Snacks</span>
+      </button>
+
+      <div className="flex overflow-x-auto space-x-4">
+        {snacks.map((snack) => (
+          <div
+            key={snack.id}
+            className="relative flex-shrink-0 w-20 h-20 cursor-pointer"
+            onClick={() => handleSnackClick(snack)}
+          >
+            <img
+              src={snack.image_url}
+              alt={snack.name}
+              className="w-full h-full object-cover rounded-md shadow-md hover:opacity-70 transition duration-300"
+            />
+            <div className="absolute inset-0 flex items-center bg-black bg-opacity-60 rounded-md opacity-0 hover:opacity-100 transition-opacity duration-300">
+              <span className="text-white text-xs font-semibold text-center">{snack.name}</span>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {selectedSnack && (
+        <SnackDetailModal snack={selectedSnack} onClose={closeModal} setSnacks={setSnacks} snacks={snacks} />
+      )}
+    </div>
+
+
           {screens && screens.length > 0 ? (
   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
     {screens.map((screen, index) => (

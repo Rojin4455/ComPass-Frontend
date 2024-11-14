@@ -11,7 +11,6 @@ import { PlacesContext } from '../../../context/placesContext';
 
 
 
-// import PlacesAutocomplete from 'react-places-autocomplete'; // For Google Places API Autocomplete
 
 const AddTheaterForm = () => {
 
@@ -24,7 +23,7 @@ const AddTheaterForm = () => {
     lng:'',
     email: '',
     phone: '',
-    screens: 1,
+    // screens: 1,
     screenTypes: [],
     foodAndBeverages: false,
     parking: false,
@@ -33,14 +32,13 @@ const AddTheaterForm = () => {
 
   
   const isLoaded = useContext(PlacesContext)
-  console.log("places context: ", isLoaded)
 
 
 
 
   const navigate = useNavigate();
 
-  const screenOptions = ["IMAX", "Dolby Atmos", "3D", "2D", "4DX"]; // Screen options
+  const screenOptions = ["IMAX", "ScreenX", "P[XL]", "4DX", "None"];
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -67,7 +65,7 @@ const AddTheaterForm = () => {
     }));
   };
 
-  const [imagePreview, setImagePreview] = useState(null); // For previewing the uploaded image
+  const [imagePreview, setImagePreview] = useState(null); 
 
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
@@ -76,7 +74,6 @@ const AddTheaterForm = () => {
         ...theaterData,
         photo: file
       });
-      // Create an image preview URL
       const reader = new FileReader();
       reader.onloadend = () => {
         setImagePreview(reader.result);
@@ -89,17 +86,14 @@ const AddTheaterForm = () => {
     const validate = () => {
       const newErrors = {};
   
-      // Name validation
       if (!theaterData.name) {
         newErrors.name = 'Theater name is required.';
       }
   
-      // Location validation
       if (!theaterData.address) {
         newErrors.address = 'Location is required.';
       }
   
-      // Email validation
       const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!theaterData.email) {
         newErrors.email = 'Email is required.';
@@ -107,7 +101,6 @@ const AddTheaterForm = () => {
         newErrors.email = 'Invalid email format.';
       }
   
-      // Phone number validation (only digits, 10-15 characters)
       const phonePattern = /^\d{10,15}$/;
       if (!theaterData.phone) {
         newErrors.phone = 'Phone number is required.';
@@ -115,7 +108,6 @@ const AddTheaterForm = () => {
         newErrors.phone = 'Phone number must be between 10 and 15 digits.';
       }
   
-      // Image upload validation
       if (!theaterData.photo) {
         newErrors.photo = 'Theater image is required.';
       }
@@ -144,9 +136,9 @@ const AddTheaterForm = () => {
     formData.append('lng', theaterData.lng);
     formData.append('email', theaterData.email);
     formData.append('phone', theaterData.phone);
-    formData.append('photo', theaterData.photo);  // Ensure this is a file input
-    formData.append('screen_types', JSON.stringify(theaterData.screenTypes));  // JSON stringified
-    formData.append('total_screens', theaterData.screens);
+    formData.append('photo', theaterData.photo);  
+    formData.append('screen_types', JSON.stringify(theaterData.screenTypes)); 
+    // formData.append('total_screens', theaterData.screens);
     formData.append('is_food_and_beverages', theaterData.foodAndBeverages);
     formData.append('is_parking', theaterData.parking);
   
@@ -184,7 +176,6 @@ const AddTheaterForm = () => {
         {errors.name && <p className="text-red-500 text-sm">{errors.name}</p>}
       </div>
 
-      {/* Location with Google Places API */}
       <div className="flex flex-col space-y-2">
   <label className="block text-sm font-medium text-gray-700">Location (Google Autocomplete)</label>
   
@@ -195,40 +186,10 @@ const AddTheaterForm = () => {
   {errors.location && <p className="text-red-500 text-sm">{errors.location}</p>}
 </>
 )}
-  {/* Uncomment and adjust the PlacesAutocomplete when integrating */}
-  {/* <PlacesAutocomplete
-    value={theaterData.location}
-    onChange={value => setTheaterData({ ...theaterData, location: value })}
-    onSelect={address => setTheaterData({ ...theaterData, location: address })}
-  >
-    {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
-      <div className="relative">
-        <input
-          {...getInputProps({
-            placeholder: 'Type to search for location...',
-            className: 'w-full rounded-md border-gray-300 shadow-sm',
-          })}
-        />
-        <div className="absolute z-10 bg-white border rounded-md shadow-lg w-full">
-          {loading && <div className="p-2">Loading...</div>}
-          {suggestions.map((suggestion, index) => (
-            <div
-              key={index}
-              {...getSuggestionItemProps(suggestion, {
-                className: 'p-2 hover:bg-gray-100 cursor-pointer',
-              })}
-            >
-              {suggestion.description}
-            </div>
-          ))}
-        </div>
-      </div>
-    )}
-  </PlacesAutocomplete> */}
+  
 </div>
 
-      {/* Email and Phone */}
-      {/* <div className="grid grid-cols-2 gap-4"> */}
+     
         <div className="flex flex-col space-y-2">
           <label className="block text-sm font-medium text-gray-700">Email</label>
           <input
@@ -255,10 +216,9 @@ const AddTheaterForm = () => {
       {/* </div> */}
 
       <div className="flex items-center space-x-4">
-  <label className="block text-sm font-medium text-gray-700">Number of Screens</label>
+  {/* <label className="block text-sm font-medium text-gray-700">Number of Screens</label> */}
   
-  {/* Custom number input with left and right buttons */}
-  <div className='flex items-center space-x-2'>
+  {/* <div className='flex items-center space-x-2'>
     <button
       type="button"
       onClick={() => setTheaterData({ ...theaterData, screens: Math.max(1, theaterData.screens - 1) })}
@@ -276,7 +236,7 @@ const AddTheaterForm = () => {
     >
       +
     </button>
-    </div>
+    </div> */}
 
 </div>
 
@@ -297,10 +257,8 @@ const AddTheaterForm = () => {
             : 'bg-primary text-white'
         }`}
       >
-        {/* Option Text */}
         <span>{option}</span>
 
-        {/* Show the close icon when the option is selected */}
         {theaterData.screenTypes.includes(option) && (
           <IoCloseOutline
             className="ml-2 text-black text-2xl"
@@ -312,7 +270,6 @@ const AddTheaterForm = () => {
 </div>
 
 
-      {/* Image Upload */}
       <div className="flex flex-col space-y-2">
         <label className="block text-sm font-medium text-gray-700">Upload Theater Image</label>
 
@@ -324,7 +281,6 @@ const AddTheaterForm = () => {
             className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
           />
           <div className="flex flex-col items-center justify-center space-y-2">
-            {/* Display preview if an image is uploaded */}
             {imagePreview ? (
               <img
                 src={imagePreview}
@@ -342,7 +298,6 @@ const AddTheaterForm = () => {
           {errors.photo && <p className="text-red-500 text-sm">{errors.photo}</p>}
         </div>
 
-        {/* Optional: Button to remove the uploaded image */}
         {imagePreview && (
           <button
             type="button"
@@ -357,7 +312,6 @@ const AddTheaterForm = () => {
         )}
       </div>
 
-      {/* Food/Beverages and Parking */}
       <div className="flex space-x-4">
         <div className="flex items-center space-x-2">
           <input
@@ -382,7 +336,6 @@ const AddTheaterForm = () => {
         </div>
       </div>
 
-      {/* Submit Button */}
       <div>
         <button
           type="submit"

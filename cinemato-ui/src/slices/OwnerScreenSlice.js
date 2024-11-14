@@ -1,3 +1,4 @@
+import React from "react";
 import { createSlice } from "@reduxjs/toolkit";
 // import { persistReducer } from "redux-persist";
 // import storage from "redux-persist/lib/storage";
@@ -7,6 +8,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
     content: "details",
     subContent:"",
+    snackContent: ''
 }
 
 
@@ -17,6 +19,7 @@ const ownerScreen = createSlice({
         setContent: (state,action) => {
             state.content = action.payload.content || state.content
             state.subContent = action.payload.subContent || state.subContent;
+            state.snackContent = action.payload.snackContent || state.snackContent;
         }
     }
 })

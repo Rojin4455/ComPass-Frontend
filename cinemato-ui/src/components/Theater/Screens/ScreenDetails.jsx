@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { FaChair, FaClock, FaImages } from 'react-icons/fa';
 import { FaVideo } from 'react-icons/fa';
 import { useNavigate, useParams } from 'react-router-dom';
 import useAxiosInstance from '../../../axiosConfig';
@@ -10,6 +9,15 @@ import { IoChevronBackOutline } from "react-icons/io5";
 import AddSeatLayout from './AddSeatLayout';
 import { useDispatch, useSelector } from 'react-redux';
 import { setContent } from '../../../slices/OwnerScreenSlice';
+import SeatLayout from './SeatLayout';
+import { setScreen as setScreenAcion } from '../../../slices/screenFullDetailsSlice';
+import AddScreenTimings from '../ScreenTime/AddScreenTimings';
+import ScreenTimings from '../ScreenTime/ScreenTimings';
+import RunningMovie from './Movie/RunningMovie';
+import AddMovie from './Movie/AddMovie';
+import MovieDetails from './Movie/OwnerMovieDetails';
+import AllShows from './Shows/AllShows';
+import ShowLayout from './Shows/ShowLayout';
 
 
 const ScreenDetails = () => {
@@ -22,10 +30,11 @@ const ScreenDetails = () => {
     const [theaterId, setTheaterId] = useState();
     const [createComponent, setCreateComponent] = useState("")
     const {content,subContent} = useSelector((state) => state.ownerscreen)
-    console.log("this is the content: ",content,subContent)
     const dispatch = useDispatch()
-
+    const [fetchScreen,setFetchScreen] = useState(false)
     const axiosInstance = useAxiosInstance()
+    const screenId = useSelector((state) => state.screendetails.screen.id)
+    
     useEffect(() => {
         const fetchTheaterDetails = async (id) => {
             setLoading(true)
@@ -34,6 +43,7 @@ const ScreenDetails = () => {
                 if (response.status === 200) {
                     console.log("response got: ", response)
                     setScreen(response.data.data)
+                    dispatch(setScreenAcion({screen:response.data.data}))
                     setTheaterId(response.data.theater_id)
                 } else {
                     console.error("error response: ", response)
@@ -46,7 +56,10 @@ const ScreenDetails = () => {
         fetchTheaterDetails(id)
     }, [])
 
-    console.log("screen info: ", screen)
+
+
+    
+
 
     return (
         <div className="screen-details-container bg-white p-10 rounded-lg shadow-xl max-w-6xl mx-auto mt-[2rem]">
@@ -63,29 +76,16 @@ const ScreenDetails = () => {
                         <h1 className="text-lg font-bold text-gray-800">Back</h1>
                     </div>
 
-                    {/* Header Section */}
                     <div className="header-section relative mb-8 p-6 bg-white border border-gray-200 rounded-lg shadow-lg">
 
-                        {/* <div className="flex items-center mb-4 z-20">
-        <IoIosArrowRoundBack
-          size={50}
-          className="text-gray-700 cursor-pointer"
-          onClick={() => navigate('/admin/theaters/')}
-        />
-        <h1 className="text-2xl font-bold text-gray-800 ml-4">Owner Details</h1>
-      </div> */}
 
 
 
-                        {/* Background Image */}
-                        {/* <div className="header-section relative mb-8 p-6 bg-primary rounded-lg shadow-lg"> */}
-                        {/* Background Image */}
+
                         <div
                             className="absolute inset-0 bg-cover bg-center bg-primary rounded-lg"
-                        // style={{ backgroundImage: 'url("https://st.depositphotos.com/19430566/55010/v/450/depositphotos_550103678-stock-illustration-abstract-dark-white-art-stripe.jpg")' }}
                         ></div>
 
-                        {/* Content */}
                         <div className="relative z-10 text-[#fdf8e1]">
                             <h2 className="text-2xl font-bold mb-3">{screen.name}</h2>
 
@@ -99,16 +99,9 @@ const ScreenDetails = () => {
                     </div>
 
 
-                    {/* Optional Divider */}
-                    {/* <hr className="my-4 border-t border-gray-300" /> */}
-
-                    {/* Additional Info */}
-                    {/* <p className="text-lg text-gray-600 mb-2">Manage screen layouts and show timings here</p> */}
-                    {/* </div> */}
 
 
 
-                    {/* Tab Navigation */}
                     <div className="tab-navigation mb-6">
                         <ul className="flex justify-start space-x-6 border-b pb-2">
                             <li
@@ -129,14 +122,24 @@ const ScreenDetails = () => {
                             >
                                 Screen Timings
                             </li>
+                            <li
+                                className={`cursor-pointer ${content === 'running-movie' ? 'border-secondary text-primary' : 'text-gray-500'} border-b-2 pb-2`}
+                                onClick={() => dispatch(setContent({content:'running-movie'}))}
+                            >
+                                Add Movie
+                            </li>                            
+                            <li
+                                className={`cursor-pointer ${content === 'shows' ? 'border-secondary text-primary' : 'text-gray-500'} border-b-2 pb-2`}
+                                onClick={() => dispatch(setContent({content:'shows'}))}
+                            >
+                                Shows
+                            </li>
                         </ul>
                     </div>
 
-                    {/* Tab Content */}
                     <div className="tab-content">
                         {content === 'details' && (
                             <div className="details-section">
-                                {/* Tiers Information */}
                                 <div className="tiers-info grid grid-cols-2 gap-4">
                                     {screen.tiers.map((tier, index) => (
                                         <div
@@ -166,7 +169,6 @@ const ScreenDetails = () => {
                                     ))}
                                 </div>
 
-                                {/* Screen Images */}
                                 <div className="screen-images mt-6">
                                     <h3 className="text-2xl font-semibold mb-4">Screen Images</h3>
                                     <div className="image-grid grid grid-cols-3 gap-4">
@@ -186,23 +188,12 @@ const ScreenDetails = () => {
                                 </div>
                             </div>
                         )}
-
                         {content === 'seat-layout' && (
-                            subContent !== 'add-seat' ? ( // Corrected conditional check
-                                <div className="seat-layout-section">
-                                    <div className="flex flex-col items-center justify-center py-20">
-                                        <FaChair size={50} className="text-secondary mb-4" />
-                                        <p className="text-gray-500 text-sm">Start setting up your seat layout.</p>
-                                        <button
-                                            onClick={() => dispatch(setContent({subContent:"add-seat"}))}
-                                            className="bg-primary text-white py-2 px-6 mt-6 rounded hover:bg-primaryhover transition"
-                                        >
-                                            Create Seat Layout
-                                        </button>
-                                    </div>
-                                </div>
+                            
+                            subContent !== 'add-seat' ? ( 
+                                <SeatLayout screen1 = {screen} isScreen = {true}/>
                             ) : (
-                                <AddSeatLayout tiers={screen.tiers} theaterId={theaterId}/>
+                                <AddSeatLayout ogTiers={screen.tiers} theaterId={theaterId} selectedSeats1={null} setEnableEdit={null}/>
 
                             )
                         )}
@@ -210,19 +201,31 @@ const ScreenDetails = () => {
 
 
                         {content === 'screen-timings' && (
-                            <div className="screen-timings-section">
-                                <div className="flex flex-col items-center justify-center py-20">
-                                    <FaClock size={50} className="text-green-500 mb-4" />
-                                    <p className="text-gray-500 text-sm">Set the timings for this screen.</p>
-                                    <button
-                                        onClick={() => alert('Navigating to Screen Timings Setup...')}
-                                        className="bg-primary text-white py-2 px-6 mt-6 rounded hover:bg-primaryhover transition"
-                                    >
-                                        Set Screen Timings
-                                    </button>
-                                </div>
-                            </div>
+
+                            subContent !== 'add-time' ? (
+                                <ScreenTimings screenId={screenId}/>
+                            ):(
+                                <AddScreenTimings screenId={screenId}/>
+                            )
                         )}
+
+
+                        {content === 'running-movie' && (
+                            subContent === 'add-movie' ? (
+                                <AddMovie />
+                            ) : (
+                                <RunningMovie />
+                            )
+                        )}
+
+                        {content === 'shows' && (
+                            subContent != "show-layout" ? (
+                                <AllShows screenId={screenId}/>
+                            ): subContent === "show-layout" && (
+                                <ShowLayout screenId={screenId}/>
+                            )
+                        )}
+
                     </div>
                 </>
             )}

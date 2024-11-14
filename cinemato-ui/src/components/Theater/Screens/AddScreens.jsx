@@ -7,6 +7,8 @@ import useAxiosInstance from '../../../axiosConfig';
 import './ListScreens.css'
 import axios from 'axios';
 import { IoIosCloseCircleOutline } from "react-icons/io";
+import TierForm from './TierForm';
+import { useSelector } from 'react-redux';
 
 
 
@@ -28,6 +30,7 @@ function AddScreens() {
 
   const {id}= useParams()
   const axiosInstance = useAxiosInstance()
+
   // const [theaterImages, setTheaterImages] = useState(null);
 
   // useEffect(() => {
@@ -110,6 +113,7 @@ function AddScreens() {
   const handleTierChange = (index, field, value) => {
     const updatedTiers = tiers.map((tier, i) => i === index ? { ...tier, [field]: value } : tier);
     setTiers(updatedTiers);
+    console.log("updated Tier: ",updatedTiers)
   };
 
   
@@ -211,6 +215,7 @@ function AddScreens() {
       if (response.status === 201) {
         console.log(response);
         ToastNotifier("success", "Screen added successfully");
+        
         navigate(`/owner/theater-details/${id}/`)
         
       } else {
@@ -230,6 +235,11 @@ function AddScreens() {
   const handleScreenTypeSelect = (type) => {
     setSelectedScreenType(type); // Update selected type
   };
+
+
+
+
+  
 
 
   return (
@@ -275,7 +285,13 @@ function AddScreens() {
 
         {/* Dynamic Tier Fields */}
         {tiers.length > 0 && tiers.length < 6 && (
+          // <TierForm tiers={tiers} handleTierChange={handleTierChange} setTiers={setTiers} />
   <div className="space-y-6 transition-all ease-in-out transform">
+<div className="relative p-4 bg-yellow-50 border-l-4 border-secondary rounded-md shadow-md mt-4">
+  <p className="text-gray-700 text-sm font-semibold">
+    <span className="text-primary">Note:</span> The screen is displayed at the bottom, and the order of tiers below will be reflected in the final layout.
+  </p>
+</div>
     {tiers.map((tier, index) => (
       <div
         key={index}

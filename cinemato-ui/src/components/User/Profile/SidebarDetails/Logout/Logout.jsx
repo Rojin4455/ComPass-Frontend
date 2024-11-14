@@ -27,6 +27,7 @@ function Logout() {
                     await persistor.purge()
                     // dispatch(setContent('personalDetails'))
                     console.log("logout successfully : ",response)
+                    dispatch(setContent({ content: 'personalDetails' }))
                     navigate('/')
                 }else{
                     console.log("something went wrong",response)

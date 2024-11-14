@@ -4,7 +4,8 @@ import storage from "redux-persist/lib/storage";
 
 
 const initialState = {
-    content: "personalDetails"
+    content: "personalDetails",
+    page:'home'
 }
 
 const userProfile = createSlice({
@@ -12,7 +13,8 @@ const userProfile = createSlice({
     initialState,
     reducers: {
         setContent: (state,action) => {
-            state.content = action.payload.content
+            state.content = action.payload.content || state.content
+            state.page = action.payload.page || state.page
         }
     }
 

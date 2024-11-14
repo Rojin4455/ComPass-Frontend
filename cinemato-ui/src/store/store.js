@@ -7,7 +7,10 @@ import storage from 'redux-persist/lib/storage'; // Default to localStorage for 
 import userProfileReducer from '../slices/userProfileSlice';
 import adminFilterReducer from '../slices/adminMovieFilterSlice'
 import OwnerScreenReducer from '../slices/OwnerScreenSlice';
-
+import ScreenDetailsReducer from '../slices/screenFullDetailsSlice'
+import UserLocationReducer from '../slices/userLocationSlice'
+import DateReducer from '../slices/userSelectedDateSlice'
+import BookingReducer from '../slices/userBookingSlice'
 
 // Combine reducers if you have more slices
 const rootReducer = combineReducers({
@@ -15,6 +18,11 @@ const rootReducer = combineReducers({
     userprofile: userProfileReducer,
     adminfilter:adminFilterReducer,
     ownerscreen:OwnerScreenReducer,
+    screendetails:ScreenDetailsReducer,
+    location:UserLocationReducer,
+    date:DateReducer,
+    booking:BookingReducer,
+
 });
 
 // Create persist configuration

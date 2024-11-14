@@ -54,6 +54,7 @@ function AdminAddMovieDetails() {
                         
                     } else {
                         console.log("No playable trailers found.");
+                        setTrailer(null)
                     }
 
                     
@@ -135,10 +136,10 @@ function AdminAddMovieDetails() {
     };
 
     // Function to handle close button click
-    const handleCloseModal = () => {
-        setShowTrailer(false);
-        setSelectedTrailer(null);
-    };
+      const handleCloseModal = () => {
+          setShowTrailer(false);
+          setSelectedTrailer(null);
+      };
 
     
     const toggleMovieListing = () => {
@@ -367,7 +368,7 @@ function AdminAddMovieDetails() {
 
             {/* Trailer Modal */}
             <div>
-            {showTrailer && selectedTrailer && (
+            {showTrailer && (
                                 <AdminShowTrailers showTrailer={showTrailer} selectedTrailer={selectedTrailer} handleCloseModal={handleCloseModal} />
             )}
             </div>

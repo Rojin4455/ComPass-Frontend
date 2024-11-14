@@ -28,7 +28,6 @@ function Login({ isOpen, onClose, onSubmit }) {
     e.preventDefault();
     setError('');
     
-    // Validate email and phone
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const phonePattern = /^\d{10}$/;
 
@@ -47,7 +46,6 @@ function Login({ isOpen, onClose, onSubmit }) {
         return;
     }
 
-    // If validation passes, call onSubmit
     try {
 
         const requestData = {};
@@ -111,7 +109,7 @@ function Login({ isOpen, onClose, onSubmit }) {
     >
       <div 
         className="bg-white p-8 rounded-lg shadow-lg w-96 flex flex-col items-center" 
-        onClick={(e) => e.stopPropagation()} // Prevent clicks inside the modal from closing it
+        onClick={(e) => e.stopPropagation()}
       >
         <img src='/assets/Login-logo.jpg' alt="Logo" className='w-32 mb-4'/>
         <h2 className="text-xl font-bold mb-2">Verify Your Information</h2>
@@ -160,14 +158,12 @@ function Login({ isOpen, onClose, onSubmit }) {
           </div>
         </form>
 
-        {/* Divider with "or" */}
         <div className="my-4 flex items-center w-full">
           <hr className="flex-grow border-gray-300"/>
           <span className="mx-2 text-gray-500">or</span>
           <hr className="flex-grow border-gray-300"/>
         </div>
 
-        {/* Google Sign-In Button */}
         <button className="flex items-center justify-center px-4 py-2 w-full bg-white text-black rounded-md" onClick={onGoogleLoginSuccess}>
           <img src="/assets/google-logo.png" alt="Google" className="w-6 h-6 mr-2"/>
           Sign in with Google

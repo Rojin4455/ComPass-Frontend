@@ -4,6 +4,7 @@ import { createListenerMiddleware } from '@reduxjs/toolkit';
 import { FaUserCircle, FaCamera } from 'react-icons/fa';
 import Loading from '../AdminAddMovies/Loading';
 import {toast} from 'sonner'
+import showToast from '../../../utils/ToastNotifier';
 
 
 function AdminUsersList() {
@@ -66,7 +67,8 @@ function AdminUsersList() {
         
         if (response.status === 200) {
           console.log("Status changed successfully");
-          toast.success("User Status Updated")
+          // toast.success("User Status Updated")
+          showToast('success', 'User Status Updated')
           
           userStatus ? setUserStatus(false) : setUserStatus(true)
           // Update the local state only after a successful response
@@ -79,11 +81,12 @@ function AdminUsersList() {
           );
         } else {
           console.log("Failed to change status");
-          toast.error("Failed to change status")
+          showToast("error","Failed to change status")
         }
       } catch (error) {
         console.error("Error changing status:", error);
-        toast.error("Something Went Wrong")
+        // toast.error("Something Went Wrong")
+        showToast('error','Something Went Wrong')
       }
     };
   

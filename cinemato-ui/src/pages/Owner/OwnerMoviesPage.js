@@ -6,7 +6,9 @@ function OwnerMoviesPage() {
   return (
     <div>
       <Header page='owner/movies/'/>
+      <div className='pt-16'>
       <Movies/>
+      </div>
     </div>
   )
 }

@@ -182,9 +182,9 @@ function OwnerDetails() {
         <h2 className="text-2xl font-bold mb-3 text-gray-800">{theater.name}</h2>
 
         {/* Total Screens */}
-        <p className="text-gray-600 mb-2 text-base">
+        {/* <p className="text-gray-600 mb-2 text-base">
           <strong>Total Screens:</strong> {theater.total_screens}
-        </p>
+        </p> */}
 
         {/* Screen Types */}
         <div className="mb-2">

@@ -111,12 +111,11 @@ const Theaters = () => {
   {theatersData.map((theater, index) => (
     <div
       key={index}
-      className={`relative bg-gray-200 rounded-lg shadow-lg p-4 ${
+      className={`relative bg-white rounded-lg shadow-lg ${
         !theater.is_approved && "opacity-80 pointer-events-none "
       }` }
       onClick={theater.is_approved ? () => handleTheaterDetails(theater.id) : null} 
     >
-      {/* Theater Image */}
       <img
         src={`${theater.image_url}`}
         alt={theater.name}
@@ -124,21 +123,18 @@ const Theaters = () => {
       />
 
 
-      {/* Theater Info */}
-      <div className="p-6 bg-white shadow-md rounded-lg">
+      <div className="p-6 bg-white rounded-lg">
         <h2 className="text-3xl font-bold mb-4 text-gray-800">
           {theater.name}
         </h2>
 
-        {/* Total Screens */}
-        <p className="text-gray-600 mb-3 text-lg">
+        {/* <p className="text-gray-600 mb-3 text-lg">
           <strong>Total Screens:</strong> {theater.total_screens}
-        </p>
+        </p> */}
 
-        {/* Screen Types */}
         <div className="mb-3">
           <p className="text-lg font-semibold text-gray-700 mb-2">
-            Screen Types:
+            Screen Types
           </p>
           <div className="flex flex-wrap gap-2">
             {theater.screen_types.map((type) => (
@@ -152,7 +148,6 @@ const Theaters = () => {
           </div>
         </div>
 
-        {/* Food & Beverages */}
         <div className="flex items-center mb-3">
           {theater.is_food_and_beverages ? (
             <>
@@ -195,7 +190,6 @@ const Theaters = () => {
           )}
         </div>
 
-        {/* Parking Availability */}
         <div className="flex items-center mb-3">
           {theater.is_parking ? (
             <>
@@ -236,13 +230,11 @@ const Theaters = () => {
           )}
         </div>
 
-        {/* Location */}
         <p className="text-gray-700 text-lg mt-4">
           <strong>Location:</strong> {theater.location}
         </p>
 
       </div>
-                          {/* Unapproved Overlay */}
                           {!theater.is_approved && (
         <div className="absolute inset-0 flex items-center">
         <div className="bg-red-600 text-center text-white min-w-full items-center">

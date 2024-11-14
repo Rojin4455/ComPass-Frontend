@@ -15,20 +15,21 @@ import AdminListedMovieDetailsPage from '../pages/Admin/AdminListedMovieDetailsP
 
 
 
+
 function AdminRoutes() {
   return (
     <Routes>
-        <Route path={'admin/'} element={<AdminLogin/>}/>
+        <Route path={'/'} element={<AdminLogin/>}/>
         
-        <Route path={'admin/home/'} element={<AdminProtectedRoute><AdminHome/></AdminProtectedRoute>}/>
-        <Route path={'admin/users/'} element={<AdminProtectedRoute><AdminUsers/></AdminProtectedRoute>}/>
-        <Route path='admin/movies/' element={<AdminProtectedRoute><AdminMovies/></AdminProtectedRoute>}/>
-        <Route path='admin/addmovies/' element={<AdminProtectedRoute><AddMovies/></AdminProtectedRoute>}/>
-        <Route path='admin/theaters/' element={<AdminProtectedRoute><AdminTheater/></AdminProtectedRoute>}/>
-        <Route path='admin/addmovie-datail/:id' element={<AdminProtectedRoute><AddMoviesDetails/></AdminProtectedRoute>}/>
-        <Route path='admin/listmovie-datail/' element={<AdminProtectedRoute><AdminListedMovieDetailsPage/></AdminProtectedRoute>}/>
-        <Route path='/admin/requested-owners/' element={<AdminProtectedRoute><RequestedOwnersPage/></AdminProtectedRoute>}/>
-        <Route path='admin/owner-details/:id/' element={<AdminProtectedRoute><OwnerDetailsPage/></AdminProtectedRoute>}/>
+        <Route path={'/home/'} element={<AdminProtectedRoute><AdminHome/></AdminProtectedRoute>}/>
+        <Route path={'/users/'} element={<AdminProtectedRoute><AdminUsers/></AdminProtectedRoute>}/>
+        <Route path='/movies/' element={<AdminProtectedRoute><AdminMovies/></AdminProtectedRoute>}/>
+        <Route path='/addmovies/' element={<AdminProtectedRoute><AddMovies/></AdminProtectedRoute>}/>
+        <Route path='/theaters/' element={<AdminProtectedRoute><AdminTheater/></AdminProtectedRoute>}/>
+        <Route path='/addmovie-datail/:id' element={<AdminProtectedRoute><AddMoviesDetails/></AdminProtectedRoute>}/>
+        <Route path='/listmovie-datail/' element={<AdminProtectedRoute><AdminListedMovieDetailsPage/></AdminProtectedRoute>}/>
+        <Route path='/requested-owners/' element={<AdminProtectedRoute><RequestedOwnersPage/></AdminProtectedRoute>}/>
+        <Route path='/owner-details/:id/' element={<AdminProtectedRoute><OwnerDetailsPage/></AdminProtectedRoute>}/>
     </Routes>
   )
 }

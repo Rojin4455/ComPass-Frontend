@@ -14,6 +14,7 @@ function LoginOtp({ isOpen, onClose, onSubmit, email, phone }) {
     const dispatch = useDispatch();
     const user = useSelector((state) => state.user.user);
     const is_user = useSelector((state) => state.user?.is_user)
+    const location = useSelector((state) => state.location)
 
     
     const axiosInstance = useAxiosInstance();
@@ -22,7 +23,7 @@ function LoginOtp({ isOpen, onClose, onSubmit, email, phone }) {
         if (isOpen) {
             setTimeLeft(20);
             setTimerActive(true);
-            setOtp(["", "", "", "", "", ""]); // Optional: Reset OTP fields
+            setOtp(["", "", "", "", "", ""]);
         }
     }, [isOpen]);
 
@@ -64,27 +65,33 @@ function LoginOtp({ isOpen, onClose, onSubmit, email, phone }) {
             const response = await axiosInstance.post('verify-otp/', {
                 otp: otpString,
                 email: email || null,
-                phone: phone || null
+                phone: phone || null,
+                address:location.address,
+                lat:location.lat,
+                lng:location.lng,
+
             },
         {
             withCredentials:true
         });          
-            // Handle the response if needed
             if (response.status === 200) {
                 const user = response.data.requestData
                 const access_token = response.data.token.access
                 const refresh_token = response.data.token.refresh
                 const is_user = true
-                console.log("usre in otp:",user)
                 dispatch(setUser({user,access_token,refresh_token,is_user}))
-                showToast("success","OTP verification success"); // Success toast
+                showToast("success","OTP verification success");
                 onClose();
+
+
+
 
                 
 
-                onClose();
+                
+
+                // onClose();
             } else {
-                // Handle any error messages from the response
                 showToast("error",`OTP verification failed: ${response.data.message}`);
             }
         } catch (error) {
@@ -131,7 +138,7 @@ function LoginOtp({ isOpen, onClose, onSubmit, email, phone }) {
         setTimeLeft(20);
         setTimerActive(true);
         setOtp(["", "", "", "", "", ""]);
-        onResendOtp(); // Call onResendOtp to handle OTP resend logic
+        onResendOtp();
     };
 
     if (!isOpen) return null;
@@ -143,7 +150,7 @@ function LoginOtp({ isOpen, onClose, onSubmit, email, phone }) {
         >
             <div 
                 className="bg-white p-8 rounded-lg shadow-lg w-96 flex flex-col items-center" 
-                onClick={(e) => e.stopPropagation()} // Prevent clicks inside the modal from closing it
+                onClick={(e) => e.stopPropagation()}
             >
                 <img src='/assets/Login-logo.jpg' alt="Logo" className='w-32 mb-4'/>
                 <h2 className="text-xl font-bold mb-2">Enter OTP</h2>
