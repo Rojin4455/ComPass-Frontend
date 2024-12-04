@@ -252,11 +252,11 @@ const AddMovieModal = ({ isOpen, onClose, movie }) => {
                                                     // Show movie details if assigned
                                                     <div className="mt-2 p-2 bg-[#72A276] rounded-lg shadow-md flex items-center w-full">
                                                         <img
-                                                            src={`https://image.tmdb.org/t/p/w500${showTime.movie.backdrop_path}`}
+                                                            src={`https://image.tmdb.org/t/p/w500${showTime.movie.poster_path}`}
                                                             alt={showTime.movie.title}
                                                             className="w-10 h-10 rounded-md mr-2"
                                                         />
-                                                        <div className="flex-1 text-white font-bold">{showTime.movie.title}</div>
+                                                        <div className="flex-1 text-white font-bold truncate w-full overflow-hidden">{showTime.movie.title}</div>
                                                     </div>
                                                 ) : (
                                                     // Show "+ Add Movie" button when no movie is added

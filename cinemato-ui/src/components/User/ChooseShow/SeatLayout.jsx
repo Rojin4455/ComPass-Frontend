@@ -28,11 +28,11 @@ function SeatLayout() {
   const screen_name = useSelector((state) => state.booking.selectedScreen)
   // const maxSelectionCount = 5;
 
-  const times = location.state.times
+  // const times = location.state.times
   const formattedFrontendDate = location.state.formattedFrontendDate
   const theaterId = location.state.theaterId
   const allScreens = location.state.allScreens
-  const selected = location.state.index
+  // const selected = location.state.index
   const axiosInstance = useAxiosInstance()
   const selectedTimeIndex = useSelector((state) => state.date.selectedTime)
   const selectedTimeOg = useSelector((state) => state.date.selectedTimeOg)
@@ -41,6 +41,7 @@ function SeatLayout() {
   // const [isOpen,setIsOpen] = useState(true)
   // const [isClose,setIsClose] = useState(true)
   const totalSeatCount = useSelector((state) => state.booking.totalSeatCount)
+  const [prevTotalSeatCount, setPrevTotalSeatCount] = useState(1)
   const dates = useSelector((state) => state.date.allDates)
   const selectedTheater = useSelector((state) => state.booking.selectedTheater)
   const selectedSeats = useSelector((state) => state.booking.selectedSeats)
@@ -209,6 +210,7 @@ const handleCheckout = async () => {
           selected_time:selectedTimeOg,
           tier:[...new Set(selectedSeats.map((seats) => seats.seat.tier_name))],
           screen_name:screen_name,
+          seat_layout:true,
         })
 
         if (response.status === 200) {
@@ -220,6 +222,10 @@ const handleCheckout = async () => {
         }
 
       }catch(er){ 
+        console.log("er: ",er)
+        if (er.status === 409){
+          showToast('error', er.response.data.detail)
+        }
         console.error("something went wrong: ",er)
 
       }
@@ -232,7 +238,7 @@ const handleCheckout = async () => {
   return (
 <div className="container mx-auto sm:p-2 flex">
   {totalSeatCount === null &&(
-  <SelectSeatNumberModal seatData={seatData}/>
+  <SelectSeatNumberModal seatData={seatData} page={'seatLayout'} setTotalSeatCount={null} totalSeatCount={prevTotalSeatCount} />
 )}
 
   <div className="w-3/4 bg-white flex flex-col p-1">
@@ -256,7 +262,7 @@ const handleCheckout = async () => {
   ))}
   </div>
   <button className="flex items-center gap-1 mr-3 justify-center bg-white border border-gray-500 hover:bg-primaryhover text-gray-500 font-semibold py-2 px-4 rounded-lg hover:text-gray-300 shadow-md transition duration-300 ease-in-out text-sm w-[13%] text-xs"
-  onClick={() => dispatch(setBooking({totalSeatCount:null}))}
+  onClick={() => {setPrevTotalSeatCount(totalSeatCount) ; dispatch(setBooking({totalSeatCount:null}))}}
   >
   <MdOutlineEdit/>
   <span>{totalSeatCount} Tickets</span>

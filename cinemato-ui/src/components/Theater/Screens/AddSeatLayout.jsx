@@ -8,6 +8,7 @@ import { FaRegEdit } from "react-icons/fa";
 import useAxiosInstance from '../../../axiosConfig';
 import showToast from '../../../utils/ToastNotifier';
 import { setScreen as setScreenAction } from '../../../slices/screenFullDetailsSlice';
+import StatusButton from '../../Common/StatusButton';
 // import fetchTheaterDetails from '../../../utils/fetchScreenDetails';
 
 

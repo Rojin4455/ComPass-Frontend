@@ -30,7 +30,6 @@ function LeftSnacksList({ categories, snacks }) {
     }
 
 
-    console.log("added snacks: ",addedSnacks, quantities)
 
 
 
@@ -96,7 +95,14 @@ function LeftSnacksList({ categories, snacks }) {
             </div>
 
             <div className="overflow-y-auto h-96 w-full">
-                <div className="grid grid-cols-2 gap-4">
+    {selectedSnacks.length === 0 ? (
+        <div className="flex items-center justify-center h-full">
+            <p className="text-gray-500 text-md font-medium">
+                No snacks are available.
+            </p>
+        </div>
+    ) : (
+        <div className="grid grid-cols-2 gap-4">
             {selectedSnacks.map((snack, index) => {
                 const quantity = quantities[snack.id] || 0;
                 const isAdded = addedSnacks.some((s) => s.id === snack.id);
@@ -139,8 +145,9 @@ function LeftSnacksList({ categories, snacks }) {
                     </div>
                 );
             })}
-                </div>
-            </div>
+        </div>
+    )}
+</div>
         </div>
     );
 }

@@ -10,6 +10,7 @@ import ProfileEdit from '../../components/User/Profile/SidebarDetails/ProfileDet
 import { useDispatch } from 'react-redux'
 import useAxiosInstance from '../../axiosConfig'
 import { setUser } from '../../slices/userSlice'
+import MyBookings from '../../components/User/Profile/SidebarDetails/Bookings/MyBookings'
 
 
 function UserProfile() {
@@ -47,14 +48,16 @@ function UserProfile() {
       case "logout":
         return <Logout />;
       case "editProfile":
-        return <ProfileEdit />;
+          return <ProfileEdit />;
+      case "myBookings":
+          return <MyBookings />;
       default:
         return <div>Select an option from the sidebar</div>;
     }
   }
 
   return (
-    <div className='bg-[#F1F1F1]'>
+    <div className='bg-gray-100 w-full h-full'>
       <MainLayout>
         <UserDetails />
         <div className='flex mt-8'>

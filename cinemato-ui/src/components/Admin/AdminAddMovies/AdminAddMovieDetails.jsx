@@ -18,21 +18,24 @@ function AdminAddMovieDetails() {
     const axiosInstance = useAxiosInstance();
     const AxiosConfigInstance = useAxiosConfigInstance()
     const { id } = useParams();
-    const [movie, setMovie] = useState(null); // State to store movie data
-    const [trailers, setTrailer] = useState([]); // State to store trailers
-    const [loading, setLoading] = useState(true); // State to handle loading
-    const [showTrailer, setShowTrailer] = useState(false); // State to control trailer modal visibility
-    const [selectedTrailer, setSelectedTrailer] = useState(null); // State to store selected trailer
+    const [movie, setMovie] = useState(null);
+    const [trailers, setTrailer] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [showTrailer, setShowTrailer] = useState(false);
+    const [selectedTrailer, setSelectedTrailer] = useState(null);
 
     const [showAllCast, setShowAllCast] = useState(false);
     const [showAllCrew, setShowAllCrew] = useState(false);
   
     const [castAndCrew, setCastAndCrew] = useState({ cast: [], crew: [] });
+    const [releaseDate, setReleaseDate] = useState(null)
 
     const visibleCast = showAllCast ? castAndCrew.cast : castAndCrew.cast.slice(0, 10);
     const visibleCrew = showAllCrew ? castAndCrew.crew : castAndCrew.crew.slice(0, 10);
 
     const [isMovieListed, setIsMovieListed] = useState(false);
+
+    console.log("herere")
 
     useEffect(() => {
         const fetchMovieById = async (movieId) => {
@@ -40,6 +43,7 @@ function AdminAddMovieDetails() {
                 const movieResponse = await axiosInstance.get(`https://api.themoviedb.org/3/movie/${movieId}?api_key=7cedc204afadbacc97f11b62930feaa3`);
                 if (movieResponse.status === 200) {
                     setMovie(movieResponse.data);
+                    setReleaseDate(movieResponse.data.release_date? movieResponse.data.release_date : null)
                     
                 } else {
                     console.log("Error response", movieResponse);
@@ -69,6 +73,7 @@ function AdminAddMovieDetails() {
                     // castAndCrew.filter((cast.) => {
 
                     // })
+                    console.log("cast and crew: ",castAndCrewResponse)
                 } else {
                     console.log("Error response", castAndCrewResponse);
                 }
@@ -84,6 +89,19 @@ function AdminAddMovieDetails() {
         fetchMovieById(id);
     }, []);
 
+
+    const [isEditingReleaseDate, setIsEditingReleaseDate] = useState(false);
+    const [newReleaseDate, setNewReleaseDate] = useState(releaseDate);
+
+    const handleSaveReleaseDate = () => {
+      if (newReleaseDate !== releaseDate) {
+          // Handle the save logic here, e.g., make an API call to update the release date
+          if (newReleaseDate){
+            setReleaseDate(newReleaseDate)
+          }
+      }
+      setIsEditingReleaseDate(false);
+  };
 
 
     // useEffect(() => {
@@ -119,13 +137,11 @@ function AdminAddMovieDetails() {
         title,
         poster_path,
         backdrop_path,
-        release_date,
         genres,
         runtime,
         overview:description,
         original_language,
         vote_average,
-
     } = movie;
 
     // Function to handle play button click
@@ -170,7 +186,6 @@ function AdminAddMovieDetails() {
         showToast("error","Something Went Wrong")
       }
     }
-
 
     const handleToggleMovieList = async () => {
         console.log("trailer in toggle", trailers);
@@ -218,13 +233,14 @@ function AdminAddMovieDetails() {
       const backdroprUrl = `https://image.tmdb.org/t/p/original${backdrop_path}`
       const posterUrl = `https://image.tmdb.org/t/p/w500${poster_path}`
     
+      console.log("release date: ",releaseDate)
 
 
         try{
             const response = await AxiosConfigInstance.post('movie/add-movie/',{
                 title,
                 tmdb_id,
-                release_date,
+                release_date:releaseDate,
                 runtime,
                 description,
                 vote_average,
@@ -302,7 +318,7 @@ function AdminAddMovieDetails() {
       <div className="ml-8 text-white">
         <h2 className="text-4xl font-bold">{title}</h2>
         <p className="mt-2 text-lg">
-          {release_date} • {original_language.toUpperCase()}
+          {releaseDate} • {original_language.toUpperCase()}
         </p>
         <p className="mt-2 text-lg">⭐ {vote_average}/10</p>
         <p className="mt-2 text-lg">{runtime} min</p>
@@ -352,8 +368,40 @@ function AdminAddMovieDetails() {
                         <h3 className="text-3xl font-semibold mb-4">Movie Info</h3>
                         <ul className="text-lg text-gray-700 space-y-2">
                             <li><strong>Genres: </strong>{genres.map(genre => genre.name).join(", ")}</li>
-                            <li><strong>Release Date: </strong>{release_date}</li>
-                            <li><strong>Duration: </strong>{runtime} min</li>
+                            <li className="relative">
+    <strong>Release Date: </strong>
+    {!isEditingReleaseDate ? (
+        <span
+            className="cursor-pointer text-blue-600 hover:underline"
+            onClick={() => setIsEditingReleaseDate(true)}
+        >
+            {releaseDate}
+        </span>
+    ) : (
+        <div className="flex items-center space-x-2">
+            <input
+                type="date"
+                className="border border-gray-300 rounded-md px-2 py-1 text-sm focus:ring-2 focus:gray-700"
+                value={newReleaseDate}
+                onChange={(e) => setNewReleaseDate(e.target.value)}
+            />
+            <button
+                className="px-3 py-1 bg-primary text-white rounded-md hover:bg-primaryhover"
+                onClick={handleSaveReleaseDate}
+            >
+                Save
+            </button>
+            <button
+                className="px-3 py-1 border border-gray-800 text-gray-800 rounded-md hover:bg-gray-400 hover:text-white hover:border-none"
+                onClick={() => {
+                    setIsEditingReleaseDate(false);
+                }}
+            >
+                Cancel
+            </button>
+        </div>
+    )}
+</li>                            <li><strong>Duration: </strong>{runtime} min</li>
                             <li><strong>Language: </strong>{original_language.toUpperCase()}</li>
                         </ul>
                     </div>

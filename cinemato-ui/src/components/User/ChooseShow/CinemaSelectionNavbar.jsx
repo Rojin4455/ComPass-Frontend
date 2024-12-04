@@ -13,9 +13,7 @@ const CinemaSelection = ({dates, scheduledTheaters }) => {
   // const [selectedDate, setSelectedDate] = useState(null);
   const [isSearchVisible, setIsSearchVisible] = useState(false);
   const dispatch = useDispatch()
-  console.log("scheduled theaters in navbar: ",scheduledTheaters)
   const selectedDate = useSelector((state) => state.date.selectedDate)
-  console.log("selecrtd dateL ", selectedDate)
 
   const movie = useSelector((state) => state.booking.selectedMovie)
   useEffect(() => {

@@ -11,6 +11,7 @@ import ScreenDetailsReducer from '../slices/screenFullDetailsSlice'
 import UserLocationReducer from '../slices/userLocationSlice'
 import DateReducer from '../slices/userSelectedDateSlice'
 import BookingReducer from '../slices/userBookingSlice'
+import OwnerShowReducer from '../slices/OwnerShowSlice'
 
 // Combine reducers if you have more slices
 const rootReducer = combineReducers({
@@ -21,6 +22,7 @@ const rootReducer = combineReducers({
     screendetails:ScreenDetailsReducer,
     location:UserLocationReducer,
     date:DateReducer,
+    ownershow:OwnerShowReducer,
     booking:BookingReducer,
 
 });

@@ -26,18 +26,16 @@ function ProfileEdit() {
         });
     }, [user]);
 
-    // Handle form input changes
     const handleChange = (e) => {
         const { name, value } = e.target;
 
         let formattedValue = name === 'phone' ? value.replace(/[^0-9]/g, '') : value;
 
-        // Check if the phone number length is more than 10 digits
         if (name === 'phone' && formattedValue.length > 10) {
             setError('Phone number must be exactly 10 digits.');
-            formattedValue = formattedValue.slice(0, 10); // Trim to 10 digits
+            formattedValue = formattedValue.slice(0, 10);
         } else {
-            setError(''); // Clear error if input is valid
+            setError('');
         }
 
         setFormData({

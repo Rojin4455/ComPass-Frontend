@@ -12,7 +12,6 @@ function UserDetails() {
     const BASE_URL = process.env.REACT_APP_BASE_API_URL;
     const fileInputRef = useRef(null);
 
-    console.log("user: ",user )
 
 
     const handleProfileChange = () => {

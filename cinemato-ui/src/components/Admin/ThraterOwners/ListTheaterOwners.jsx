@@ -62,7 +62,6 @@ function ListTheaterOwners() {
     try{
     const response = await axiosInstance.get(`admin/owner-details/${ownerId}`)
     if (response.status === 200){
-      showToast("success","owner details found successfully")
       
       navigate(`/admin/owner-details/${response.data.owner_data.id}`)
     }else{
@@ -151,14 +150,7 @@ function ListTheaterOwners() {
 
               {/* Approve/Disapprove Buttons */}
               <div className="space-x-2">
-  {owner.is_approved ? (
-    <button
-      className="bg-red-500 text-white px-6 py-2 rounded-full"
-      onClick={() => handleDisapprove(owner.id)}
-    >
-      Disapprove
-    </button>
-  ) : (
+  {!owner.is_approved && (
     <button
       className="bg-green-500 text-white px-6 py-2 rounded-full shadow-lg hover:bg-green-600 transition ease-in-out duration-300 transform hover:-translate-y-1 hover:scale-105 focus:ring-2 focus:ring-green-300 focus:outline-none"
       onClick={() => handleApprove(owner.id)}

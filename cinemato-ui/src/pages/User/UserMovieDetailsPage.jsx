@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux';
 import Loading from '../../components/Common/Loading';
 import useAxiosInstance from '../../axiosConfig'
 import { useLocation } from 'react-router-dom'; // Import useLocation
+import ReviewBase from '../../components/User/Movie/ReviewBase';
 
 
 
@@ -55,6 +56,8 @@ function UserMovieDetailsPage() {
         <div ref={movieDetailsRef}>
             <MovieDetails />
         </div>
+        <ReviewBase/>
+
         <SimilarMovies movies={location.nowShowing} isLoading={loading}/>
     </MainLayout>
   )

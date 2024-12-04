@@ -18,6 +18,22 @@ function RunningTheaters({ scheduledTheaters, dates, selectedDate }) {
         Nov: "11", Dec: "12"
     };
 
+    const isPastTime = (timeString, selectedDate) => {
+        console.log("time string in user:,",timeString,"selectedDate : ",selectedDate)
+        const now = new Date();
+        const [hour, minute] = timeString.split(':').map(Number);
+    
+        const selectedDateTime = new Date(
+            selectedDate.year,
+            new Date(`${selectedDate.month} 1, 2024`).getMonth(),
+            selectedDate.day,
+            hour,
+            minute
+        );
+    
+        return selectedDateTime < now;
+    };
+
     const axiosInstance = useAxiosInstance()
     const navigate = useNavigate()
     const dispatch = useDispatch()
@@ -45,7 +61,7 @@ function RunningTheaters({ scheduledTheaters, dates, selectedDate }) {
 
     }
 
-    console.log("scheduled theaters: ", theatersForDate)
+
 
     const [expandedTheater, setExpandedTheater] = useState(null);
 
@@ -55,8 +71,7 @@ function RunningTheaters({ scheduledTheaters, dates, selectedDate }) {
 
 
     const handleShowTimeClick = async (theater, showTime, screenName, times, timeIndex, allScreens) => {
-        console.log("Selected theater, showTime, screen, date in theater details:", showTime);
-    
+        console.log("time index: ",timeIndex)
         try {
             const response = await axiosInstance.post('booking/seat-layout/', {
                 theater_id: theater.id,
@@ -66,8 +81,6 @@ function RunningTheaters({ scheduledTheaters, dates, selectedDate }) {
             });
 
 
-
-    
             if (response.status === 200) {
                 console.log("Seat layout fetched successfully:", response);
                 dispatch(setDate({selectedTime:timeIndex, selectedTimeOg:showTime}))
@@ -81,7 +94,9 @@ function RunningTheaters({ scheduledTheaters, dates, selectedDate }) {
                         screenName: screenName,
                         allScreens: allScreens,
                         index: timeIndex
-                    }
+                    
+                    }, 
+                    replace:true
                 });
             } else {
                 console.log("Unexpected response status:", response);
@@ -147,18 +162,36 @@ function RunningTheaters({ scheduledTheaters, dates, selectedDate }) {
                             {expandedTheater === index && (
           <div className="mt-4 border-t border-gray-300 pt-4">
             <div className="ml-1 grid grid-cols-2 gap-3 mt-4 mb-2 md:grid-cols-3 lg:grid-cols-8">
-              {Object.entries(theater.showtimes.screen).map(([screen, times], screnIndex) => (
-                times.map((time, timeIndex) => (
-                  <div
-                    key={`${screen}-${timeIndex}`}
-                    className="flex flex-col p-4 w-full border border-[#177D23] rounded-md shadow-sm bg-[#F5FAF6] text-center transform transition-all hover:scale-105 cursor-pointer"
-                    onClick={() => handleShowTimeClick(theater, time[0], screen, theater.showtimes['time'], `${timeIndex}${screnIndex}`, theater.showtimes.screen)}
-                  >
-                    <span className="text-sm font-semibold text-[#177D23]">{convertTo12HourFormat(time[0])}</span>
-                    <span className="text-xs font-semibold text-primary">{time[1]}</span>
-                  </div>
-                ))
-              ))}
+            {Object.entries(theater.showtimes.screen).map(([screen, times], screnIndex) => (
+    [...times]
+        .sort((a, b) => {
+            const [aHours, aMinutes] = a[0].split(':').map(Number);
+            const [bHours, bMinutes] = b[0].split(':').map(Number);
+            return aHours * 60 + aMinutes - (bHours * 60 + bMinutes);
+        })
+        .map((time, timeIndex) => (
+            <div
+                key={`${screen}-${timeIndex}`}
+                className={`flex flex-col p-4 w-full border border-[#177D23] rounded-md shadow-sm bg-[#F5FAF6] text-center transform transition-all ${
+                    isPastTime(time[0], dates[selectedDate]) ? 'opacity-50 cursor-not-allowed' : 'hover:scale-105 cursor-pointer'
+                }`}
+                onClick={() =>
+                    !isPastTime(time[0], dates[selectedDate]) &&
+                    handleShowTimeClick(
+                        theater,
+                        time[0],
+                        screen,
+                        theater.showtimes['time'],
+                        `${timeIndex}${screnIndex}`,
+                        theater.showtimes.screen
+                    )
+                }
+            >
+                <span className="text-sm font-semibold text-[#177D23]">{convertTo12HourFormat(time[0])}</span>
+                <span className="text-xs font-semibold text-primary">{time[1]}</span>
+            </div>
+        ))
+))}
             </div>
           </div>
                             )}

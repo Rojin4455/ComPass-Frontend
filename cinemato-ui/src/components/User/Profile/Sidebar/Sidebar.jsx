@@ -2,6 +2,8 @@ import React,{useState} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { IoPerson, IoNotifications, IoLogOut } from "react-icons/io5";
 import { setContent } from '../../../../slices/userProfileSlice';
+import { RiMovie2Fill } from "react-icons/ri";
+
 
 function Sidebar() {
     const dispatch = useDispatch();
@@ -25,13 +27,21 @@ function Sidebar() {
         <>
         <div className="w-1/4 p-4 bg-white h-full mx-10 rounded-lg">
             <ul className="space-y-4">
-                <li>
+            <li>
                     <div
                         className={getClassNames('personalDetails')}
                         onClick={() => dispatch(setContent({ content: 'personalDetails' }))}
                     >
                         <IoPerson className="mr-2" />
                         Personal Details
+                    </div>
+                </li>                <li>
+                    <div
+                        className={getClassNames('myBookings')}
+                        onClick={() => dispatch(setContent({ content: 'myBookings' }))}
+                    >
+                        <RiMovie2Fill className="mr-2" />
+                        My Bookings
                     </div>
                 </li>
                 <li>

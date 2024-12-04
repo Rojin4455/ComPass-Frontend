@@ -8,9 +8,9 @@ import { IoIosArrowRoundBack } from 'react-icons/io';
 import { IoChevronBackOutline } from "react-icons/io5";
 import AddSeatLayout from './AddSeatLayout';
 import { useDispatch, useSelector } from 'react-redux';
-import { setContent } from '../../../slices/OwnerScreenSlice';
+import { clearContent, setContent } from '../../../slices/OwnerScreenSlice';
 import SeatLayout from './SeatLayout';
-import { setScreen as setScreenAcion } from '../../../slices/screenFullDetailsSlice';
+import { setScreen as setScreenAcion, clearScreen } from '../../../slices/screenFullDetailsSlice';
 import AddScreenTimings from '../ScreenTime/AddScreenTimings';
 import ScreenTimings from '../ScreenTime/ScreenTimings';
 import RunningMovie from './Movie/RunningMovie';
@@ -18,6 +18,7 @@ import AddMovie from './Movie/AddMovie';
 import MovieDetails from './Movie/OwnerMovieDetails';
 import AllShows from './Shows/AllShows';
 import ShowLayout from './Shows/ShowLayout';
+import { clearShow } from '../../../slices/OwnerShowSlice';
 
 
 const ScreenDetails = () => {
@@ -57,6 +58,11 @@ const ScreenDetails = () => {
     }, [])
 
 
+    useEffect(() => {
+        return () => dispatch(clearScreen())
+    },[])
+
+
 
     
 
@@ -67,7 +73,7 @@ const ScreenDetails = () => {
             {loading ? (<Loading loading={loading} />) : (
                 <>
                     <div className="flex items-center mb-4 gap-1 cursor-pointer"
-                        onClick={() => navigate(`/owner/theater-details/${theaterId}/`)}>
+                        onClick={() => { dispatch(clearShow()); dispatch(clearContent());  navigate(`/owner/theater-details/${theaterId}/`)}}>
                         <IoChevronBackOutline
                             size={20}
                             className="text-gray-700 cursor-pointer hover:text-primary transition"

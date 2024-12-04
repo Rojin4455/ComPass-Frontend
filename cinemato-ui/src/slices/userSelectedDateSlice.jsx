@@ -22,8 +22,6 @@ const initialState = {
     selectedTime: null,
     selectedTimeOg: null,
 }
-
-
 const dateSlice = createSlice({
     name:'date',
     initialState,

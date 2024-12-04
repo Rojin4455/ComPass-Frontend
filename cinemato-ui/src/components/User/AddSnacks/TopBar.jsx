@@ -7,7 +7,7 @@ import { clearBooking } from '../../../slices/userBookingSlice';
 import { replace, useNavigate } from 'react-router-dom';
 import { clearDates } from '../../../slices/userSelectedDateSlice';
 
-function TopBar({title}) {
+function TopBar({title,isPayment}) {
     const axiosInstance = useAxiosInstance()
     const dates = useSelector((state) => state.date.allDates)
     const {selectedTheater,selectedSeats, selectedScreen} = useSelector((state) => state.booking)
@@ -35,7 +35,7 @@ function TopBar({title}) {
               tier:[...new Set(selectedSeats.map((seats) => seats.seat.tier_name))],
               screen_name:selectedScreen,
             })
-            if (response.status === 200){
+            if ([200].includes(response.status)){
                 console.log("good response: ",response)
                 setIsCleared(true);
             }else{
@@ -43,6 +43,9 @@ function TopBar({title}) {
             }
 
                 }catch(er){
+                  if (er.status === 409){
+                    setIsCleared(true)
+                  }
                     console.error("something went wrong: ",er)
                 }
 
@@ -64,7 +67,7 @@ function TopBar({title}) {
 
 
   return (
-    <div className="fixed w-full flex justify-between items-center bg-primary p-6 shadow-md text-white">
+    <div className="fixed w-full flex justify-between items-center bg-gray-100 p-6 text-gray-800 z-20">
       <div className="flex items-center space-x-2"
         onClick={handleBack}
       >

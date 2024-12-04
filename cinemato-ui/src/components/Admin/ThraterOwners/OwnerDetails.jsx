@@ -251,15 +251,9 @@ function OwnerDetails() {
           </div>
 
           <div className="flex items-right pointer-events-auto">
-            {theater.is_approved ? (
-              <button
-                className="flex items-center text-white px-4 py-2 bg-red-500 rounded-lg shadow-lg hover:bg-red-600 transition ease-in-out duration-300 transform hover:-translate-y-1 hover:scale-105 focus:ring-2 focus:ring-red-300 focus:outline-none"
-                onClick={() => handleDisapprove(theater.id)}
-              >
-                <TiTimes size={20} className="mr-2 text-white" />
-                Deny
-              </button>
-            ) : (
+            {!theater.is_approved && (
+
+            
               <button
                 className="flex items-center text-white px-4 py-2 rounded-lg bg-green-500 hover:bg-green-600 transition ease-in-out duration-300 transform hover:-translate-y-1 hover:scale-105 focus:ring-2 focus:ring-green-300 focus:outline-none"
                 onClick={() => {

@@ -12,7 +12,6 @@ function SetTime() {
     e.preventDefault();
 
     try {
-      // Send a POST request to the backend with movie title and time
       const response = await axiosInstance.post("screen/set-time/", {
         movie_title: movieTitle,
         time: time,

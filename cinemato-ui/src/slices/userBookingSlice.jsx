@@ -8,6 +8,9 @@ const initialState = {
     selectedSeats: [],
     addedSnacks:[],
     quantities:{},
+    email:"",
+    phone:"",
+    isProceed:false,
 }
 
 
@@ -23,6 +26,9 @@ const bookingSlice = createSlice({
             state.selectedSeats = action.payload.selectedSeats !==undefined ? action.payload.selectedSeats : state.selectedSeats
             state.addedSnacks = action.payload.addedSnacks !==undefined ? action.payload.addedSnacks : state.addedSnacks
             state.quantities = action.payload.quantities !==undefined ? action.payload.quantities : state.quantities
+            state.email = action.payload.email !==undefined ? action.payload.email : state.email
+            state.phone = action.payload.phone !==undefined ? action.payload.phone : state.phone
+            state.isProceed = action.payload.isProceed !==undefined ? action.payload.isProceed : state.isProceed
 
         },
         clearBooking:(state,action) => {
@@ -32,6 +38,9 @@ const bookingSlice = createSlice({
             state.quantities = {};
             state.selectedTheater = null;
             state.selectedScreen = null
+            state.email = ''
+            state.phone = ''
+            state.isProceed = false
         }
         
     }

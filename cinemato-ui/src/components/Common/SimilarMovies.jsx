@@ -50,7 +50,7 @@ function SimilarMovies({ movies, isLoading }) {
     }
 
     return (
-        <div className="relative py-4">
+        <div className="relative py-4 mt-[7rem]">
             <div className="relative flex items-center justify-center max-w-5xl mx-auto">
                 {/* Left Scroll Button */}
                 <button

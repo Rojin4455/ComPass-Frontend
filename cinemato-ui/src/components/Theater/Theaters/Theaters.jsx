@@ -102,9 +102,15 @@ const Theaters = () => {
       {theatersData.length === 0 ? (
         <div className="text-center">
           <h2 className="text-xl font-semibold mb-4">No theaters listed</h2>
-          <button className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600" onClick={handleAddTheater}>
-            Add Theater
-          </button>
+          <div className="flex justify-center">
+    <button
+      className="flex items-center gap-2 bg-yellow-100 text-black border-2 border-secondary rounded-full px-4 py-2 hover:bg-yellow-200 hover:border-secondary transition-all"
+      onClick={handleAddTheater}
+    >
+      <RiFunctionAddLine size={30} />
+      Add Theater
+    </button>
+  </div>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

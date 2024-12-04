@@ -3,11 +3,26 @@ import { useDispatch } from 'react-redux';
 import { setContent } from '../../../slices/OwnerScreenSlice';
 import { FaClock } from 'react-icons/fa';
 import useAxiosInstance from '../../../axiosConfig';
+import ScheduleMovieDetailsModal from './ScheduleMovieDetailsModal';
+import { MdEditCalendar } from "react-icons/md";
+import { MdDeleteSweep } from "react-icons/md";
+import DeleteScheduleModal from './DeleteScheduleModal';
+
+
 
 function ScreenTimings({ screenId }) {
     const dispatch = useDispatch();
     const axiosInstance = useAxiosInstance();
     const [addedTimes, setAddedTimes] = useState([]);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [showTime, setShowTime] = useState([])
+    const [responseStatus, setResponseStatus] = useState(null);
+
+
+
+
 
     useEffect(() => {
         const fetchAllTime = async () => {
@@ -15,24 +30,24 @@ function ScreenTimings({ screenId }) {
                 const response = await axiosInstance.get(`screen/screen-time/${screenId}`);
                 if (response.status === 200) {
                     const showtimeEntries = Object.values(response.data.data);
-                    
+                    console.log("response data in timeL ",response.data)
                     const times = showtimeEntries.map((showtimeEntry) => {
-                        const timeString = showtimeEntry.time.start_time.slice(0, 5); // Get HH:MM only
+                        const timeString = showtimeEntry.time.start_time.slice(0, 5);
                         const [hours, minutes] = timeString.split(':').map(Number);
                         const date = new Date();
                         date.setHours(hours);
                         date.setMinutes(minutes);
                         
-                        // Format the time to 12-hour format with AM/PM
                         const formattedTime = date.toLocaleTimeString([], {
                             hour: '2-digit',
                             minute: '2-digit',
                             hour12: true,
-                        }).replace('am', 'AM').replace('pm', 'PM'); // Convert am/pm to AM/PM
+                        }).replace('am', 'AM').replace('pm', 'PM');
                 
                         return {
                             time: formattedTime,
-                            movie: showtimeEntry.movie !== "None" ? showtimeEntry.movie : null // Include movie object
+                            movie: showtimeEntry.movie !== "None" ? showtimeEntry.movie : null,
+                            schedules: showtimeEntry.movie_schedule? showtimeEntry.movie_schedule : null
                         };
                     });
 
@@ -46,35 +61,102 @@ function ScreenTimings({ screenId }) {
             }
         };
         fetchAllTime();
-    }, [screenId]);
+        console.log("response status")
+    }, [screenId, responseStatus]);
+
+
+    const handleCloseModal = () => {
+        setShowDeleteModal(false);
+      };
+
+    const handleUpdateSchedule = async (showtime) => {
+        setShowTime(showtime)
+        setIsModalOpen(true)
+
+    }
+
+    const handleConfirmDelete = (showtime) => {
+        setShowDeleteModal(false);
+      };
+    
+      const handleDeleteClick = (showtime) => {
+        setShowTime(showtime)
+        setShowDeleteModal(true); 
+      };
+
+
 
     return (
         <div className="screen-timings-section">
+
+
+            {isModalOpen &&
+            <ScheduleMovieDetailsModal showTime={showTime}
+            setShowTime={setShowTime}
+            setAddedTimes={setAddedTimes}
+            addedTimes={addedTimes}
+            onClose={() => setIsModalOpen(false)} 
+            />
+}
+                  {showDeleteModal && (
+        <DeleteScheduleModal
+          onClose={handleCloseModal}
+          onConfirm={handleConfirmDelete}
+          showtime={showTime}
+          setResponseStatus={setResponseStatus}
+        />
+      )}
+
             {addedTimes.length > 0 && (
                 <div className="times-list mb-6">
                     <h3 className="text-xl font-bold mb-6 text-center text-gray-700">Scheduled Screen Times</h3>
                     <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
-                        {addedTimes.map((showtime, index) => (
-                            <div
-                                key={index}
-                                className="p-3 border border-[#177D23] rounded-lg shadow-sm bg-[#F5FAF6] text-[#177D23] text-center transform transition-all hover:scale-105"
-                            >
-                                <span className="text-lg font-bold">{showtime.time}</span>
-                                {showtime.movie ? (
-                                    <div className="mt-2">
-                                        <p className="font-medium">{showtime.movie.title}</p>
-                                        {/* <img 
-                                            src={`https://image.tmdb.org/t/p/w500${showtime.movie.backdrop_path}`} // Adjust property based on actual API response
-                                            alt={showtime.movie.title}
-                                            className="w-16 h-16 mt-2 mx-auto rounded"
-                                        /> */}
-                                    </div>
-                                ) : (
-                                    <p className="text-sm text-gray-500 mt-2">No movie scheduled</p>
-                                )}
-                            </div>
-                        ))}
-                    </div>
+    {addedTimes.map((showtime, index) => (
+        <div
+            key={index}
+            className="p-3 border border-[#177D23] rounded-lg shadow-sm bg-[#F5FAF6] text-[#177D23] text-center transform transition-all hover:scale-105"
+        >
+
+            <span className="text-lg font-bold">{showtime.time}</span>
+            {showtime.movie ? (
+                <>
+                <div className="mt-2">
+                    <p className="font-medium truncate w-full overflow-hidden">{showtime.movie.title}</p>
+                    {/* <img 
+                        src={`https://image.tmdb.org/t/p/w500${showtime.movie.backdrop_path}`} 
+                        alt={showtime.movie.title}
+                        className="w-16 h-16 mt-2 mx-auto rounded"
+                    /> */}
+
+                </div>
+                <div className="flex  items-center justify-between">
+      {/* Update Icon */}
+      <button
+        onClick={() => handleUpdateSchedule(showtime)}
+        className="text-[#F59E0B] rounded hover:text-[#D97706] focus:outline-none"
+      >
+        <MdEditCalendar className="text-xl" />
+      </button>
+
+      {/* Delete Icon */}
+      <button
+        onClick={() => handleDeleteClick(showtime)}
+        className="text-[#F44336] hover:text-[#D32F2F] focus:outline-none"
+      >
+        <MdDeleteSweep className="text-xl" />
+      </button>
+
+    </div>
+                </>
+                
+            ) : (
+                <p className="text-sm text-gray-500 mt-2">No movie scheduled</p>
+            )}
+
+        </div>
+    ))}
+</div>
+
                 </div>
             )}
             

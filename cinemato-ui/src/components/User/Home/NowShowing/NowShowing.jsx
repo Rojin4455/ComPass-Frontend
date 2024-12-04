@@ -84,7 +84,7 @@ function NowShowing({ movies }) {
                             </div>
                         ))
                         : movies.map((movie, index) => (
-                            <div key={index} className="w-64 h-auto rounded-lg flex-shrink-0 bg-white overflow-hidden">
+                            <div key={index} className="w-64 h-auto rounded-lg flex-shrink-0 bg-white overflow-hidden relative">
                                 <img
                                     src={movie.poster_path}
                                     alt={movie.title}
@@ -142,7 +142,7 @@ function NowShowing({ movies }) {
                                             </span>
                                         ))}
                                     </div>
-                                    <div className='w-full mt-4 flex items-center'>
+                                    <div className='absolute bottom-0   w-full mt-4 flex items-center'>
                                         <button className="w-4/6 bg-primary text-white py-2 rounded-lg text-center font-medium hover:bg-primary-dark transition-colors">
                                             Book Tickets
                                         </button>

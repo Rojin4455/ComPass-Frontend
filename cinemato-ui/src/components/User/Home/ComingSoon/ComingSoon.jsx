@@ -72,7 +72,7 @@ function NowShowing({movies}) {
                 </div> */}
                 <div
                     ref={scrollRef}
-                    className="flex overflow-x-auto space-x-6 scrollbar-hide"
+                    className="flex overflow-x-auto space-x-6 scrollbar-hide mb-10"
                     style={{ scrollBehavior: 'smooth', scrollbarWidth: 'none', msOverflowStyle: 'none' }}
                 >
                     {isLoading
@@ -88,7 +88,7 @@ function NowShowing({movies}) {
                             </div>
                           ))
                         : movies.map((movie, index) => (
-                            <div key={index} className="w-64 h-140 rounded-lg flex-shrink-0 bg-gray-100">
+                            <div key={index} className="w-64 h-140 rounded-lg flex-shrink-0 bg-gray-100 relative">
                                 <img
                                     src={movie.poster_path}
                                     alt={movie.title}
@@ -118,7 +118,7 @@ function NowShowing({movies}) {
                                         ))}
                                     </div>
 
-                                    <div className='w-full mt-4 flex items-center'>
+                                    <div className='absolute bottom-0 w-full mt-6 flex items-center'>
                                         <button className="bg-white text-primary px-4 py-2 rounded-lg font-semibold border border-gray-500">View Details</button>
 
                                         <MdNotificationAdd

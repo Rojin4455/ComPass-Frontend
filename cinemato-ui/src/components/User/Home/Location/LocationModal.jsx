@@ -10,6 +10,7 @@ import { IoIosClose } from "react-icons/io";
 import { setLoading } from '../../../../slices/userSlice';
 import showToast from '../../../../utils/ToastNotifier';
 import useAxiosInstance from '../../../../axiosConfig';
+import '../../Profile/SidebarDetails/Bookings/cancelModal.css'
 
 
 
@@ -204,7 +205,7 @@ function LocationModal() {
     return (
         
         <div className="fixed bg-[#7e7e7e90] w-full h-screen flex justify-center items-center p-5 top-0 z-20">
-  <div className="bg-white w-3/5 py-9 flex flex-col justify-around items-center relative">
+  <div className="bg-white w-3/5 py-9 flex flex-col justify-around items-center relative animate-spring">
   {location.display && (
     <button
     className="absolute top-4 right-4 text-gray-500 hover:text-gray-800"

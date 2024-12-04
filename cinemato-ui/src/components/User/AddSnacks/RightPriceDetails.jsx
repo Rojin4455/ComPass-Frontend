@@ -2,24 +2,47 @@ import React from 'react'
 import { TbTicketOff } from "react-icons/tb";
 import { useSelector } from 'react-redux';
 import Loading from '../../Common/Loading';
+import { MdDelete } from "react-icons/md";
+import { setBooking } from '../../../slices/userBookingSlice';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 
-function RightPriceDetails({movie}) {
+
+function RightPriceDetails({movie, isPayment}) {
 
     const selectedTimeOg = useSelector((state) => state.date.selectedTimeOg)
     const selectedDate = useSelector((state) => state.date.selectedDate)
     const dates = useSelector((state) => state.date.allDates)
-    const {selectedTheater,selectedSeats,quantities,addedSnacks} = useSelector((state) => state.booking)
+    const {selectedTheater,selectedSeats,quantities,addedSnacks, selectedScreen} = useSelector((state) => state.booking)
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
 
-    console.log("added snsacks: ",addedSnacks)
-    console.log("Quantity: ",quantities)
+    const deleteSnack = (snackId) => {
+            const updatedSnacks = addedSnacks.filter((snack) => snack.id !== snackId);
+          const { [snackId]: _, ...updatedQuantities } = quantities;
+          
+          dispatch(setBooking({
+              addedSnacks: updatedSnacks,
+              quantities: updatedQuantities
+          }));
+
+}
 
     if (!selectedSeats || !dates || !selectedTimeOg || !selectedTheater) {
         return <Loading loading={true} />;
       }
 
+
+      const handleCheckout = async () => {
+        navigate('/user/booking-payment/',{
+          replace:true
+        })
+      }
+
+
   return (
-    <div className="border p-4 rounded-lg shadow-md bg-white">
+    <div className="border p-6 rounded-lg shadow-md bg-white">
   <div className="flex items-center justify-between mb-4">
     <h4 className="text-lg font-semibold">Booking Summary</h4>
     <span className="text-xl text-gray-600">
@@ -40,7 +63,8 @@ function RightPriceDetails({movie}) {
         ? `${dates[selectedDate].day} ${dates[selectedDate].month} ${dates[selectedDate].dayOfWeek} ${dates[selectedDate].year}`
         : " "}
       </p>
-      <p className="text-xs text-gray-500">Theater: {selectedTheater.name}</p>
+      <p className="text-xs text-gray-500 mb-1">Theater: {selectedTheater.name} </p>
+      <p className="text-xs text-gray-500">{selectedScreen}</p>
     </div>
   </div>
 
@@ -75,9 +99,14 @@ function RightPriceDetails({movie}) {
     <div className="flex flex-col space-y-2 mb-2">
         {addedSnacks.map((snack) => (
             <div key={snack.id} className="flex justify-between text-xs text-gray-500">
+              <div className='flex items-center gap-2 text-xs text-gray-500'>
+                {!isPayment && (
+              <MdDelete size={17} className='cursor-pointer hover:text-red-800' onClick={() => deleteSnack(snack.id)}/>
+                )}
                 <p>
                     {quantities[snack.id]} x {snack.name} @ ₹{parseFloat(snack.price).toFixed(2)}
                 </p>
+                </div>
                 <p className="font-semibold text-gray-800">
                     Total: ₹{quantities[snack.id] * parseInt(snack.price)}
                 </p>
@@ -93,12 +122,14 @@ function RightPriceDetails({movie}) {
 
       </div>
 
-
-      <div className='mt-[10%]'>
+      
+      <div className={`mt-[10%] ${isPayment? 'bg-yellow-100 p-3': '' }`}>
+      {!isPayment && (
       <div className="border-t border-gray-300"></div>
+      )}
 
-      <div className="flex justify-between items-center mb-4">
-    <p className="text-base font-semibold text-gray-700">Grand Total</p>
+      <div className={`flex justify-between items-center ${!isPayment ? 'mt-4' : ''}`}>
+    <p className={`{${isPayment?"text-xs text-gray-500" : "text-base text-gray-700" }font-semibold`}>{isPayment? "Amount Payable" : "Grand Total"}</p>
     <p className="text-base font-semibold text-gray-800">
         ₹{(
             addedSnacks.reduce((total, snack) => {
@@ -109,12 +140,13 @@ function RightPriceDetails({movie}) {
     </p>
 </div>
 
-
+    {!isPayment && (
     <button className="w-full bg-primary hover:bg-primaryhover text-white font-semibold py-2 rounded-md transition duration-300"
-    // onClick={handleCheckout}
+    onClick={handleCheckout}
       >
       Proceed to Checkout
     </button>
+    )}
     </div>
 
 

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FaClock, FaTrash } from 'react-icons/fa';
 import Clock from 'react-clock';
-import 'react-clock/dist/Clock.css'; // Assuming you're using this package for clock styles
+import 'react-clock/dist/Clock.css'; 
 import { IoChevronBackOutline } from "react-icons/io5";
 import { setContent } from '../../../slices/OwnerScreenSlice';
 import { useDispatch, useSelector } from 'react-redux';
@@ -9,23 +9,21 @@ import useAxiosInstance from '../../../axiosConfig';
 import showToast from '../../../utils/ToastNotifier';
 
 const ScreenTimingsSetup = ({ screenId }) => {
-  const [selectedHour, setSelectedHour] = useState(new Date().getHours() % 12 || 12); // default to current hour
-  const [selectedMinute, setSelectedMinute] = useState(new Date().getMinutes()); // default to current minute
-  const [amPm, setAmPm] = useState(new Date().getHours() >= 12 ? 'PM' : 'AM'); // default to AM/PM based on current time
-  const [selectedTime, setSelectedTime] = useState(''); // current time in "HH:MM:SS" format by default
+  const [selectedHour, setSelectedHour] = useState(new Date().getHours() % 12 || 12);
+  const [selectedMinute, setSelectedMinute] = useState(new Date().getMinutes());
+  const [amPm, setAmPm] = useState(new Date().getHours() >= 12 ? 'PM' : 'AM');
+  const [selectedTime, setSelectedTime] = useState('');
   const [addedTimes, setAddedTimes] = useState([]);
   const [isValid, setIsValid] = useState(true);
   const dispatch = useDispatch();
   const axiosInstance = useAxiosInstance();
 
-  // Format selected time to "HH:MM:SS" without date information
   const getSelectedTime = () => {
     const hours = amPm === 'PM' && selectedHour !== 12 ? selectedHour + 12 : selectedHour;
     const formattedTime = `${hours.toString().padStart(2, '0')}:${selectedMinute.toString().padStart(2, '0')}:00`;
     return formattedTime;
   };
 
-  // Fetch previously added times on mount
   useEffect(() => {
     const fetchAllTime = async () => {
       try {
@@ -33,7 +31,7 @@ const ScreenTimingsSetup = ({ screenId }) => {
         if (response.status === 200) {
           const showtimeEntries = Object.values(response.data.data);
           const times = showtimeEntries.map((showtimeEntry) => (
-            showtimeEntry.time.start_time.slice(0, 5) // Get HH:MM only
+            showtimeEntry.time.start_time.slice(0, 5)
           ));
           setAddedTimes(times);
         } else {
@@ -48,7 +46,6 @@ const ScreenTimingsSetup = ({ screenId }) => {
     fetchAllTime();
   }, []);
 
-  // Check if the new time is at least 3 hours apart from existing times
   const isTimeValid = (newTime) => {
     const [newHours, newMinutes] = newTime.split(':').map(Number);
     const newTimeInMinutes = newHours * 60 + newMinutes;
@@ -119,7 +116,7 @@ const ScreenTimingsSetup = ({ screenId }) => {
       <div className="flex flex-col items-center justify-center py-10">
         <h2 className="text-2xl text-gray-700 mb-6">Set Screen Timings</h2>
 
-        <Clock value={new Date()} renderMinuteMarks renderSecondHand={false} hourHandWidth={5} minuteHandWidth={3} />
+        <Clock value={getSelectedTime()} renderMinuteMarks renderSecondHand={false} hourHandWidth={5} minuteHandWidth={3} />
 
         <div className="flex items-center space-x-4 mb-4 mt-6">
           <select value={selectedHour} onChange={(e) => setSelectedHour(Number(e.target.value))} className="border rounded p-2">
@@ -149,7 +146,6 @@ const ScreenTimingsSetup = ({ screenId }) => {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
           {addedTimes.length > 0 ? (
   addedTimes.map((timeString, index) => {
-    // Split the time string to create a Date object
     const [hours, minutes] = timeString.split(':').map(Number);
     const date = new Date();
     date.setHours(hours);

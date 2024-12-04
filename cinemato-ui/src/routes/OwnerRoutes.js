@@ -35,6 +35,7 @@ function OwnerRoutes() {
       <Route path={'/set-time'} element={<OwnerProtectedRoute><SetTime/></OwnerProtectedRoute>} />
       <Route path={'/snacks-list'} element={<OwnerProtectedRoute><SnacksListPage/></OwnerProtectedRoute>} />
       <Route path={'/theater-add-snacks'} element={<OwnerProtectedRoute><AddTheaterSnacksPage/></OwnerProtectedRoute>} />
+      {/* <Route path={'/theater-add-snacks'} element={<OwnerProtectedRoute><AddTheaterSnacksPage/></OwnerProtectedRoute>} /> */}
     </Routes>
   );
 }

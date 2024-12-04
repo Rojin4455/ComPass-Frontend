@@ -18,11 +18,16 @@ const screenDetails = createSlice({
             state.screen = action.payload.screen || state.screen
             state.showScreen = action.payload.showScreen || state.showScreen
             state.showScreenBacic = action.payload.showScreenBacic || state.showScreenBacic
+        },
+        clearScreen: (state,action) => {
+            state.screen = {}
+            state.showScreen = {}
+            state.showScreenBacic = {}
         }
     }
 })
 
-export const {setScreen} = screenDetails.actions
+export const {setScreen, clearScreen} = screenDetails.actions
 
 export default screenDetails.reducer;
 

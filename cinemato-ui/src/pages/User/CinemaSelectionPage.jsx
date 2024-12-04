@@ -22,7 +22,7 @@ function CinemaSelectionPage() {
           const date = new Date(today);
           date.setDate(today.getDate() + i);
       
-          const day = String(date.getDate()).padStart(2, '0'); // Day with leading zero
+          const day = String(date.getDate()).padStart(2, '0');
           const month = months[date.getMonth()];
           const dayOfWeek = daysOfWeek[date.getDay()];
           const year = date.getFullYear()

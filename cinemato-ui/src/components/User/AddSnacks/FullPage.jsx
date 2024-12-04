@@ -13,6 +13,7 @@ function FullPage() {
   const axiosInstance = useAxiosInstance()
   const theaterId = useSelector((state) => state.booking.selectedTheater)
   const selectedMovie = useSelector((state) => state.booking.selectedMovie)
+  const isPayment = false
   
 
   useEffect(() => {
@@ -77,7 +78,7 @@ function FullPage() {
           </div>
   
           <div className="w-1/3 p-4 bg-500">
-            <RightPriceDetails movie={selectedMovie} />
+            <RightPriceDetails movie={selectedMovie} isPayment={isPayment}/>
           </div>
         </div>
       </div>
