@@ -16,6 +16,7 @@ import { useDispatch } from 'react-redux';
 import LocationModal from '../Location/LocationModal';
 import { PlacesContext } from '../../../../context/placesContext';
 import { useContext } from 'react';
+import { setContent } from '../../../../slices/userProfileSlice';
 
 function Header() {
   const [isLoginOpen, setIsLoginOpen] = useState(false);
@@ -43,6 +44,7 @@ function Header() {
 
   
   const handleClick = () => {
+    dispatch(setContent({page:'home'}))
     navigate('/')
   };
 
@@ -81,6 +83,7 @@ function Header() {
   }
 
 
+    
 
 
 
@@ -142,7 +145,7 @@ function Header() {
 </button>
 
   <button
-    onClick={handleClick}
+    onClick={() => {navigate('/movie'); dispatch(setContent({page:'movies'}))}}
     className={`flex items-center gap-2 px-3 py-1 md:px-4 md:py-2 rounded-full text-sm md:text-base ${
       page === 'movies' ? 'bg-primary text-white ' : 'bg-white text-primary border border-gray-700'
     }`}  >

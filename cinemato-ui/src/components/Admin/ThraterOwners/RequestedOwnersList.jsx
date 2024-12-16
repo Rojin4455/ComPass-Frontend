@@ -11,7 +11,18 @@ function RequestedOwnersList() {
   const axiosInstance = useAxiosInstance();
   const navigate = useNavigate()
 
-  
+  const roomName = 'lobby';
+  const chatSocket = new WebSocket(`ws://${window.location.host}/ws/chat/${roomName}/`);
+
+  chatSocket.onmessage = function(event) {
+      const message = event.data;
+      console.log('Received message:', message);
+      // Display the message in the chat UI
+  };
+
+  function sendMessage(message) {
+      chatSocket.send(message);
+  }
 
 
 

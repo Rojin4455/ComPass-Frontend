@@ -16,6 +16,8 @@ import SectionDivider from '../../components/User/Home/SectionDivider';
 import Loading from '../../components/Admin/AdminAddMovies/Loading';
 import NoMovieRunning from '../../components/User/Home/NoMovieRunning';
 import { setContent } from '../../slices/userProfileSlice';
+import FutureShowings from '../../components/User/Home/FutureShowings/FutureShowings';
+import Footer from '../../components/User/Home/Footer/Footer';
 
 function UserHome() {
   const [data, setData] = useState(null);
@@ -34,7 +36,6 @@ function UserHome() {
 
 
   
-  dispatch(setContent({page:'home'}))
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -119,11 +120,11 @@ function UserHome() {
 
 
 
-  useEffect(() => {
+  // useEffect(() => {
 
-  }, [location]);
+  // }, [location]);
 
-
+  console.log("location: ",location)
   return (
     <>
       <MainLayout>
@@ -138,6 +139,7 @@ function UserHome() {
         <RecommendedMovies movies={location.nowShowing}/>
         <SectionDivider title="Now Showing" />
         <NowShowing movies={location.nowShowing}/>
+        {/* <FutureShowings movies={location.futureShowing} /> */}
         <ComingSoon movies={location.upComing}/>
         </>
       ):(
@@ -147,8 +149,10 @@ function UserHome() {
         <SectionDivider/>
         </>
       )}
+       <Footer/>
       </>
     {/* )} */}
+   
       </MainLayout>
     </>
   );

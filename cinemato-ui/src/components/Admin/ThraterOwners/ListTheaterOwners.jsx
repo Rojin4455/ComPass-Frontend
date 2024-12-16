@@ -1,18 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import useAxiosInstance from '../../../axiosConfig';
-import { VscGitPullRequestNewChanges } from "react-icons/vsc";
+import { VscBell, VscGitPullRequestNewChanges } from "react-icons/vsc";
 import { useNavigate } from 'react-router-dom';
 import { FaChampagneGlasses } from 'react-icons/fa6';
 import showToast from '../../../utils/ToastNotifier';
+import ListRequestedOwners from './ListRequestedOwners';
 
 
 function ListTheaterOwners() {
   const [owners, setOwners] = useState([]);
   const axiosInstance = useAxiosInstance()
   const navigate = useNavigate()
+  const [notifications, setNotifications] = useState([]);
+  const [websocket, setWebsocket] = useState(null);
+  const [isRead, setIsRead] = useState(false)
+  const [isRequested, setIsRequested] = useState(false)
 
-  // Fetch theater owners from the API
   useEffect(() => {
     const fetchOwners = async () => {
       try {
@@ -27,12 +31,56 @@ function ListTheaterOwners() {
     fetchOwners();
   }, []);
 
-  // Approve a theater owner
+  useEffect(() => {
+    const ws = new WebSocket('ws://localhost:8000/ws/notifications/');
+
+    ws.onopen = () => {
+      console.log('WebSocket Connected');
+    };
+
+    ws.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+
+      if(data.type === "existing_notifications"){
+        setNotifications(data.notifications)
+      }else if(data.type === "new_notification"){
+        const newNotification = {
+          id: data.notification.id || Date.now(),
+          message: data.notification.message,
+          is_read: data.notification.is_read || false,
+          created_at: data.notification.created_at || new Date().toISOString()
+      };
+      setNotifications(prev => [newNotification, ...prev]);
+      }
+      console.log("this is notification data: ", data)
+
+    };
+
+    ws.onerror = (error) => {
+      console.error('WebSocket Error:', error);
+    };
+
+    setWebsocket(ws);
+
+    return () => {
+      if (ws) ws.close();
+    };
+  }, []);
+
+
+  useEffect(()=> {
+    
+    const is_read = notifications.some(notification => notification.is_read === false);
+    setIsRead(is_read);
+    console.log("notification:",notifications)
+    console.log("isRead", is_read)
+  }, [notifications])
+
+
   const handleApprove = async (ownerId) => {
     try {
       await axiosInstance.patch(`admin/theater-owners/${ownerId}/approve/`);
       showToast("success",'Owner approved successfully');
-      // Update the UI after approval
       setOwners(owners.map(owner => owner.id === ownerId ? { ...owner, is_approved: true } : owner));
     } catch (error) {
       console.error('Error approving owner:', error);
@@ -40,22 +88,15 @@ function ListTheaterOwners() {
     }
   };
 
-  // Disapprove a theater owner
-  const handleDisapprove = async (ownerId) => {
-    try {
-      await axiosInstance.patch(`admin/theater-owners/${ownerId}/disapprove/`);
-      showToast("success",'Owner disapproved successfully');
-      // Update the UI after disapproval
-      setOwners(owners.map(owner => owner.id === ownerId ? { ...owner, is_approved: false } : owner));
-    } catch (error) {
-      console.error('Error disapproving owner:', error);
-      showToast("error",'Failed to disapprove owner');
-    }
-  };
 
 
   const getRequestedOwners = async () => {
-    navigate('/admin/requested-owners/')
+    // navigate('/admin/requested-owners-list/',{
+    //   state: {
+    //     notifications:notifications
+    //   }
+    // })
+    setIsRequested(true)
   }
 
   const getOwner = async (ownerId) => {
@@ -71,36 +112,53 @@ function ListTheaterOwners() {
     console.error("bad response", error)
   }
 }
-
   return (
     <div className="container mx-auto p-6">
-      
-  <h1 className="text-3xl font-bold mb-8 text-center">Theater Owner</h1>
+      {isRequested? ( 
+      <ListRequestedOwners notifications={notifications} setNotifications={setNotifications} setIsRequested={setIsRequested}/>
+):(
+  <>
+<h1 className="text-3xl font-bold mb-8 text-center">Theater Owner</h1>
   {owners.length === 0 ? (
     <>
     <p className="text-center text-gray-500">No theater owners found.</p>
     <div className="flex justify-center items-center mt-10">
-  <button
-    className="flex items-center gap-2 bg-primary text-white border-2 border-primary rounded-lg px-6 py-3 shadow-lg hover:bg-primaryhover hover:bg-primaryhover: '#284757',
- transition-all transform hover:scale-105"
- onClick={getRequestedOwners}
-  >
-    <VscGitPullRequestNewChanges size={24} />
-    All Requests
-  </button>
+    <button
+  className={`flex items-center gap-2 bg-white text-primary border-2 border-primary rounded-lg px-6 py-3 shadow-lg 
+              hover:bg-primary hover:text-white transition-all transform hover:scale-105 ${
+                !isRead ? 'relative' : ''
+              }`}
+  onClick={getRequestedOwners}
+>
+  <div className="relative">
+    <VscBell size={24} />
+    {isRead && (
+      <span className="absolute top-0 right-0 w-3 h-3 bg-red-500 rounded-full border-2 border-white"></span>
+    )}
+  </div>
+  <span className="font-medium">Requests</span>
+</button>
 </div>
     </>
   ) : (
     <>
 <div className="flex justify-end mb-6">
-  <button
-    className="flex items-center gap-2 bg-primary text-white border-2 border-primary rounded-lg px-6 py-3 shadow-lg hover:bg-primaryhover hover:bg-primaryhover: '#284757',
- transition-all transform hover:scale-105"
- onClick={getRequestedOwners}
-  >
-    <VscGitPullRequestNewChanges size={24} />
-    All Requests
-  </button>
+<button
+  className={`flex items-center gap-2 bg-white text-primary border-2 border-primary rounded-lg px-6 py-3 shadow-lg 
+              hover:bg-primary hover:text-white transition-all transform hover:scale-105 ${
+                !isRead ? 'relative' : ''
+              }`}
+  onClick={getRequestedOwners}
+>
+  <div className="relative">
+    <VscBell size={24} />
+    {isRead && (
+      <span className="absolute top-0 right-0 w-3 h-3 bg-red-500 rounded-full border-2 border-white"></span>
+    )}
+  </div>
+  <span className="font-medium">Requests</span>
+</button>
+
 </div>
 
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -148,7 +206,6 @@ function ListTheaterOwners() {
                 {owner.is_approved ? "Approved" : "Pending"}
               </p>
 
-              {/* Approve/Disapprove Buttons */}
               <div className="space-x-2">
   {!owner.is_approved && (
     <button
@@ -170,6 +227,10 @@ function ListTheaterOwners() {
     </div>
     </>
   )}
+  </>
+)}
+      
+  
 </div>
 
 

@@ -1,6 +1,5 @@
 import React from 'react'
 import Header from '../../components/Admin/Header/Header'
-import AdminListedMovieDetails from '../../components/Admin/AdminListedMovies/AdminListedMovieDetails'
 import MovieDetails from '../../components/Common/MovieDetails'
 
 function AdminListedMovieDetailsPage() {

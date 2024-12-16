@@ -19,7 +19,6 @@ function RunningTheaters({ scheduledTheaters, dates, selectedDate }) {
     };
 
     const isPastTime = (timeString, selectedDate) => {
-        console.log("time string in user:,",timeString,"selectedDate : ",selectedDate)
         const now = new Date();
         const [hour, minute] = timeString.split(':').map(Number);
     
@@ -71,7 +70,6 @@ function RunningTheaters({ scheduledTheaters, dates, selectedDate }) {
 
 
     const handleShowTimeClick = async (theater, showTime, screenName, times, timeIndex, allScreens) => {
-        console.log("time index: ",timeIndex)
         try {
             const response = await axiosInstance.post('booking/seat-layout/', {
                 theater_id: theater.id,

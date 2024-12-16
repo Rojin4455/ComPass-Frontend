@@ -113,7 +113,7 @@ function LocationModal() {
         })
         if (response.status === 200){
           console.log("movie response: ",response)
-          dispatch(setLocation({isLocation:true,nowShowing:response.data.now_showing,upComing:response.data.upcoming,display:false}))
+          dispatch(setLocation({isLocation:true,nowShowing:response.data.now_showing,upComing:response.data.upcoming,futureShowing:response.data.future_showings,display:false}))
           // setNowShowing(response.data.now_showing)
           // setUpComing(response.data.upcoming)
           // setIsLocation(true)

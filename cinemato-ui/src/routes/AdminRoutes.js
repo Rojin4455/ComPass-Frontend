@@ -8,11 +8,12 @@ import AdminUsers from '../pages/Admin/AdminUsers'
 import AdminTheater from '../pages/Admin/AdminTheater'
 import AddMovies from '../pages/Admin/AddMovies'
 import AddMoviesDetails from '../pages/Admin/AdminAddMoviesDetails'
-import AdminListedMovieDetails from '../components/Admin/AdminListedMovies/AdminListedMovieDetails'
 import RequestedOwnersPage from '../pages/Admin/RequestedOwnersPage'
 import OwnerDetailsPage from '../pages/Admin/OwnerDetailsPage'
 import AdminListedMovieDetailsPage from '../pages/Admin/AdminListedMovieDetailsPage'
-
+import NotificationComponent from '../pages/Admin/NotificationPage'
+import ListRequestedOwners from '../components/Admin/ThraterOwners/ListRequestedOwners'
+import ListRequestedOwnersPage from '../pages/Admin/ListRequestedOwnersPage'
 
 
 
@@ -29,7 +30,9 @@ function AdminRoutes() {
         <Route path='/addmovie-datail/:id' element={<AdminProtectedRoute><AddMoviesDetails/></AdminProtectedRoute>}/>
         <Route path='/listmovie-datail/' element={<AdminProtectedRoute><AdminListedMovieDetailsPage/></AdminProtectedRoute>}/>
         <Route path='/requested-owners/' element={<AdminProtectedRoute><RequestedOwnersPage/></AdminProtectedRoute>}/>
+        {/* <Route path='/requested-owners-list/' element={<AdminProtectedRoute><ListRequestedOwnersPage/></AdminProtectedRoute>}/> */}
         <Route path='/owner-details/:id/' element={<AdminProtectedRoute><OwnerDetailsPage/></AdminProtectedRoute>}/>
+        <Route path='notification/' element={<AdminProtectedRoute><NotificationComponent/></AdminProtectedRoute>} />
     </Routes>
   )
 }

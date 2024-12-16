@@ -129,6 +129,11 @@ function Login({ isOpen, onClose, onSubmit }) {
               className="mt-1 p-2 w-full border border-gray-300 rounded-md placeholder:text-sm placeholder:font-medium placeholder:text-gray-300 focus:border-primary focus:outline-none"
             />
           </div>
+          <div className="flex items-center">
+      <span className="block w-full h-[1px] bg-gray-300"></span>
+      <span className="text-xs text-gray-400 px-2">OR</span>
+      <span className="block w-full h-[1px] bg-gray-300"></span>
+    </div>
 
           <div className="mb-4">
             <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
@@ -151,7 +156,7 @@ function Login({ isOpen, onClose, onSubmit }) {
           <div className="flex justify-end">
             <button
               type="submit"
-              className="px-4 py-2 w-full bg-primary text-white rounded-md"
+              className="px-4 py-2 w-full bg-primary text-white rounded-md hover:bg-primaryhover"
             >
               Proceed
             </button>

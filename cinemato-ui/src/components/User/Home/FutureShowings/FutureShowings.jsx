@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'
 import 'tailwindcss/tailwind.css';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 
@@ -7,9 +7,7 @@ import { BsFillInfoCircleFill } from "react-icons/bs";
 import { CiCircleInfo } from "react-icons/ci";
 import { IoInformation } from "react-icons/io5";
 
-
-
-function NowShowing({ movies }) {
+function FutureShowings({movies}) {
     const scrollRef = React.useRef(null);
     const isLoading = useSelector((state) => state.location.showModal);
 
@@ -51,7 +49,7 @@ function NowShowing({ movies }) {
     <div className="flex items-center mb-6 mt-10">
         <hr className="border-t-2 mb-3 border-gray-300 flex-grow" />
         <h1 className="text-xl sm:text-xl md:text-2xl lg:text-2xl font-semibold mb-4 text-center">
-            In Theaters
+            Future Showings
         </h1>
         <hr className="border-t-2 mb-3 border-gray-300 flex-grow" />
     </div>
@@ -79,7 +77,7 @@ function NowShowing({ movies }) {
             : movies.map((movie, index) => (
                 <div
                     key={index}
-                    className="w-48 sm:w-64 flex-shrink-0 rounded-lg bg-white shadow-md overflow-hidden relative"
+                    className="w-48 sm:w-64 flex-shrink-0 rounded-lg bg-white overflow-hidden relative"
                 >
                     <img
                         src={movie.poster_path}
@@ -87,7 +85,7 @@ function NowShowing({ movies }) {
                         className="w-full h-64 sm:h-80 object-cover rounded-t-lg"
                     />
 
-                    <div className="p-4 space-y-3 w-full">
+                    <div className="py-4 space-y-3 w-full">
                         <h2 className="text-base sm:text-lg font-semibold text-gray-800 truncate">
                             {movie.title}
                         </h2>
@@ -130,7 +128,7 @@ function NowShowing({ movies }) {
                             ))}
                         </div>
 
-                        <div className=" w-full flex items-center justify-between">
+                        {/* <div className=" w-full flex items-center justify-between">
                             <button className="w-4/6 bg-primary text-white py-2 rounded-lg text-center font-medium hover:bg-primary-dark transition-colors">
                                 Book Tickets
                             </button>
@@ -138,7 +136,7 @@ function NowShowing({ movies }) {
                                 size={32}
                                 className="ml-2 border border-gray-300 rounded-lg p-2 hover:bg-secondary transition"
                             />
-                        </div>
+                        </div> */}
                     </div>
                 </div>
             ))}
@@ -149,4 +147,4 @@ function NowShowing({ movies }) {
     );
 }
 
-export default NowShowing;
+export default FutureShowings

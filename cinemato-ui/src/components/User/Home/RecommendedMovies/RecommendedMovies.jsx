@@ -47,7 +47,14 @@ function RecommendedMovies({movies}) {
 
     return (
         <div className="relative py-10 px-4 sm:px-6 md:px-10 lg:px-20">
-        <h1 className="text-2xl font-semibold mb-4 text-center lg:text-left">Recommended Movies</h1>
+            
+            <div className="flex items-center">
+        <hr className="border-t-2 mb-3 border-gray-300 flex-grow" />
+        <h1 className="text-xl sm:text-xl md:text-2xl lg:text-2xl font-semibold mb-4 text-center">
+            Recommended Movies
+        </h1>
+        <hr className="border-t-2 mb-3 border-gray-300 flex-grow" />
+    </div>
         <div className="flex items-center justify-between relative">
             {/* <button
                 onClick={scrollLeft}
@@ -128,16 +135,16 @@ function RecommendedMovies({movies}) {
         <h3 className="text-lg font-semibold text-gray-800 truncate">{movie.title}</h3>
         
         {/* Display Genres */}
-        <div className="flex flex-wrap gap-1 mt-1">
-            {movie.genres.map((genre, index) => (
-                <span 
-                    key={index} 
-                    className="text-xs text-gray-600 bg-gray-100 rounded-full px-2 py-1"
-                >
-                    {genre.name}
-                </span>
-            ))}
-        </div>
+            <div className="flex flex-wrap gap-1 mt-1">
+                {movie.genres.map((genre, index) => (
+                    <span 
+                        key={index} 
+                        className="text-xs text-gray-600 bg-gray-100 rounded-full px-2 py-1"
+                    >
+                        {genre.name}
+                    </span>
+                ))}
+            </div>
     </div>
 </div>
 

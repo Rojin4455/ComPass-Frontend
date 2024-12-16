@@ -77,34 +77,70 @@ const ReviewBase = () => {
         const fetchReviews = async () => {
             try{
             const response = await axiosInstance.get(`movie/get-reviews/${movie.id}/`)
-                if (response.status === 200){
-                    console.log("this is revies get api call")
-                    const transformedReviews = response.data.map((review) => ({
-                        id: review.id,
-                        user: review.user?.email ? review.user.email.split("@")[0] : "Anonymous User",
-                        platform: "cinemato",
-                        rating: parseFloat(review.rating), 
-                        hashtags: review.hashtags.map((hashtag) => `#${hashtag.heading}`),
-                        content: review.content || "No review content provided", 
-                        likes: review.likes_count,
-                        dislikes: review.dislikes_count,
-                        reviewReaction: review.review_reaction?.reaction? review.review_reaction.reaction : null,
-                        timeAgo: calculateTimeAgo(review.created_at), 
-                      }));
-                
-                      setReviews(transformedReviews);  
-
-                      console.log("rsponseC: ",response)          
-                }else{
-                    console.error('error response: ',response)
-                }
+            if (response.status === 200) {
+                console.log("this is reviews get API call");
+                console.log("user review: ", response.data.userReview);
+              
+                const userReview = response.data.userReview
+                  ? {
+                      id: response.data.userReview.id,
+                      user: response.data.userReview.user?.email
+                        ? response.data.userReview.user.email.split("@")[0]
+                        : "Anonymous User",
+                      platform: "cinemato",
+                      rating: parseFloat(response.data.userReview.rating),
+                      hashtags: response.data.userReview.hashtags.map(
+                        (hashtag) => `#${hashtag.heading}`
+                      ),
+                      content:
+                        response.data.userReview.content || "No review content provided",
+                      likes: response.data.userReview.likes_count,
+                      dislikes: response.data.userReview.dislikes_count,
+                      reviewReaction:
+                        response.data.userReview.review_reaction?.reaction || null,
+                      timeAgo: calculateTimeAgo(response.data.userReview.created_at),
+                      isEditable: true, // User review is editable
+                    }
+                  : null;
+              
+                const otherReviews = response.data.otherReviews.map((review) => ({
+                  id: review.id,
+                  user: review.user?.email
+                    ? review.user.email.split("@")[0]
+                    : "Anonymous User",
+                  platform: "cinemato",
+                  rating: parseFloat(review.rating),
+                  hashtags: review.hashtags.map((hashtag) => `#${hashtag.heading}`),
+                  content: review.content || "No review content provided",
+                  likes: review.likes_count,
+                  dislikes: review.dislikes_count,
+                  reviewReaction: review.review_reaction?.reaction || null,
+                  timeAgo: calculateTimeAgo(review.created_at),
+                  isEditable: false,
+                }));
+              
+                // Combine userReview and otherReviews
+                const allReviews = userReview
+                  ? [userReview, ...otherReviews]
+                  : otherReviews;
+              
+                setReviews(allReviews);
+                console.log("transformed reviews: ", allReviews);
+              } else {
+                console.error("error response: ", response);
+              }
             }catch(error){
                 console.error("something went wrong", error)
             }
         }
 
         fetchReviews()
-    },[isReaction])
+    },[isReaction,user])
+
+
+    const handleEditReview = async () => {
+        
+    }
 
 
   return (
@@ -122,15 +158,26 @@ const ReviewBase = () => {
     
   >
     <div className="space-y-1">
-    <h2 className="text-xl font-base">Add your rating & reviews</h2>
-    <h4 className="text-md font-thin">Your rating matters</h4>
+    {reviews.some((review) => review.isEditable) ? (
+    <>
+      <h2 className="text-xl font-base">You've already rated this movie</h2>
+      <h4 className="text-md font-thin">Thank you for your feedback!</h4>
+    </>
+  ) : (
+    <>
+      <h2 className="text-xl font-base">Add your rating & reviews</h2>
+      <h4 className="text-md font-thin">Your rating matters</h4>
+    </>
+  )}
     </div>
+    {!reviews.some((review) => review.isEditable) && (
     <button className="px-4 rounded-md text-md border border-primary text-primary font-semibold hover:bg-primary hover:text-white transition-all transform hover:scale-110"
     style={{ fontFamily: "Montserrat" }}
     onClick={handleRatingModal}
     > 
         Rate Now
     </button>
+    )}
   </div>
 
   <p className="text-gray-600 mb-4">Summary of {reviews.length} reviews.</p>
@@ -163,12 +210,15 @@ const ReviewBase = () => {
           <p className="text-gray-800">{review.content}</p>
         </div>
       
-       <ReviewActions review={review} isLoggedIn={isLoggedIn} handleReaction={handleReaction} likes={likes} dislikes={dislikes} isReaction={isReaction} />
+       <ReviewActions review={review} isLoggedIn={isLoggedIn} handleReaction={handleReaction} likes={likes} dislikes={dislikes} isReaction={isReaction}/>
       </div>
       
       ))}
     </div>
-  </div>
+  
+  
+</div>
+
 </div>
 
   );

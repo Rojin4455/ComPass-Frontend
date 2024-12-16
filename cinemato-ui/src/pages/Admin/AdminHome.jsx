@@ -6,10 +6,7 @@ function AdminHome() {
   return (
     <div>
       <Header page="admin/home/"/>
-      <div className='pt-20'>
-      <p>Hello Home</p>
         <AdminDashboard/>
-        </div>
       
     </div>
   )

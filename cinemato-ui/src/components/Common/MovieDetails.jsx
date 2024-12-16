@@ -14,6 +14,7 @@ import { useLocation } from "react-router-dom";
 import showToast from '../../utils/ToastNotifier';
 import { useDispatch, useSelector } from "react-redux";
 import { setBooking } from "../../slices/userBookingSlice";
+import { setFilter } from "../../slices/adminMovieFilterSlice";
 
 function MovieDetails() {
     const [loading, setLoading] = useState(false);
@@ -30,10 +31,10 @@ function MovieDetails() {
     const [showTitle, setShowTitle] = useState(false);
     const dispatch = useDispatch()
     
+    
 
 
 
-    const [isMovieListed, setIsMovieListed] = useState(true);
     const location = useLocation();
 
 
@@ -42,6 +43,25 @@ function MovieDetails() {
     // const movie = useSelector((state) => state.booking.selectedMovie)
 
     const movie = location.state.movie
+    const {
+        tmdb_id,
+        title,
+        poster_path,
+        backdrop_path,
+        release_date,
+        genres,
+        runtime,
+        description,
+        vote_average,
+        roles,
+        video_key,
+        id,
+        is_listed
+    } = movie;
+    const statusSlice = useSelector((state) => state.adminfilter.is_listed?state.adminfilter.is_listed : is_listed)
+    const [isMovieListed, setIsMovieListed] = useState(statusSlice);
+
+
     useEffect(() => {
         const handleScroll = () => {
             const stickyDiv = document.getElementById("sticky-book-section");
@@ -62,24 +82,8 @@ function MovieDetails() {
     
     
     
-    const {
-        tmdb_id,
-        title,
-        poster_path,
-        backdrop_path,
-        release_date,
-        genres,
-        runtime,
-        description,
-        vote_average,
-        roles,
-        video_key,
-        id
-    } = movie;
 
 
-
-    
     
     
 
@@ -129,6 +133,8 @@ function MovieDetails() {
         setIsMovieListed(!isMovieListed);
         if (isMovieListed) {
             handleToggleMovieUnList();
+        }else{
+            handleToggleMovieList()
         }
     };
 
@@ -137,14 +143,34 @@ function MovieDetails() {
     const handleToggleMovieUnList = async () => {
 
         try {
-            const response = await axiosInstance.post('movie/remove-movie/', {
+            const response = await axiosInstance.post('movie/inactive-movie/', {
                 id: tmdb_id
             })
             if (response.status === 200) {
-                console.log("movie unlisted successfully", response);
-                showToast("success", "movie unlisted successfully")
-                navigate('/admin/movies/')
+                console.log("movie deactivated successfully", response);
+                dispatch(setFilter({is_listed:false}))
+                showToast("success", "movie deactivated successfully")
 
+            } else {
+                console.error("error response", response)
+                showToast("error", "something went wrong")
+            }
+
+        } catch (error) {
+            console.error("error response in catch", error)
+            showToast("error", "Something Went Wrong")
+        }
+    }
+const handleToggleMovieList = async () => {
+
+        try {
+            const response = await axiosInstance.post('movie/activate-movie/', {
+                id: tmdb_id
+            })
+            if (response.status === 200) {
+                console.log("movie activated successfully", response);
+                dispatch(setFilter({is_listed:true}))
+                showToast("success", "movie activated successfully")
             } else {
                 console.error("error response", response)
                 showToast("error", "something went wrong")
@@ -218,7 +244,7 @@ function MovieDetails() {
                                             className={`absolute text-lg font-semibold text-black transition-all duration-300 ease-in-out ${isMovieListed ? "left-4" : "right-4"
                                                 }`}
                                         >
-                                            {isMovieListed ? "Listed" : "Unlisted"}
+                                            {isMovieListed ? "Active" : "Inactive"}
                                         </span>
 
                                         {/* Switch Circle */}

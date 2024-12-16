@@ -9,7 +9,7 @@ import useAxiosInstance from "../../../axiosBaseConfig";
 import Loading from "../../Admin/AdminAddMovies/Loading";
 
 function Movies() {
-  const [movies, setMovies] = useState([]); // Empty array initially
+  const [movies, setMovies] = useState([]);
   const axiosInstance = useAxiosInstance();
   const [isMovie, setIsMovie] = useState(true);
   const [loading, setLoading] = useState(true);
@@ -28,7 +28,7 @@ function Movies() {
       const fetchListedMovies = async () => {
         setLoading(true);
         try {
-          const response = await axiosInstance.get("movie/get-movie/");
+          const response = await axiosInstance.get("movie/get-movie/?page=theater");
           if (response.status === 200) {
             console.log("success", response);
             setMovies(response.data);

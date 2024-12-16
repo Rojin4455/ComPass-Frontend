@@ -40,23 +40,23 @@ function LoginOtp({ isOpen, onClose, onSubmit, email, phone }) {
     }, [isOpen, timerActive, timeLeft]);
     
 
-    const handleChange = (e, index) => {
-        const { value } = e.target;
-        if (value.match(/^[0-9]$/)) {
-            const newOtp = [...otp];
-            newOtp[index] = value;
-            setOtp(newOtp);
-            // Move focus to the next input
-            if (index < otp.length - 1) {
-                document.getElementById(`otp-${index + 1}`).focus();
-            }
-        } else if (value === "") {
-            // Move focus to the previous input if deleting
-            if (index > 0) {
-                document.getElementById(`otp-${index - 1}`).focus();
-            }
-        }
-    };
+    // const handleChange = (e, index) => {
+    //     const { value } = e.target;
+    //     if (value.match(/^[0-9]$/)) {
+    //         const newOtp = [...otp];
+    //         newOtp[index] = value;
+    //         setOtp(newOtp);
+    //         // Move focus to the next input
+    //         if (index < otp.length - 1) {
+    //             document.getElementById(`otp-${index + 1}`).focus();
+    //         }
+    //     } else if (value === "") {
+    //         // Move focus to the previous input if deleting
+    //         if (index > 0) {
+    //             document.getElementById(`otp-${index - 1}`).focus();
+    //         }
+    //     }
+    // };
     const afterSubmit = async () => {
         
         try {
@@ -143,6 +143,45 @@ function LoginOtp({ isOpen, onClose, onSubmit, email, phone }) {
 
     if (!isOpen) return null;
 
+    const handleChange = (e, index) => {
+        const { value } = e.target;
+        const newOtp = [...otp];
+    
+        if (value.match(/^[0-9]$/)) {
+            // Set the value for the current input
+            newOtp[index] = value;
+            setOtp(newOtp);
+    
+            // Move focus to the next input
+            if (index < otp.length - 1) {
+                document.getElementById(`otp-${index + 1}`).focus();
+            }
+        } else if (value === "") {
+            // Clear current input
+            newOtp[index] = "";
+            setOtp(newOtp);
+        }
+    };
+    
+    const handleKeyDown = (e, index) => {
+        if (e.key === "Backspace") {
+            const newOtp = [...otp];
+    
+            if (otp[index]) {
+                // If current field has a value, clear it
+                newOtp[index] = "";
+                setOtp(newOtp);
+            } else if (index > 0) {
+                // If current field is empty, move focus to the previous input
+                document.getElementById(`otp-${index - 1}`).focus();
+    
+                // Clear the previous input's value
+                newOtp[index - 1] = "";
+                setOtp(newOtp);
+            }
+        }
+    };
+
     return (
         <div 
             className="fixed inset-0 flex items-center justify-center z-30 bg-black bg-opacity-50"
@@ -160,29 +199,31 @@ function LoginOtp({ isOpen, onClose, onSubmit, email, phone }) {
                 <p className='mb-4 font-bold'>{email ? email : phone}</p>
 
                 <form onSubmit={handleSubmit} className="w-full">
-                    <div className="flex justify-center mb-4 gap-2">
-                        {otp.map((digit, index) => (
-                            <input
-                                key={index}
-                                id={`otp-${index}`}
-                                type="text"
-                                value={digit}
-                                onChange={(e) => handleChange(e, index)}
-                                className="w-10 h-10 text-center border border-gray-300 rounded-md text-lg focus:outline-none focus:border-primary"
-                                maxLength="1"
-                            />
-                        ))}
-                    </div>
+                <div className="flex justify-center mb-4 gap-2">
+        {otp.map((digit, index) => (
+            <input
+                key={index}
+                id={`otp-${index}`}
+                type="text"
+                value={digit}
+                onChange={(e) => handleChange(e, index)}
+                onKeyDown={(e) => handleKeyDown(e, index)}
+                className="w-10 h-10 text-center border border-gray-300 rounded-md text-lg focus:outline-none focus:border-primary"
+                maxLength="1"
+            />
+        ))}
+    </div>
 
-                    <div className="flex justify-end">
-                        <button
-                            type="submit"
-                            className="px-4 py-2 w-full bg-primary text-white rounded-md"
-                        >
-                            Verify OTP
-                        </button>
-                    </div>
-                </form>
+    <div className="flex justify-end">
+        <button
+            type="submit"
+            className="px-4 py-2 w-full bg-primary text-white rounded-md hover:bg-primaryhover"
+        >
+            Verify OTP
+        </button>
+    </div>
+</form>
+
 
                 <div className="mt-4 text-center">
                     {timerActive ? (

@@ -59,9 +59,12 @@ const ScreenDetails = () => {
 
 
     useEffect(() => {
-        return () => dispatch(clearScreen())
-    },[])
-
+        return () => {
+            dispatch(clearScreen());
+            dispatch(clearShow());
+            dispatch(clearContent());
+        };
+    }, []);
 
 
     
@@ -73,7 +76,7 @@ const ScreenDetails = () => {
             {loading ? (<Loading loading={loading} />) : (
                 <>
                     <div className="flex items-center mb-4 gap-1 cursor-pointer"
-                        onClick={() => { dispatch(clearShow()); dispatch(clearContent());  navigate(`/owner/theater-details/${theaterId}/`)}}>
+                        onClick={() => { dispatch(clearShow()); dispatch(clearContent()); navigate(`/owner/theater-details/${theaterId}/`)}}>
                         <IoChevronBackOutline
                             size={20}
                             className="text-gray-700 cursor-pointer hover:text-primary transition"
@@ -217,11 +220,8 @@ const ScreenDetails = () => {
 
 
                         {content === 'running-movie' && (
-                            subContent === 'add-movie' ? (
+
                                 <AddMovie />
-                            ) : (
-                                <RunningMovie />
-                            )
                         )}
 
                         {content === 'shows' && (

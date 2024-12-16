@@ -12,6 +12,7 @@ const initialState = {
     isLocation:false,
     nowShowing:[],
     upComing:[],
+    futureShowing:[],   
 
 }
 
@@ -28,6 +29,7 @@ const locationSlice = createSlice({
             state.isLocation = action.payload.isLocation === undefined ? state.isLocation : action.payload.isLocation
             state.nowShowing = action.payload.nowShowing || state.nowShowing;
             state.upComing = action.payload.upComing || state.upComing;
+            state.futureShowing = action.payload.futureShowing || state.futureShowing;
         }
     }
 })

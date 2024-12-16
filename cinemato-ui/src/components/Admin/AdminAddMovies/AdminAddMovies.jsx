@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { getGenreNames, getLanguageName } from '../../../utils/genreAndLanguageUtils';
 import AdminFilterMovies from './AdminFilterMovies';
 import Loading from './Loading';
+import useUserAxiosInstance from '../../../axiosConfig';
 // import axios from 'axios';
 
 
@@ -30,7 +31,28 @@ function AdminAddMovies() {
     const [selectedLanguage, setSelectedLanguage] = useState('Lan');
     const [selectedGenre, setSelectedGenre] = useState('Gen');
     const [changeFilter, setChangeFilter] = useState(false)
+    const userAxiosInstance = useUserAxiosInstance()
+    const [excludedIds, setExcludedIds] = useState([])
+    const [excludedIdsFetched, setExcludedIdsFetched] = useState(false);
 
+    console.log(movies.length)
+  useEffect(() => {
+    const fetchMovieByIds = async () => {
+      setLoading(true)
+      try{
+        const response = await userAxiosInstance.get('movie/get-movie-ids/')
+        setExcludedIds(response.data.ids)
+      }catch(err){
+        console.log("something went wrong to fetch IDs")
+      }finally{
+        setLoading(false)
+        setExcludedIdsFetched(true);
+
+      }
+    }
+
+    fetchMovieByIds()
+  },[])
 
   const fetchMovies = async () => {
     if (loading) return;
@@ -43,10 +65,16 @@ function AdminAddMovies() {
         `https://api.themoviedb.org/3/discover/movie?with_original_language=${filter.language}&with_genres=${filter.genre}&sort_by=release_date.desc&api_key=${TMDB_API_KEY}&page=${page}&region=IN`
       );
 
-      if (response.status === 200) {
-        const fetchedMovies = response.data.results;
 
-        if (fetchedMovies.length < 12) {
+
+      if (response.status === 200) {
+        // const fetchedMovies = response.data.results;
+        console.log(response.data.results)
+        const fetchedMovies = response.data.results.filter(
+          movie => !excludedIds.includes(movie.id)
+        );
+
+        if (fetchedMovies.length < 10) {
           setHasMore(false); 
         }
 
@@ -55,7 +83,11 @@ function AdminAddMovies() {
           
           setChangeFilter(false)
         }else{
+          if (movies.length  === 0){
+            setMovies(fetchedMovies)
+          }else{
         setMovies((prevMovies) => [...prevMovies, ...fetchedMovies]);
+          }
         }
       }
     } catch (error) {
@@ -67,9 +99,12 @@ function AdminAddMovies() {
 
 
   useEffect(() => {
-    fetchMovies();
+    if (excludedIdsFetched) {
+      fetchMovies();
+    }
     
-  }, [filter.language,filter.genre]);
+    
+  }, [filter.language,filter.genre, excludedIdsFetched]);
 
 
   useEffect(() => {
@@ -84,21 +119,22 @@ function AdminAddMovies() {
   }, [hasMore]);
 
   useEffect(() => {
-    if (page > 1) {
+    if (excludedIdsFetched && page > 1) {
       fetchMovies();
     }
-  }, [page]);
+  }, [page, excludedIdsFetched]);
 
 
   const handleSearch = async (e) => {
     setLoading(true)
     setSearchInput(e.target.value)
-    console.log('object')
     try{
       const response = await axiosInstance.get(`https://api.themoviedb.org/3/search/movie?api_key=${TMDB_API_KEY}&query=${searchInput}`)
-      console.log("response",response)
       if (response.status === 200){
-        setMovies(response.data.results);
+        const fetchedMovies = response.data.results.filter(
+          movie => !excludedIds.includes(movie.id)
+        );
+        setMovies(fetchedMovies);
       }
     }catch(error){
       console.log("Error fetching movies:", error);

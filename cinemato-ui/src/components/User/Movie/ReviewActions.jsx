@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { BiLike, BiDislike, BiSolidDislike, BiSolidLike } from "react-icons/bi";
 import showToast from "../../../utils/ToastNotifier";
+import { FaRegEdit } from "react-icons/fa";
+
 
 
 const ReviewActions = ({ review, isLoggedIn, handleReaction, isReacion, likes, dislikes }) => {
@@ -27,6 +29,11 @@ const ReviewActions = ({ review, isLoggedIn, handleReaction, isReacion, likes, d
     handleReaction(review.id, newReaction);
   };
 
+
+  const handleEditReview = () => {
+
+  }
+
   return (
     <div className="absolute bottom-5 left-4 right-4 flex justify-between items-center text-gray-500 text-sm">
       <div className="flex items-center gap-4">
@@ -44,6 +51,8 @@ const ReviewActions = ({ review, isLoggedIn, handleReaction, isReacion, likes, d
         </button>
       </div>
       <span>{review.timeAgo}</span>
+      <div className="flex items-center gap-4">
+      {/* {review.isEditable && <FaRegEdit onClick={handleEditReview} />} */}
       <button>
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -60,6 +69,8 @@ const ReviewActions = ({ review, isLoggedIn, handleReaction, isReacion, likes, d
           />
         </svg>
       </button>
+      </div>
+
     </div>
   );
 };

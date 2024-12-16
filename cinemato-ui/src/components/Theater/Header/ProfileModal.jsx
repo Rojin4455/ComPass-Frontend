@@ -2,12 +2,16 @@ import React, { useState } from 'react';
 import { FaTimes } from 'react-icons/fa';
 import { FaCircleUser } from "react-icons/fa6";
 
-const ProfileModal = ({ email, onLogout }) => {
+const ProfileModal = ({ email, onLogout, page }) => {
   const [isModalVisible, setModalVisible] = useState(false);
 
   const handleProfileClick = () => {
     setModalVisible(true);
   };
+
+  console.log("page ;",page)
+
+  
 
   const handleCloseModal = () => {
     setModalVisible(false);
@@ -17,7 +21,7 @@ const ProfileModal = ({ email, onLogout }) => {
     <div>
       <FaCircleUser
         size={35}
-        className="text-primary cursor-pointer hover:primaryhover transition duration-300"
+        className={`${page === 'admin' ? 'text-white' : 'text-primary'} cursor-pointer hover:primaryhover transition duration-300`}
         onClick={handleProfileClick}
       />
 
@@ -32,8 +36,8 @@ const ProfileModal = ({ email, onLogout }) => {
             </button>
 
             <div className="flex flex-col items-center">
-              <FaCircleUser size={60} className="text-primary mb-3" />
-              <p className="text-lg font-semibold text-gray-800 mb-2">{email}</p>
+              <FaCircleUser size={60} className={`${page === 'admin' ? 'text-white' : 'text-primary'} mb-3`}/>
+              <p className={` ${page === 'admin' ? "text-white":"text-gray-800"}text-lg font-semibold  mb-2`}>{email}</p>
 
               <div className="w-full border-t border-gray-300 my-3"></div>
 

@@ -5,7 +5,7 @@ import { setContent } from '../../../../slices/OwnerScreenSlice';
 
 function RunningMovie() {
     const dispatch = useDispatch();
-    const movies = []; // Replace with actual movie data from state or props
+    const movies = [];
   
     return (
       <div className="add-movie-section">

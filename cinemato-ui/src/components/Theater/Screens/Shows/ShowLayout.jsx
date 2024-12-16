@@ -69,7 +69,6 @@ function ShowLayout({screenId}) {
 
   const axiosInstance = useAxiosInstance()
 
-  console.log("theater: ", selectedTheater)
   const [seatData,setSeatData] = useState(allSeats)
   const {selectedTimeOg} = useSelector((state) => state.date)
 
@@ -140,14 +139,13 @@ function ShowLayout({screenId}) {
   
   const isPastTime = (timeString, selectedDate) => {
 
-    console.log("timestringL ",timeString,"selected date: ",selectedDate)
     const now = new Date();
+    
     const [hour, minute] = timeString.split(':').map(Number);
-
     const selectedDateTime = new Date(
         selectedDate.year,
         new Date(`${selectedDate.month} 1, 2024`).getMonth(),
-        selectedDate.day,
+        selectedDate.date,
         hour,
         minute
     );
@@ -172,7 +170,7 @@ function ShowLayout({screenId}) {
               <div
                 key={columnIndex}
                 onClick={() => {
-                  if (isPastTime(selectedTimeOg, selectedDate)) {
+                  if (!isPastTime(selectedTimeOg, selectedDate)) {
                     handleSeatClick(rowIndex, columnIndex);
                   }
                 }}
@@ -261,7 +259,6 @@ const handleCheckout = async () => {
     });
 
     if (response.status === 200) {
-      console.log("response: ", response);
       setSeatData(response.data);
       showToast('success', "seats are confirmed successfully")
       setStatus("success");
@@ -282,7 +279,6 @@ const handleCheckout = async () => {
     console.error("something went wrong: ", er);
   }
 };
-console.log("selected date date date: ",selectedDate)
 
 return (
   <>

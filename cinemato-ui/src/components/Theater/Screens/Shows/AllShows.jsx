@@ -24,7 +24,6 @@ const AllShows = ({ screenId }) => {
     const [times, setTimes] = useState()
     const [theaterDetails, setTheaterDetails] = useState({})
 
-    console.log("screen full details: ",screenDetails)
 
 
 
@@ -83,7 +82,6 @@ const AllShows = ({ screenId }) => {
             try {
                 const response = await axiosInstance.get(`theater/theater-details/${screenDetails.theater}`);
                 if (response.status === 200) {
-                    console.log("theater response api: ",response)
                     setTheaterDetails(response.data.data)
                 } else {
                     console.error("Failed to fetch schedule:", response);
@@ -178,10 +176,8 @@ const AllShows = ({ screenId }) => {
     const handleShowTimeClick = async (theater, showTime, index, movie) => {
 
         const timeIndex = index.toString()+"0"
-        console.log("time index: ", movie)
         
         let screenName = screenDetails.screen.name
-        console.log("screen details: ",screenDetails)
         const allScreens = {
             [screenName] : times,
         }

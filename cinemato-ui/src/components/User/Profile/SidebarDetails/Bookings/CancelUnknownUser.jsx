@@ -13,8 +13,7 @@ function CancelUnknownUser() {
   const axiosInstance = useAxiosInstance()
 
   const bookingId = searchParams.get('booking_id');
-  const userId = searchParams.get('user_id');
-  const id = searchParams.get('id');
+
 
 
   const handleCancelBooking = async () => {
@@ -23,8 +22,6 @@ function CancelUnknownUser() {
     try {
       const response = await axiosInstance.post('booking/cancel-ticket-unknown/', {
         booking_id: bookingId,
-        user_id: userId,
-        id: id,
       });
 
       if (response.status === 200) {
@@ -34,7 +31,9 @@ function CancelUnknownUser() {
         showToast('error','Failed to cancel the booking. Please try again.');
       }
     } catch (err) {
-      showToast('error','An error occurred while processing your request.');
+        console.error(err)
+        
+      showToast('error',err.response.data.message? err.response.data.message :'An error occurred while processing your request.');
     } finally {
       setLoading(false);
     }
@@ -42,10 +41,10 @@ function CancelUnknownUser() {
 
   useEffect(() => {
     // Optional: Perform any additional validation or setup here
-    if (!bookingId || !userId || !id) {
+    if (!bookingId) {
       showToast('error','Invalid URL parameters. Please check the link and try again.');
     }
-  }, [bookingId, userId, id]);
+  }, [bookingId]);
 
   return (
     <div className="min-h-screen flex flex-col justify-center items-center bg-gradient-to-br from-gray-50 to-gray-200 px-6">

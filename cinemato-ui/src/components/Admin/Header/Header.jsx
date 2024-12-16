@@ -6,12 +6,14 @@ import { MdPerson, MdLocationPin } from "react-icons/md";
 import { FaTheaterMasks } from "react-icons/fa";
 import { IoIosArrowDown } from "react-icons/io";
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { clearUser } from '../../../slices/userSlice';
 import useAxiosInstance from '../../../axiosConfig';
+import ProfileModal from '../../Theater/Header/ProfileModal';
 
 function Header(props) {
   // const [selectedOption, setSelectedOption] = useState('Home');
+  const email = useSelector((state) => state.user.user)
   const navigate = useNavigate();
   const {page} = props;
   const [showModal,setShowModal] = useState(false)
@@ -104,14 +106,14 @@ function Header(props) {
 
         {/* Right side: Admin Profile */}
         <div className="relative flex items-center gap-4">
-  <button
+  {/* <button
     onClick={handleLogout}
     className="flex items-center gap-2 px-3 py-2 bg-danger text-white rounded-full"
   >
-    {/* <MdPerson /> */}
     Logout
-    {/* <IoIosArrowDown /> */}
-  </button>
+  </button> */}
+
+
 
   {/* Dropdown menu */}
   {/* {isDropdownOpen && (
@@ -136,9 +138,11 @@ function Header(props) {
     </div>
   )} */}
 </div>
-<div className='ml-8'>
+{/* <div className='ml-8'>
 <MdPerson size={35} className='text-white' onClick={handleProfileClick}/>
-</div>
+</div> */}
+<ProfileModal email={email} onLogout={handleLogoutConfirm} page="admin"/>
+
 
 
   

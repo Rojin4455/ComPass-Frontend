@@ -83,13 +83,14 @@ function Banner({ movies }) {
             {currentMovie?.title || 'Latest Movie Release'}
           </h1>
         )}
-        {isLoading ? (
-          <Skeleton width={200} height={20} className="mt-2" />
-        ) : (
-          <p className="mt-2 text-sm sm:text-base md:text-lg">
-            {currentMovie?.description || 'Catch the excitement in theaters near you!'}
-          </p>
-        )}
+{isLoading ? (
+  <Skeleton width={200} height={20} className="mt-2" />
+) : (
+  <p className="mt-2 text-sm sm:text-base md:text-lg hidden lg:block">
+    {currentMovie?.description || "Catch the excitement in theaters near you!"}
+  </p>
+)}
+
       </div>
 
       <div className="w-full lg:w-auto flex justify-center lg:mr-12 relative z-11">

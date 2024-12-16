@@ -14,6 +14,8 @@ import UserPaymentPage from '../pages/User/UserPaymentPage'
 import BookingSuccessPage from '../pages/User/BookingSuccessPage'
 import ErrorShowingPage from '../pages/User/ErrorShowingPage'
 import CancelUnknownUserPage from '../pages/User/CancelUnknownUserPage'
+import PaymentFailedPage from '../pages/User/PaymentFailedPage'
+import ListMoviePage from '../pages/User/ListMoviePage'
 
 
 
@@ -21,6 +23,7 @@ function UserRoutes() {
   return (
     <Routes>
         <Route path='/' element={<UserHome/>}/>
+        <Route path='/movie' element={<ListMoviePage/>}/>
         <Route path='/profile' element={ <UserProtectedRoute><UserProfile/></UserProtectedRoute>} />
         <Route path='/user/movie-details' element={ <UserMovieDetailsPage/>} />
         <Route path='/user/select-cinema' element={ <CinemaSelectionPage/>} />
@@ -31,6 +34,7 @@ function UserRoutes() {
         <Route path='/user/booking-success' element={<BookingSuccessPage/>} />
         <Route path='/user/booking-error' element={<ErrorShowingPage/>} />
         <Route path='/user/cancel-unknown-ticket' element={<CancelUnknownUserPage/>} />
+        <Route path='/user/payment-failed' element={<PaymentFailedPage/>} />
         </Routes>
   )
 }

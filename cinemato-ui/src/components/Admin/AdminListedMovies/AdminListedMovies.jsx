@@ -6,47 +6,28 @@ import useAxiosInstance from "../../../axiosConfig";
 import { useNavigate } from "react-router-dom";
 import { RiFunctionAddLine } from "react-icons/ri";
 import Loading from "../AdminAddMovies/Loading";
-import { RiDeleteBin3Fill } from "react-icons/ri";
-// import { toast } from "sonner";
-import AdminListedMovieDetails from "./AdminListedMovieDetails";
-import showToast from "../../../utils/ToastNotifier";
+
 
 
 function AdminMovies() {
-  const [movies, setMovies] = useState([]); // Empty array initially
+  const [movies, setMovies] = useState([]);
   const axiosInstance = useAxiosInstance();
   const [isMovie, setIsMovie] = useState(true);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const [isRemoved,setIsRemoved] = useState(false)
-
   const handleAddMovie = async () => {
-    // Logic to handle adding a movie
     console.log("Add movie clicked");
     navigate("/admin/addmovies/");
-    // try {
-    //   const response = await axiosInstance.get('https://api.themoviedb.org/3/movie/157336?api_key=7cedc204afadbacc97f11b62930feaa3')
-
-    //   if (response.status === 200){
-    //     console.log("success response got", response)
-    //   }else{
-    //     console.log("error response",response)
-    //   }
-    // }catch{
-    //   console.log("something went wrong")
-    // }
-    // console.log("rrrrrrrrrrrr")
   };
 
   useEffect(() => {
-    console.log("FFF");
     
     const fetchListedMovies = async () => {
       setLoading(true);
       try {
-        const response = await axiosInstance.get("movie/get-movie/");
+        const response = await axiosInstance.get("movie/get-movie/?page=admin");
         if (response.status === 200) {
-          console.log("success", response);
           setMovies(response.data);
           if (movies.length === 0) {
             setIsMovie(false);
@@ -65,25 +46,7 @@ function AdminMovies() {
   }, [isRemoved]);
 
 
-  const unListMovie = async (movieId) => {
-    try{
-      const response = await axiosInstance.post('movie/remove-movie/',{
-        id:movieId
-      })
-      if (response.status === 200){
-        console.log("movie unlisted successfully",response);
-        showToast("success","movie removed successfully")
-        setIsRemoved(true)        
-      }else{
-        console.error("error response", response)
-        showToast("error","something went wrong")
-      }
 
-    }catch(error){
-      console.error("error response in catch",error)
-      showToast("error","Something Went Wrong")
-    }
-  }
 
   const showMovieDetails = async (movieId) => {
     movies.map((movie, index) => {
@@ -102,24 +65,16 @@ function AdminMovies() {
       <Loading loading={loading} />
 
       <div>
-        {/* <Header page="admin/movies/" /> */}
 
         <div>
-          {/* Top-right button to add movies */}
 
-          {/* Check if movies array is empty */}
           {movies.length === 0 && !isMovie ? (
             <div className="flex flex-col items-center justify-center h-[70vh]">
               <p className="text-yellow-500 text-xl mb-4">
                 No movies are listed yet.
               </p>
               <p className="text-bold-900 text-xl mb-4">Add Movies</p>
-              {/* <button 
-              onClick={handleAddMovie} 
-            //   className="bg-gray-300 hover:bg-gray-400 text-gray-700 font-bold py-4 px-8 rounded-full"
-            >
-              +
-            </button> */}
+
               <IoAddCircle
                 size={120}
                 className="text-primary hover:text-gray-600"
@@ -128,9 +83,7 @@ function AdminMovies() {
             </div>
           ) : (
             <>
-              {/* Container for the button and movies */}
               <div className="relative">
-                {/* Button Container */}
                 <div className=" absolute right-8 top-4">
                   <button
                     className="flex items-center gap-2 bg-yellow-100 text-black border-2 border-secondary rounded-full px-4 py-2 hover:bg-yellow-200 hover:border-secondary transition-all"
@@ -141,14 +94,12 @@ function AdminMovies() {
                   </button>
                 </div>
 
-                {/* Movies Grid */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 p-20">
                   {movies.map((movie, index) => (
                     <div
                       key={index}
                       className="relative group bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow"
                     >
-                      {/* Movie poster */}
                       <img
                         src={movie.poster_path}
                         alt={movie.title}
@@ -156,12 +107,10 @@ function AdminMovies() {
                       />
 
                       <div className="p-4">
-                        {/* Movie title */}
                         <h3 className="text-lg font-semibold mb-2">
                           {movie.title}
                         </h3>
 
-                        {/* Movie genres */}
                         <div className="flex flex-wrap text-sm text-gray-500 mb-2">
                           {movie.genres.map((genre, i) => (
                             <span
@@ -173,7 +122,6 @@ function AdminMovies() {
                           ))}
                         </div>
 
-                        {/* Movie languages */}
                         <div className="text-sm text-gray-500 mb-2">
                           <span className="font-semibold">Languages: </span>
                           {movie.languages.map((lang, i) => (
@@ -184,7 +132,6 @@ function AdminMovies() {
                           ))}
                         </div>
 
-                        {/* Rating with stars */}
                         <div className="flex items-center text-yellow-400 mb-2">
                           {[...Array(5)].map((_, i) => (
                             <svg
@@ -212,21 +159,15 @@ function AdminMovies() {
                           </span>
                         </div>
 
-                        {/* Release Date */}
                         <p className="text-sm text-gray-500">
                           <span className="font-semibold">Released: </span>
                           {movie.release_date}
                         </p>
                       </div>
 
-                      {/* Hover effect to show movie description */}
                       <div className="absolute inset-0 bg-black bg-opacity-75 flex flex-col justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity">
-                        {/* Delete Icon Positioned at Top Right */}
-                        <div className="absolute top-4 right-4" onClick={() => unListMovie(movie.tmdb_id)}>
-                          <RiDeleteBin3Fill size={20} className="text-danger cursor-pointer"/>
-                        </div>
 
-                        {/* Movie Description in the Center */}
+
                         <div className="text-center p-4 cursor-pointer" onClick={() => showMovieDetails(index)}>
                           <h3 className="text-xl font-bold mb-2">
                             {movie.title}
