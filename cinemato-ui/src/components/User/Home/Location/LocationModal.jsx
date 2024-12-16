@@ -19,6 +19,12 @@ function LocationModal() {
     clearSuggestions,
   } = usePlacesAutocomplete({});
 
+  console.log("something is triggered")
+
+  console.log('Backend URL:', process.env.REACT_APP_BASE_API_URL);
+
+
+
   const location = useSelector((state) => state.location);
   const dispatch = useDispatch();
   const axiosInstance = useAxiosInstance();
