@@ -20,6 +20,7 @@ function LocationModal() {
   } = usePlacesAutocomplete({});
 
   console.log("something is triggered")
+  console.log('Full Environment:', process.env);
 
   console.log('Backend URL:', process.env.REACT_APP_BASE_API_URL);
 
