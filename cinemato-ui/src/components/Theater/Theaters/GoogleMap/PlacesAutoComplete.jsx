@@ -1,23 +1,22 @@
-import React from 'react';
-import usePlacesAutocomplete, { getGeocode, getLatLng } from 'use-places-autocomplete';
-import { Combobox, ComboboxInput, ComboboxPopover, ComboboxList, ComboboxOption } from "@reach/combobox";
+import React from "react";
+import usePlacesAutocomplete, { getGeocode, getLatLng } from "use-places-autocomplete";
+import Select from "react-select";
 import { FaLocationArrow } from "react-icons/fa6";
 
-// import { useLoadScript } from "@react-google-maps/api";
-
-// const libraries = ["places"];  // Declare libraries as a constant outside the component to avoid re-render issues.
-
 function PlacesAutoComplete({ setTheaterData, theaterData }) {
-  const { ready, value, setValue, suggestions: { status, data }, clearSuggestions } = usePlacesAutocomplete({});
-  // const { isLoaded } = useLoadScript({
-  //   googleMapsApiKey: process.env.REACT_APP_GOOGLE_API_KEY,
-  //   libraries: libraries,  // Ensure libraries is not passed as a new array every time.
-  // });
+  const {
+    ready,
+    value,
+    setValue,
+    suggestions: { status, data },
+    clearSuggestions,
+  } = usePlacesAutocomplete({});
 
   // Handle address selection
-  const handleSelect = async (address) => {
-    setValue(address, false); // Set the input value
-    clearSuggestions();  // Clear autocomplete suggestions
+  const handleSelect = async (selectedOption) => {
+    const address = selectedOption.label;
+    setValue(address, false); // Update the input value
+    clearSuggestions(); // Clear suggestions list
 
     try {
       const results = await getGeocode({ address });
@@ -34,38 +33,65 @@ function PlacesAutoComplete({ setTheaterData, theaterData }) {
     }
   };
 
-  // Early return if script isn't loaded yet
+  // Map suggestions to options format for React-Select
+  const options =
+    status === "OK"
+      ? data.map(({ description, place_id }) => ({
+          label: description,
+          value: place_id,
+        }))
+      : [];
+
+  // Styling for React-Select
+  const customStyles = {
+    control: (provided) => ({
+      ...provided,
+      paddingLeft: "2.5rem", // Space for the icon
+      borderColor: "#d1d5db",
+      height: "40px",
+      boxShadow: "none",
+      "&:hover": {
+        borderColor: "#2563eb",
+      },
+    }),
+    input: (provided) => ({
+      ...provided,
+      margin: "0",
+    }),
+    placeholder: (provided) => ({
+      ...provided,
+      color: "#9ca3af",
+    }),
+    singleValue: (provided) => ({
+      ...provided,
+      color: "#374151",
+    }),
+    menu: (provided) => ({
+      ...provided,
+      zIndex: 50,
+    }),
+  };
+
   if (!ready) {
-    return <p>Loading Google Maps API...</p>;  // Show a loading message while the API is loading
+    return <p>Loading Google Maps API...</p>;
   }
 
   return (
-    <Combobox onSelect={handleSelect}>
-      <div className='relative flex items-center'>
-        <FaLocationArrow className="absolute left-3 text-gray-400" />
-        <ComboboxInput
-          className="pl-10 pr-4 py-2 w-full border-b h-10 border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-primary focus:ring-primary transition duration-300"
-          value={value || ""}
-          onChange={(e) => setValue(e.target.value)}
-          disabled={!ready}  // Disable the input if the API isn't ready
-          placeholder="Select Your Location"
-        />
-        {/* Render suggestions if available */}
-        {status === "OK" && (
-          <ComboboxPopover className="bg-white border border-gray-200 rounded-lg shadow-lg p-2 z-50">
-            <ComboboxList className="max-h-48 overflow-y-auto">
-              {data.map(({ description, place_id }) => (
-                <ComboboxOption
-                  key={place_id}
-                  value={description}
-                  className="p-2 border-b border-gray-100 last:border-none cursor-pointer hover:bg-gray-100"
-                />
-              ))}
-            </ComboboxList>
-          </ComboboxPopover>
-        )}
-      </div>
-    </Combobox>
+    <div className="relative flex items-center">
+      {/* Icon */}
+      <FaLocationArrow className="absolute left-3 text-gray-400" />
+      {/* Dropdown */}
+      <Select
+        options={options} // Provide suggestions as options
+        onChange={handleSelect} // Handle selection
+        styles={customStyles} // Apply custom styles
+        isDisabled={!ready} // Disable if API isn't ready
+        placeholder="Select Your Location"
+        className="w-full" // Adjust width to match container
+        value={value ? { label: value, value: value } : null} // Sync selected value
+        onInputChange={(inputValue) => setValue(inputValue)} // Update value on input change
+      />
+    </div>
   );
 }
 
