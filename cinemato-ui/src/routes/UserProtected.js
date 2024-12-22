@@ -83,6 +83,7 @@ const UserProtectedRoute = ({children}) => {
       navigate("/")
     }  },[])
     if (access_token){
+      
     return children
   }
   if (!is_admin) {

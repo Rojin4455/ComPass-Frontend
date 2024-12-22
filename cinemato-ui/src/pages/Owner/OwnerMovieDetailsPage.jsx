@@ -8,7 +8,7 @@ function OwnerMovieDetailsPage() {
     <div>
       <Header page="owner/movies/"/>
       <div style={{paddingTop:'4.5rem'}}>
-    <MovieDetails/>
+    <MovieDetails page={"owner"}/>
     </div>
     </div>
   )

@@ -8,7 +8,7 @@ import showToast from '../../../utils/ToastNotifier';
 
 
 
-export default function MovieRatingModal({ setRatingModal, ratingModal, movieId }) {
+export default function MovieRatingModal({ setRatingModal, ratingModal, movieId, setIsReaction }) {
     const [rating, setRating] = useState(0)
     const [selectedHashtags, setSelectedHashtags] = useState([])
     const axiosInstance = useAxiosInstance()
@@ -87,6 +87,7 @@ export default function MovieRatingModal({ setRatingModal, ratingModal, movieId 
 
             if (response.status === 201){
                 showToast('success', response.data.message)
+                setIsReaction(true)
                 setRatingModal(false)
             }else{
                 showToast('error', 'something went wrong')

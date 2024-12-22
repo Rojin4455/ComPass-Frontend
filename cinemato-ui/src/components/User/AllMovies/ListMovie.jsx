@@ -19,17 +19,41 @@ export default function ListMovie({movies}) {
     ]
     const address = useSelector((state) => state.location.address)
     const [isSearchVisible, setIsSearchVisible] = useState(false);
-    const [filterLanguages, setFilterLanguages] = useState([])
-    const [filterGenres, setFilterGenres] = useState([])
+    const ogAllMovies = movies
     const [allMovies,setAllMovies] = useState(movies)
+    const [content,setContent] = useState("")
 
     const [selectedOptions, setSelectedOptions] = useState({
         Languages: [],
         Genres: [],
       });
     
+      const setSearchContent = (e) => {
+        if (e.target.value === ""){
+            setContent("")
+            return
+        }
+        const searchValue = e.target.value.toLowerCase();
+        setContent(searchValue);
+        console.log(searchValue);
+    
+        const filteredMovies = allMovies.filter((movie) => 
+            movie.title.toLowerCase().includes(searchValue)
+        );
+    
+        // Update the state with filtered movies
+        setAllMovies(filteredMovies);
 
+        console.log("filtered options: ", filteredMovies);
+    };
 
+    useEffect(()=> {
+        if (content === ""){
+            setAllMovies(ogAllMovies)
+        }
+
+    },[content])
+    
     const [activeFilter, setActiveFilter] = useState(true);
 
     const toggleFilter = (filter) => {
@@ -39,7 +63,6 @@ export default function ListMovie({movies}) {
     const filterOptions = {
       Languages: languages,
       Genres: genres,
-    //   Format: ['2D', '3D', 'IMAX', 'Dolby Cinema'],
     };
 
 
@@ -51,40 +74,20 @@ export default function ListMovie({movies}) {
           updatedSelectedOptions[filter].push(option);
         }
         setSelectedOptions(updatedSelectedOptions);
-        // onFilterChange(updatedSelectedOptions);
       };
 
 
-    //   const onFilterChange = (filter, option) => {
-    //     console.log(filter)
-    //     if (filter === "Languages") {
-    //         setFilterLanguages((prev) => [...prev, option]);
-    //     } else if (filter === "Genres") {
-    //         setFilterGenres((prev) => [...prev, option]);
-    //     }
-
-    //     console.log(filterLanguages, filterGenres)
-        
-    //   }
-
       useEffect(() => {
 
-        console.log("all movies: ", allMovies)
-        console.log("filter languages: ", filterLanguages)
-        console.log("filter genres: ", filterGenres)
         const filteredMovies = movies.filter((movie) => {
-            // Check if genres match or no filter is applied
             const matchesGenres = selectedOptions.Genres.length === 0 || movie.genres.some((genre) => selectedOptions.Genres.includes(genre.name));
     
-            // Check if languages match or no filter is applied
             const matchesLanguages = selectedOptions.Languages.length === 0 || movie.languages.some((language) => selectedOptions.Languages.includes(language.name));
     
-            // Return true if both conditions are satisfied
             return matchesGenres && matchesLanguages;
         });
         setAllMovies(filteredMovies)
     
-        console.log("Filtered movies: ", filteredMovies);
     }, [selectedOptions]);
 
 
@@ -183,6 +186,7 @@ export default function ListMovie({movies}) {
         placeholder="Search cinema"
         className="border-0 outline-none py-1 placeholder-gray-400 transition-all duration-300 ease-in-out"
         onBlur={() => setIsSearchVisible(false)}
+        onChange={setSearchContent}
         autoFocus
       />
       
@@ -217,77 +221,86 @@ export default function ListMovie({movies}) {
             </div>
             
             {/* Movie Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {allMovies.map((movie, index) => (
-                <div key={index} className="bg-white rounded-lg overflow-hidden shadow-sm">
-                  <div className="relative aspect-[2/3]">
-                  <div
-      style={{
-        position: 'relative',
-        width: '100%',
-        height: '100%',
-        overflow: 'hidden',
-      }}
-    >
-      <img
-        src={movie.poster_path}
-        alt={movie.title}
-        style={{
-          width: '100%',
-          height: '100%',
-          objectFit: 'cover',
-          display: 'block',
-        }}
-      />
+            <div>
+  {allMovies.length === 0 ? (
+    <div className="text-center py-10">
+      <h2 className="text-lg font-medium text-gray-500">No movies available</h2>
+      <p className="text-sm text-gray-400">Try adjusting your search or filters.</p>
     </div>
+  ) : (
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      {allMovies.map((movie, index) => (
+        <div key={index} className="bg-white rounded-lg overflow-hidden shadow-sm">
+          <div className="relative aspect-[2/3]">
+            <div
+              style={{
+                position: 'relative',
+                width: '100%',
+                height: '100%',
+                overflow: 'hidden',
+              }}
+            >
+              <img
+                src={movie.poster_path}
+                alt={movie.title}
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover',
+                  display: 'block',
+                }}
+              />
+            </div>
 
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                    <div className="absolute bottom-2 left-2 flex items-center text-yellow-400">
-            {[...Array(5)].map((_, i) => (
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+            <div className="absolute bottom-2 left-2 flex items-center text-yellow-400">
+              {[...Array(5)].map((_, i) => (
                 <svg
-                    key={i}
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill={
-                        i < Math.round(movie.vote_average / 2)
-                            ? "currentColor"
-                            : "none"
-                    }
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    className="w-4 h-4"
+                  key={i}
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill={
+                    i < Math.round(movie.vote_average / 2)
+                      ? "currentColor"
+                      : "none"
+                  }
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  className="w-4 h-4"
                 >
-                    <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M12 2l2.39 7.173H22l-6.043 4.247L17.32 22 12 17.75 6.68 22l1.733-8.58L2 9.173h7.611L12 2z"
-                    />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M12 2l2.39 7.173H22l-6.043 4.247L17.32 22 12 17.75 6.68 22l1.733-8.58L2 9.173h7.611L12 2z"
+                  />
                 </svg>
-            ))}
-            <span className="ml-1 text-white text-xs">
+              ))}
+              <span className="ml-1 text-white text-xs">
                 ({movie.vote_average.toFixed(1)})
-            </span>
-        </div>
-                  </div>
-                  <div className="p-4">
-                    <h3 className="font-medium text-lg mb-1">{movie.title}</h3>
-                    <div className="flex items-center gap-2">
-
-                      <div className="flex flex-wrap gap-1 mt-1">
-            {movie.genres.map((genre, index) => (
-                <span 
+              </span>
+            </div>
+          </div>
+          <div className="p-4">
+            <h3 className="font-medium text-lg mb-1">{movie.title}</h3>
+            <div className="flex items-center gap-2">
+              <div className="flex flex-wrap gap-1 mt-1">
+                {movie.genres.map((genre, index) => (
+                  <span 
                     key={index} 
                     className="text-xs text-gray-600 bg-gray-100 rounded-full px-2 py-1"
-                >
+                  >
                     {genre.name}
-                </span>
-            ))}
-        </div>
-                    </div>
-                  </div>
-                </div>
-              ))}
+                  </span>
+                ))}
+              </div>
             </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  )}
+</div>
+
           </div>
         </div>
 

@@ -16,6 +16,7 @@ import ErrorShowingPage from '../pages/User/ErrorShowingPage'
 import CancelUnknownUserPage from '../pages/User/CancelUnknownUserPage'
 import PaymentFailedPage from '../pages/User/PaymentFailedPage'
 import ListMoviePage from '../pages/User/ListMoviePage'
+import UpcomingMovieDetailsPage from '../pages/User/UpcomingMovieDetailsPage'
 
 
 
@@ -26,6 +27,7 @@ function UserRoutes() {
         <Route path='/movie' element={<ListMoviePage/>}/>
         <Route path='/profile' element={ <UserProtectedRoute><UserProfile/></UserProtectedRoute>} />
         <Route path='/user/movie-details' element={ <UserMovieDetailsPage/>} />
+        <Route path='/user/upcoming-movie-details' element={ <UpcomingMovieDetailsPage/>} />
         <Route path='/user/select-cinema' element={ <CinemaSelectionPage/>} />
         <Route path='/user/selected-layout' element={ <UserSeatLayoutPage/> } />
         <Route path='/user/add-snacks' element={ <SnackSelectionPage/> } />,

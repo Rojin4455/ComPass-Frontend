@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { IoAddCircle } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
-import { RiFunctionAddLine } from "react-icons/ri";
-import { RiDeleteBin3Fill } from "react-icons/ri";
-import showToast from "../../../utils/ToastNotifier";
-import MovieDetails from "../Screens/Movie/OwnerMovieDetails";
 import useAxiosInstance from "../../../axiosBaseConfig";
 import Loading from "../../Admin/AdminAddMovies/Loading";
 

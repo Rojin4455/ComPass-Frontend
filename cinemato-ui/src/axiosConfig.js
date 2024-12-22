@@ -44,11 +44,9 @@ const useAxiosInstance = () => {
     }
   );
 
-  // Response Interceptor
   axiosInstance.interceptors.response.use(
     (response) => {
 
-      // Check for the 'Authorization' header in the response
       const authorizationHeader = response.headers['authorization'];
   
       if (authorizationHeader) {

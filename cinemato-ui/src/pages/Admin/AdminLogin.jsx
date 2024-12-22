@@ -89,7 +89,7 @@ function AdminLogin() {
           const refresh_token = response.data.refresh
           const is_admin = true
           dispatch(clearUser())
-          dispatch(setUser({user,access_token,refresh_token,is_admin}))
+          dispatch(setUser({user,access_token,refresh_token,is_admin,is_user:false, is_owner:false}))
           showToast("success","Successfully logging in")
           navigate('home/')
           

@@ -32,7 +32,7 @@ function ListTheaterOwners() {
   }, []);
 
   useEffect(() => {
-    const ws = new WebSocket('ws://localhost:8000/ws/notifications/');
+    const ws = new WebSocket('ws://13.48.30.144/ws/notifications/');
 
     ws.onopen = () => {
       console.log('WebSocket Connected');

@@ -7,7 +7,7 @@ function AdminListedMovieDetailsPage() {
     <div>
       <Header page="admin/movies/"/>
       <div style={{paddingTop:'4.5rem'}}>
-    <MovieDetails/>
+    <MovieDetails page={"admin"}/>
     </div>
     </div>
   )

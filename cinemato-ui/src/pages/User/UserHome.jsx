@@ -101,7 +101,7 @@ function UserHome() {
           const refresh_token = token.refresh;
           const is_user = true
 
-          dispatch(setUser({ user, access_token, refresh_token,is_user }));
+          dispatch(setUser({ user, access_token, refresh_token,is_user, is_admin:false, is_owner:false }));
 
           window.history.replaceState({}, document.title, window.location.pathname);
         } else {

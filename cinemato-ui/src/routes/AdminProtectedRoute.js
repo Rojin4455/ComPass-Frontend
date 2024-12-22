@@ -1,8 +1,9 @@
 import React,{useEffect} from "react";
 import {Navigate,Outlet,replace,useNavigate} from 'react-router-dom';
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { jwtDecode } from "jwt-decode";
 import {toast} from 'sonner'
+import { setUser } from "../slices/userSlice";
 
 
 const AdminProtectedRoute = ({children}) => {
@@ -53,8 +54,7 @@ useEffect(() => {
   if (!access_token){
     navigate("/admin/")
   }  },[])
-  if (access_token && is_admin){
-    
+  if (access_token){
   return children
 }
 if (!is_admin) {

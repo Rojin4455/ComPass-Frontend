@@ -6,7 +6,7 @@ import { TiTick } from "react-icons/ti";
 import { TiTimes } from 'react-icons/ti';
 import showToast from '../../../utils/ToastNotifier';
 
-function OwnerDetails() {
+function OwnerDetails({page}) {
   const { id } = useParams();
   const navigate = useNavigate();
   const axiosInstance = useAxiosInstance();

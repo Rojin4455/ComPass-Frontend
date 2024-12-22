@@ -65,7 +65,7 @@ function OwnerLogin() {
         if (response.status === 200) {
           const { user, token } = response.data;
           dispatch(clearUser())
-          dispatch(setUser({ user: user.email, access_token: token.access, refresh_token: token.refresh, is_owner:true,id: user.id }));
+          dispatch(setUser({ user: user.email, access_token: token.access, refresh_token: token.refresh, is_owner:true, is_admin:false, is_user:false ,id: user.id }));
           showToast("success","Successfully logged in")
           navigate('owner/home/');
         }

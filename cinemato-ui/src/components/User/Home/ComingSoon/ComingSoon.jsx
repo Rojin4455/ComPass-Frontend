@@ -3,54 +3,32 @@ import 'tailwindcss/tailwind.css';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
-import { useSelector } from 'react-redux';
+import { useDispatch,useSelector } from 'react-redux';
 import { MdNotificationAdd } from "react-icons/md";
-
+import { setBooking } from '../../../../slices/userBookingSlice';
+import { useNavigate } from 'react-router-dom';
 
 function NowShowing({movies}) {
     const scrollRef = React.useRef(null);
     const isLoading = useSelector((state) => state.location.showModal)
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
 
-    // Sample movies data
-    // const movies = [
-    //     { title: 'Movie 1', genre: 'Action', language: 'English', imageUrl: "assets/deadpool-img.jpg" },
-    //     { title: 'Movie 2', genre: 'Comedy', language: 'Hindi', imageUrl: "assets/deadpool-img.jpg" },
-    //     { title: 'Movie 3', genre: 'Drama', language: 'Tamil', imageUrl: "assets/deadpool-img.jpg" },
-    //     { title: 'Movie 4', genre: 'Thriller', language: 'Malayalam', imageUrl: "assets/deadpool-img.jpg" },
-    //     { title: 'Movie 5', genre: 'Romance', language: 'Telugu', imageUrl: "assets/deadpool-img.jpg" },
-    // ];
+    
 
-    const cardWidth = 320; // Adjusted card width
-    const cardMargin = 24; // Space between cards
-    const totalCardWidth = cardWidth + cardMargin;
 
-    // React.useEffect(() => {
-    //     const timer = setTimeout(() => {
-    //         setIsLoading(false);
-    //     }, 2000); // Simulate loading time
-
-    //     return () => clearTimeout(timer);
-    // }, []);
-
-    const scrollLeft = () => {
-        if (scrollRef.current) {
-            scrollRef.current.scrollBy({
-                top: 0,
-                left: -totalCardWidth * 4, // Scroll by the width of 4 cards
-                behavior: 'smooth',
-            });
-        }
-    };
-
-    const scrollRight = () => {
-        if (scrollRef.current) {
-            scrollRef.current.scrollBy({
-                top: 0,
-                left: totalCardWidth * 4, // Scroll by the width of 4 cards
-                behavior: 'smooth',
-            });
-        }
-    };
+    const handleMovieDetails = (movieId) => {
+        movies.map((movie, index) => {
+            if (index === movieId){
+                dispatch(setBooking({selectedMovie:movie}))
+              navigate('/user/upcoming-movie-details/',{
+                state:{
+                  movie
+                }
+              })
+            }
+          })
+    }
 
     return (
         <>
@@ -119,7 +97,10 @@ function NowShowing({movies}) {
                                     </div>
 
                                     <div className='absolute bottom-0 w-full mt-6 flex items-center'>
-                                        <button className="bg-white text-primary px-4 py-2 rounded-lg font-semibold border border-gray-500">View Details</button>
+                                        <button className="bg-white text-primary px-4 py-2 rounded-lg font-semibold border border-gray-500"
+                                        onClick={() => handleMovieDetails(index)}
+
+                                        >View Details</button>
 
                                         {/* <MdNotificationAdd
                                             size={39}

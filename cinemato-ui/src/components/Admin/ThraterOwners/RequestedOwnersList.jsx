@@ -12,6 +12,7 @@ function RequestedOwnersList() {
   const navigate = useNavigate()
 
   const roomName = 'lobby';
+  console.log("location: ", window.location.host )
   const chatSocket = new WebSocket(`ws://${window.location.host}/ws/chat/${roomName}/`);
 
   chatSocket.onmessage = function(event) {

@@ -6,10 +6,8 @@ import { IoIosArrowRoundBack } from "react-icons/io";
 
 const ListRequestedOwners = ({ notifications, setNotifications , setIsRequested}) => {
 
-    console.log("notification in requiested owners: ", notifications)
     const [isRequesteDetails, setIsRequestDetails] = useState(false)
     const [notification, setNotification] = useState({})
-    console.log("notificationL :",notifications)
     const markAsRead = (notificationId) => {
         
         const updatedNotifications = notifications.map((noti) => 

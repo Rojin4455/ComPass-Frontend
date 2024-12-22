@@ -42,6 +42,7 @@ function UserDetails() {
                 dispatch(setUser({
                     ...user,
                     profilePhoto: response.data.profilePhoto,
+                    is_user:true, is_admin:false, is_owner:false
                 }));
             }
         } catch (error) {

@@ -8,12 +8,12 @@ import ReviewActions from "./ReviewActions";
 import { useSelector } from "react-redux";
 import { VscLightbulb } from "react-icons/vsc";
 import showToast from "../../../utils/ToastNotifier";
+import AllReviewModal from "./AllReviewModal";
 
 
 
 
 const ReviewBase = () => {
-
     const [ratingModal, setRatingModal] = useState(false)
     const axiosInstance = useAxiosInstance()
     const location = useLocation()
@@ -21,6 +21,8 @@ const ReviewBase = () => {
     const [isReaction, setIsReaction] = useState(false)
     const [likes, setLikes] = useState(0)
     const [dislikes, setDislikes] = useState(0)
+    const [showModal, setShowModal] = useState(false);
+
     
     const movie = location.state.movie
     const user = useSelector((state) => state.user.is_user )
@@ -78,7 +80,6 @@ const ReviewBase = () => {
             try{
             const response = await axiosInstance.get(`movie/get-reviews/${movie.id}/`)
             if (response.status === 200) {
-                console.log("this is reviews get API call");
                 console.log("user review: ", response.data.userReview);
               
                 const userReview = response.data.userReview
@@ -99,7 +100,7 @@ const ReviewBase = () => {
                       reviewReaction:
                         response.data.userReview.review_reaction?.reaction || null,
                       timeAgo: calculateTimeAgo(response.data.userReview.created_at),
-                      isEditable: true, // User review is editable
+                      isEditable: true,
                     }
                   : null;
               
@@ -119,7 +120,6 @@ const ReviewBase = () => {
                   isEditable: false,
                 }));
               
-                // Combine userReview and otherReviews
                 const allReviews = userReview
                   ? [userReview, ...otherReviews]
                   : otherReviews;
@@ -147,12 +147,15 @@ const ReviewBase = () => {
 
     <div className="w-4/5 mx-auto px-8">
         
-        <AddRatingModal setRatingModal={setRatingModal} ratingModal={ratingModal} movieId={movie.id}/>
+        <AddRatingModal setRatingModal={setRatingModal} ratingModal={ratingModal} movieId={movie.id} setIsReaction={setIsReaction}/>
   <div className="flex justify-between items-center mb-6">
     <h2 className="text-2xl font-bold">Top Reviews</h2>
-    <button className="text-primary flex items-center gap-2">
-      See All Reviews <span>&gt;</span>
-    </button>
+    <button
+          className="text-primary flex items-center gap-2"
+          onClick={() => setShowModal(true)}
+        >
+          See All Reviews <span>&gt;</span>
+        </button>
   </div>
   <div className=" flex justify-between w-2/5 gap-8 p-4 bg-gray-100 mb-4 rounded-lg"
     
@@ -218,6 +221,14 @@ const ReviewBase = () => {
   
   
 </div>
+<AllReviewModal
+        showModal={showModal}
+        setShowModal={setShowModal}
+        reviews={reviews}
+        isLoggedIn={isLoggedIn}
+        handleReaction={handleReaction}
+        isReaction={isReaction}
+      />
 
 </div>
 

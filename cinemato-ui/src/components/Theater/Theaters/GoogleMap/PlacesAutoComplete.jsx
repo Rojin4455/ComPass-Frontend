@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import usePlacesAutocomplete, { getGeocode, getLatLng } from "use-places-autocomplete";
 import Select from "react-select";
 import { FaLocationArrow } from "react-icons/fa6";
@@ -12,16 +12,29 @@ function PlacesAutoComplete({ setTheaterData, theaterData }) {
     clearSuggestions,
   } = usePlacesAutocomplete({});
 
+  const [selectedLocation, setSelectedLocation] = useState(null);
+  useEffect(() => {
+    if (theaterData && theaterData.address) {
+      setValue(theaterData.address, false);
+      setSelectedLocation({
+        label: theaterData.address,
+        value: theaterData.address
+      });
+    }
+  }, [theaterData, setValue]);
+
   // Handle address selection
   const handleSelect = async (selectedOption) => {
     const address = selectedOption.label;
     setValue(address, false); // Update the input value
     clearSuggestions(); // Clear suggestions list
-
+    
     try {
       const results = await getGeocode({ address });
       const { lat, lng } = await getLatLng(results[0]);
-
+      
+      // Update both local state and parent component state
+      setSelectedLocation(selectedOption);
       setTheaterData({
         ...theaterData,
         address: address,
@@ -42,7 +55,7 @@ function PlacesAutoComplete({ setTheaterData, theaterData }) {
         }))
       : [];
 
-  // Styling for React-Select
+  // Styling for React-Select (unchanged)
   const customStyles = {
     control: (provided) => ({
       ...provided,
@@ -80,16 +93,21 @@ function PlacesAutoComplete({ setTheaterData, theaterData }) {
     <div className="relative flex items-center">
       {/* Icon */}
       <FaLocationArrow className="absolute left-3 text-gray-400" />
+      
       {/* Dropdown */}
       <Select
-        options={options} // Provide suggestions as options
-        onChange={handleSelect} // Handle selection
-        styles={customStyles} // Apply custom styles
-        isDisabled={!ready} // Disable if API isn't ready
+        options={options}
+        onChange={handleSelect}
+        styles={customStyles}
+        isDisabled={!ready}
         placeholder="Select Your Location"
-        className="w-full" // Adjust width to match container
-        value={value ? { label: value, value: value } : null} // Sync selected value
-        onInputChange={(inputValue) => setValue(inputValue)} // Update value on input change
+        className="w-full"
+        
+        // Use selectedLocation instead of direct value management
+        value={selectedLocation}
+        
+        // Keep input change functionality
+        onInputChange={(inputValue) => setValue(inputValue)}
       />
     </div>
   );

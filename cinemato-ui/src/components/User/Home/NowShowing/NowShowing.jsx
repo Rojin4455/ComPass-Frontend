@@ -2,24 +2,21 @@ import React from 'react';
 import 'tailwindcss/tailwind.css';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { BsFillInfoCircleFill } from "react-icons/bs";
 import { CiCircleInfo } from "react-icons/ci";
 import { IoInformation } from "react-icons/io5";
+import { setBooking } from '../../../../slices/userBookingSlice';
+import { useNavigate } from 'react-router-dom';
 
 
 
 function NowShowing({ movies }) {
     const scrollRef = React.useRef(null);
     const isLoading = useSelector((state) => state.location.showModal);
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
 
-    // const movies = [
-    //     { title: 'Movie 1', genre: 'Action', language: 'English', imageUrl: "assets/deadpool-img.jpg" },
-    //     { title: 'Movie 2', genre: 'Comedy', language: 'Hindi', imageUrl: "assets/deadpool-img.jpg" },
-    //     { title: 'Movie 3', genre: 'Drama', language: 'Tamil', imageUrl: "assets/deadpool-img.jpg" },
-    //     { title: 'Movie 4', genre: 'Thriller', language: 'Malayalam', imageUrl: "assets/deadpool-img.jpg" },
-    //     { title: 'Movie 5', genre: 'Romance', language: 'Telugu', imageUrl: "assets/deadpool-img.jpg" },
-    // ];
 
     const cardWidth = 320;
     const cardMargin = 24;
@@ -44,6 +41,19 @@ function NowShowing({ movies }) {
             });
         }
     };
+
+    const handleMovieDetails = (movieId) => {
+        movies.map((movie, index) => {
+            if (index === movieId){
+                dispatch(setBooking({selectedMovie:movie}))
+              navigate('/user/movie-details/',{
+                state:{
+                  movie
+                }
+              })
+            }
+          })
+    }
 
     return (
         <>
@@ -131,7 +141,10 @@ function NowShowing({ movies }) {
                         </div>
 
                         <div className=" w-full flex items-center justify-between">
-                            <button className="w-4/6 bg-primary text-white py-2 rounded-lg text-center font-medium hover:bg-primary-dark transition-colors">
+                            <button className="w-4/6 bg-primary text-white py-2 rounded-lg text-center font-medium hover:bg-primary-dark transition-colors"
+                                onClick={() => handleMovieDetails(index)}
+
+                            >
                                 Book Tickets
                             </button>
                             <IoInformation

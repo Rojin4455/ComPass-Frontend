@@ -16,7 +16,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setBooking } from "../../slices/userBookingSlice";
 import { setFilter } from "../../slices/adminMovieFilterSlice";
 
-function MovieDetails() {
+function MovieDetails({page}) {
     const [loading, setLoading] = useState(false);
 
     const axiosInstance = useAxiosConfigInstance();
@@ -28,6 +28,7 @@ function MovieDetails() {
     const [showAllCrew, setShowAllCrew] = useState(false);
     const navigate = useNavigate();
     const { is_user, is_admin, is_owner } = useSelector((state) => state.user)
+
     const [showTitle, setShowTitle] = useState(false);
     const dispatch = useDispatch()
     
@@ -231,7 +232,7 @@ const handleToggleMovieList = async () => {
                                 ⭐ {isNaN(vote_average) ? 0 : vote_average}/10
                             </p>
                             <p className="mt-2 text-lg">{runtime} min</p>
-                            {is_admin && (
+                            {page==="admin" && (
                                 <div className="mt-4 relative">
                                     {/* Toggle Button for List/Unlist Movie */}
                                     <button
@@ -265,7 +266,7 @@ const handleToggleMovieList = async () => {
             </div>
 
 
-            {((is_user && is_admin === null && is_owner === null) || (is_user === null && is_admin === null && is_owner === null)) && (
+            {page==="user" && (
             <div
             id="sticky-book-section"
             className="sticky top-0 bg-white shadow-lg w-full py-6 z-10 rounded-md transition-all duration-300 ease-in-out"

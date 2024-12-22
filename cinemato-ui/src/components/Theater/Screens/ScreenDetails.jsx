@@ -15,7 +15,6 @@ import AddScreenTimings from '../ScreenTime/AddScreenTimings';
 import ScreenTimings from '../ScreenTime/ScreenTimings';
 import RunningMovie from './Movie/RunningMovie';
 import AddMovie from './Movie/AddMovie';
-import MovieDetails from './Movie/OwnerMovieDetails';
 import AllShows from './Shows/AllShows';
 import ShowLayout from './Shows/ShowLayout';
 import { clearShow } from '../../../slices/OwnerShowSlice';

@@ -63,7 +63,7 @@ function ProfileEdit() {
             if (response.status === 200){
                 const updatedData = response.data.updatedData
                 console.log("updated data",updatedData,response)
-                dispatch(setUser({user:updatedData}))
+                dispatch(setUser({user:updatedData, is_user:true, is_admin:false, is_owner:false}))
                 dispatch(setContent({content:"personalDetails"}))
             }else{
                 console.log("user Profile edit failed", response)
