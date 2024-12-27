@@ -12,7 +12,7 @@ const useAxiosInstance = () => {
   const {is_admin,is_user,is_owner} = useSelector((state) => state.user)
   
   const dispatch = useDispatch();
-  const navigate = useNavigate(); // Hook to navigate to different routes
+  const navigate = useNavigate();
 
   const axiosInstance = axios.create({
     baseURL: process.env.REACT_APP_BASE_API_URL,
