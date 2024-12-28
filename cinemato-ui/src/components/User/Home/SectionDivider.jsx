@@ -5,7 +5,7 @@ function SectionDivider({ title }) {
 <div className="relative py-10 md:py-12 w-full flex items-center justify-center mt-10">
     {/* Banner Image */}
     <img
-        src='/assets/divider-new.png'
+        src='/assets/Divider-new.png'
         alt="Banner"
         className="absolute h-24 md:h-32 w-[80%] md:w-[85%] object-cover rounded-lg" // Adjust height and width, and add rounded edges
     />
