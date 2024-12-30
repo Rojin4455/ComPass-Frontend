@@ -27,15 +27,16 @@ function Sidebar() {
         <>
         <div className="w-1/4 p-4 bg-white h-full mx-10 rounded-lg">
             <ul className="space-y-4">
-            <li>
+            <li className='cursor-pointer'>
                     <div
-                        className={getClassNames('personalDetails')}
+                        className={getClassNames('personalDetails') }
                         onClick={() => dispatch(setContent({ content: 'personalDetails' }))}
                     >
                         <IoPerson className="mr-2" />
                         Personal Details
                     </div>
-                </li>                <li>
+                </li>                
+                <li className='cursor-pointer'>
                     <div
                         className={getClassNames('myBookings')}
                         onClick={() => dispatch(setContent({ content: 'myBookings' }))}
@@ -44,7 +45,7 @@ function Sidebar() {
                         My Bookings
                     </div>
                 </li>
-                <li>
+                <li className='cursor-pointer'>
                     <div
                         className={getClassNames('movieAlerts')}
                         onClick={() => dispatch(setContent({ content: 'movieAlerts' }))}
@@ -53,7 +54,7 @@ function Sidebar() {
                         Movie Alerts
                     </div>
                 </li>
-                <li>
+                <li className='cursor-pointer'>
                     <div
                         className={getClassNames('logout')}
                         onClick={() => setShowModal(true)}

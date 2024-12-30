@@ -18,7 +18,7 @@ import { PlacesContext } from '../../../../context/placesContext';
 import { useContext } from 'react';
 import { setContent } from '../../../../slices/userProfileSlice';
 
-function Header() {
+function Header({page}) {
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isLoginOtpOpen, setIsLoginOtpOpen] = useState(false);
   const [email, setEmail] = useState("");
@@ -27,7 +27,7 @@ function Header() {
   const navigate = useNavigate();
   const axiosInstance = useAxiosInstance();
   const address = useSelector((state) => state.location.address)
-  const page = useSelector((state) => state.userprofile.page)
+  // const page = useSelector((state) => state.userprofile.page)
   const dispatch = useDispatch()
 
 
@@ -44,7 +44,7 @@ function Header() {
 
   
   const handleClick = () => {
-    dispatch(setContent({page:'home'}))
+    // dispatch(setContent({page:'home'}))
     navigate('/')
   };
 
@@ -140,14 +140,14 @@ function Header() {
     page === 'home' ? 'bg-primary text-white' : 'bg-white text-primary border border-gray-700'
   }`}
 >
-  <IoHome />
+  <IoHome/>
   <span className="hidden sm:inline">Home</span>
 </button>
 
   <button
-    onClick={() => {navigate('/movie'); dispatch(setContent({page:'movies'}))}}
+    onClick={() => {navigate('/movie') }}
     className={`flex items-center gap-2 px-3 py-1 md:px-4 md:py-2 rounded-full text-sm md:text-base ${
-      page === 'movies' ? 'bg-primary text-white ' : 'bg-white text-primary border border-gray-700'
+      page === 'movie' ? 'bg-primary text-white ' : 'bg-white text-primary border border-gray-700'
     }`}  >
     <MdLocalMovies />
     <span className="hidden sm:inline">Movies</span>
@@ -155,12 +155,13 @@ function Header() {
 </div>
 
 
-      {/* Center: Logo */}
-      <div className="flex-grow flex justify-center items-center">
+      <div className="flex-grow flex justify-center items-center"
+      >
   <img
     src="/assets/logo-new1.png"
     alt="Logo"
     className="h-6 sm:h-5 lg:h-10 object-contain"
+    onClick={handleClick}
   />
 </div>
 
@@ -196,9 +197,9 @@ function Header() {
           </button>
         )}
 
-        <div className="text-gray-600">
+        {/* <div className="text-gray-600">
           <IoNotifications size={20} />
-        </div>
+        </div> */}
       </div>
     </nav>
   </header>

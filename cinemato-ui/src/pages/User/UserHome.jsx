@@ -127,7 +127,7 @@ function UserHome() {
   console.log("location: ",location)
   return (
     <>
-      <MainLayout>
+      <MainLayout page={'home'}>
         {/* {loading? (<Loading loading={loading} />):( */}
           <>
         {/* {(location.showModal || location.display) && isLoaded && (

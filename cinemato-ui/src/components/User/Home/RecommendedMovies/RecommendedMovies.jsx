@@ -87,7 +87,7 @@ function RecommendedMovies({movies}) {
                     : movies.map((movie, index) => (
 <div 
     key={index} 
-    className="w-28 h-52 sm:w-48 sm:h-72 md:w-56 md:h-80 lg:w-[236px] lg:h-auto rounded-lg flex-shrink-0 bg-white overflow-hidden relative"
+    className="w-28 h-52 sm:w-48 sm:h-72 md:w-56 md:h-80 lg:w-[236px] lg:h-auto rounded-lg flex-shrink-0 bg-white overflow-hidden relative cursor-pointer"
     onClick={() => handleMovieDetails(index)}
 
 >

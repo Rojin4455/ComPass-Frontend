@@ -7,7 +7,7 @@ function ListMoviePage() {
     const location = useSelector((state) => state.location)
 
   return (
-    <MainLayout>
+    <MainLayout page={'movie'}>
         <ListMovie movies={location.nowShowing}/>
     </MainLayout>
   )

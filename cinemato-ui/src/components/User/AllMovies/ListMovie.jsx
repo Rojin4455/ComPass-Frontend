@@ -1,12 +1,18 @@
 import React,{ useState, useEffect } from "react";
 import { IoSearchOutline } from "react-icons/io5"
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { IoIosClose } from "react-icons/io";
+import { setBooking } from "../../../slices/userBookingSlice";
+import { useNavigate } from "react-router-dom";
+import { useAnimationControls } from "framer-motion";
 
 
 
 
 export default function ListMovie({movies}) {
+
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
     const languages = [
         ...new Set(
             movies.flatMap(movie => movie.languages.map(lan => lan.name))
@@ -97,6 +103,21 @@ export default function ListMovie({movies}) {
         setSelectedOptions(updatedSelectedOptions);
         // onFilterChange(updatedSelectedOptions);
       };
+
+
+
+      const handleMovieDetails = (movieId) => {
+        movies.map((movie, index) => {
+            if (index === movieId){
+                dispatch(setBooking({selectedMovie:movie}))
+              navigate('/user/movie-details/',{
+                state:{
+                  movie
+                }
+              })
+            }
+          })
+    }
     
   return (
     <div className="container mx-auto py-8 px-4">
@@ -117,7 +138,7 @@ export default function ListMovie({movies}) {
                   >
                     {option}
                     <button
-                      className="ml-2 text-gray-700 hover:text-gray-900"
+                      className="ml-2 text-gray-700 hover:text-gray-900 cursor-pointer"
                       onClick={() => handleRemoveFilter(filter, option)}
                     >
                       <IoIosClose className="w-4 h-4" />
@@ -230,7 +251,9 @@ export default function ListMovie({movies}) {
   ) : (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
       {allMovies.map((movie, index) => (
-        <div key={index} className="bg-white rounded-lg overflow-hidden shadow-sm">
+        <div key={index} className="bg-white rounded-lg overflow-hidden shadow-sm cursor-pointer"
+        onClick={() => handleMovieDetails(index)}
+        >
           <div className="relative aspect-[2/3]">
             <div
               style={{
