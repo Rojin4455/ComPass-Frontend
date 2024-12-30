@@ -1,109 +1,127 @@
 import React, { useEffect, useState } from 'react'
 import { X } from 'lucide-react'
-import '../Profile/SidebarDetails/Bookings/cancelModal.css'
-import { FaStar } from "react-icons/fa";
-import useAxiosInstance from '../../../axiosConfig';
-import { useLocation } from 'react-router-dom';
-import showToast from '../../../utils/ToastNotifier';
-
-
+import { FaStar } from "react-icons/fa"
+import useAxiosInstance from '../../../axiosConfig'
+import showToast from '../../../utils/ToastNotifier'
 
 export default function MovieRatingModal({ setRatingModal, ratingModal, movieId, setIsReaction }) {
     const [rating, setRating] = useState(0)
     const [selectedHashtags, setSelectedHashtags] = useState([])
     const axiosInstance = useAxiosInstance()
-    const [hashtags, setHashtags] = useState([])
-    const [hashtagIndex, sethashtagIndex] = useState(0)
+    const [hashtagIndex, setHashtagIndex] = useState(0)
     const [content, setContent] = useState('')
-    const [isFocused, setIsFocused] = useState(false);
-
-        // const movie = useSelector((state) => state.booking.selectedMovie)
-
-
-
-    const [groupedHashtags, setGroupedHashtags] = useState({});
+    const [isFocused, setIsFocused] = useState(false)
+    const [isLoading, setIsLoading] = useState(true)
+    const [groupedHashtags, setGroupedHashtags] = useState({})
+    const [error, setError] = useState(null)
 
     const handleRatingChange = (e) => {
         setRating(Number(e.target.value))
     }
 
-    const toggleHashtagSelection = (hashtag, hashtagIndex) => {
-
-        if (selectedHashtags.includes(hashtag)) {
-            setSelectedHashtags(selectedHashtags.filter((item) => item != hashtag))
-        } else {
-            setSelectedHashtags([...selectedHashtags, hashtag])
-        }
+    const toggleHashtagSelection = (hashtag) => {
+        setSelectedHashtags(prev => 
+            prev.includes(hashtag) 
+                ? prev.filter(item => item !== hashtag)
+                : [...prev, hashtag]
+        )
     }
 
     useEffect(() => {
-
         const fetchHashtags = async () => {
-
+            setIsLoading(true)
             try {
                 const response = await axiosInstance.get('movie/movie-hashtags/')
-                const data = await response.data;
+                const data = response.data
 
                 const grouped = data.reduce((acc, item) => {
-                    acc[item.rated_at] = acc[item.rated_at] || [];
-                    acc[item.rated_at].push(item.heading);
-                    return acc;
-                }, {});
+                    if (!acc[item.rated_at]) {
+                        acc[item.rated_at] = []
+                    }
+                    acc[item.rated_at].push(item.heading)
+                    return acc
+                }, {})
 
-                console.log("grouped: ", grouped)
-                setGroupedHashtags(grouped);
+                setGroupedHashtags(grouped)
+                setError(null)
             } catch (error) {
-                console.log("response: error ", error)
+                console.error("Failed to fetch hashtags:", error)
+                setError("Failed to load hashtags. Please try again later.")
+            } finally {
+                setIsLoading(false)
             }
         }
         fetchHashtags()
-
     }, [])
-
 
     useEffect(() => {
         if (rating <= 3) {
-            sethashtagIndex(3)
+            setHashtagIndex(3)
         } else if (rating <= 6) {
-            sethashtagIndex(6)
+            setHashtagIndex(6)
         } else {
-            sethashtagIndex(10)
+            setHashtagIndex(10)
         }
-
         setSelectedHashtags([])
-
     }, [rating])
-
 
     const handleReviewSubmit = async () => {
         try {
             const response = await axiosInstance.post('movie/add-review/', {
-                rating: rating,
-                selectedHashtags: selectedHashtags,
-                content: content,
-                movieId: movieId
-
+                rating,
+                selectedHashtags,
+                content,
+                movieId
             })
 
-            if (response.status === 201){
+            if (response.status === 201) {
                 showToast('success', response.data.message)
                 setIsReaction(true)
                 setRatingModal(false)
-            }else{
-                showToast('error', 'something went wrong')
-                console.log("error response: ",response)
-            }   
+            } else {
+                showToast('error', 'Something went wrong')
+            }
         } catch (error) {
-            console.log("something went wring :", error)
-            if (error.status === 400){
+            if (error.response?.status === 400) {
                 showToast('error', error.response.data.message)
-            }else{
-            showToast('error', "something went wrong")
+            } else {
+                showToast('error', "Something went wrong")
             }
         }
     }
 
+    const renderHashtags = () => {
+        if (isLoading) {
+            return <div className="text-center">Loading hashtags...</div>
+        }
 
+        if (error) {
+            return <div className="text-center text-red-500">{error}</div>
+        }
+
+        const currentHashtags = groupedHashtags[hashtagIndex]
+        if (!currentHashtags || currentHashtags.length === 0) {
+            return <div className="text-center">No hashtags available for this rating</div>
+        }
+
+        return (
+            <div className="flex flex-wrap justify-center gap-2">
+                {currentHashtags.map((hashtag, index) => (
+                    <div
+                        key={index}
+                        className={`px-2 py-1 rounded-full border text-xs border-primary cursor-pointer transition-all 
+                            ${selectedHashtags.includes(hashtag)
+                                ? "bg-primary text-white"
+                                : "text-gray-700 bg-white"
+                            }`}
+                        onClick={() => toggleHashtagSelection(hashtag)}
+                    >
+                        #{hashtag}
+                    </div>
+                ))}
+            </div>
+        )
+    }
 
     return (
         <div className="relative">
@@ -124,12 +142,12 @@ export default function MovieRatingModal({ setRatingModal, ratingModal, movieId,
                             </button>
                         </div>
 
-                        {/* Modal Body */}
                         <div
                             className="mb-8 overflow-y-auto pr-2"
-                            style={{ maxHeight: "calc(100% - 110px)" }} /* Adjust for footer */
+                            style={{ maxHeight: "calc(100% - 110px)" }}
                         >
                             <h3 className="text-lg mb-8">How would you rate the movie?</h3>
+                            {/* Rating Input Section */}
                             <div className="relative w-full mt-10">
                                 <div className="relative w-full h-10">
                                     <input
@@ -154,8 +172,7 @@ export default function MovieRatingModal({ setRatingModal, ratingModal, movieId,
                                         className="absolute top-0 left-0 h-2 rounded-lg"
                                         style={{
                                             width: "100%",
-                                            background: `linear-gradient(to right, #003049 ${(rating / 10) * 100
-                                                }%, #e5e7eb ${(rating / 10) * 100}%)`,
+                                            background: `linear-gradient(to right, #003049 ${(rating / 10) * 100}%, #e5e7eb ${(rating / 10) * 100}%)`,
                                             transition: "background-size 0.3s ease-out",
                                         }}
                                     />
@@ -163,10 +180,11 @@ export default function MovieRatingModal({ setRatingModal, ratingModal, movieId,
                                         {Array.from({ length: 11 }, (_, i) => (
                                             <div
                                                 key={i}
-                                                className={`w-2 h-2 rounded-full ${i <= rating
+                                                className={`w-2 h-2 rounded-full ${
+                                                    i <= rating
                                                         ? "bg-primary"
                                                         : "bg-white border border-gray-300"
-                                                    }`}
+                                                }`}
                                                 style={{ transition: "background-color 0.3s ease" }}
                                             />
                                         ))}
@@ -195,22 +213,7 @@ export default function MovieRatingModal({ setRatingModal, ratingModal, movieId,
                                         <p className="text-gray-400 italic text-sm mb-1">
                                             Express Yourself with hashtags
                                         </p>
-                                        {/* Hashtags */}
-                                        <div className="flex flex-wrap justify-center gap-2">
-                                            {groupedHashtags[hashtagIndex].map((hashtag, index) => (
-                                                <div
-                                                    key={index}
-                                                    className={`px-2 py-1 rounded-full border text-xs border-primary cursor-pointer transition-all 
-                          ${selectedHashtags.includes(hashtag)
-                                                            ? "bg-primary text-white"
-                                                            : "text-gray-700 bg-white"
-                                                        }`}
-                                                    onClick={() => toggleHashtagSelection(hashtag, hashtagIndex)}
-                                                >
-                                                    #{hashtag}
-                                                </div>
-                                            ))}
-                                        </div>
+                                        {renderHashtags()}
 
                                         <div className="mt-6 mb-10">
                                             <p className="text-gray-800 mb-5 left-0">
@@ -218,27 +221,27 @@ export default function MovieRatingModal({ setRatingModal, ratingModal, movieId,
                                                 <span className="text-gray-400">(optional)</span>
                                             </p>
                                             <div className="relative">
-      <input
-        type="text"
-        id="review"
-        value={content}
-        onChange={(e) => setContent(e.target.value)}
-        onFocus={() => setIsFocused(true)}
-        onBlur={() => setIsFocused(false)}
-        className="w-full px-4 py-6 border-b border-gray-300 focus:outline-none focus:border-black"
-        placeholder=" " // Invisible placeholder for styling
-      />
-      <label
-        htmlFor="review"
-        className={`absolute left-0 transition-all transform ${
-          isFocused || content.length > 0
-            ? "top-0 text-black text-sm"
-            : "top-1/2 -translate-y-1/2 text-gray-400 text-base"
-        }`}
-      >
-        Your opinion matters
-      </label>
-    </div>
+                                                <input
+                                                    type="text"
+                                                    id="review"
+                                                    value={content}
+                                                    onChange={(e) => setContent(e.target.value)}
+                                                    onFocus={() => setIsFocused(true)}
+                                                    onBlur={() => setIsFocused(false)}
+                                                    className="w-full px-4 py-6 border-b border-gray-300 focus:outline-none focus:border-black"
+                                                    placeholder=" "
+                                                />
+                                                <label
+                                                    htmlFor="review"
+                                                    className={`absolute left-0 transition-all transform ${
+                                                        isFocused || content.length > 0
+                                                            ? "top-0 text-black text-sm"
+                                                            : "top-1/2 -translate-y-1/2 text-gray-400 text-base"
+                                                    }`}
+                                                >
+                                                    Your opinion matters
+                                                </label>
+                                            </div>
                                         </div>
                                     </div>
                                 )}
@@ -247,12 +250,12 @@ export default function MovieRatingModal({ setRatingModal, ratingModal, movieId,
 
                         <div className="absolute bottom-0 left-0 w-full p-4 bg-gray-100">
                             <button
-                                className={`w-full py-3 rounded-lg text-lg font-medium transition-colors ${rating
+                                className={`w-full py-3 rounded-lg text-lg font-medium transition-colors ${
+                                    rating
                                         ? "text-white bg-primary hover:bg-primaryhover cursor-pointer"
                                         : "text-white bg-gray-300 cursor-default"
-                                    }`}
+                                }`}
                                 disabled={!rating}
-
                                 onClick={handleReviewSubmit}
                             >
                                 Submit Rating
@@ -262,9 +265,5 @@ export default function MovieRatingModal({ setRatingModal, ratingModal, movieId,
                 </div>
             )}
         </div>
-
-
-
     )
 }
-
