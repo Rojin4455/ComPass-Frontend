@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { clearUser, setUser } from './slices/userSlice';
 import Cookies from 'js-cookie'; // You need this library to manage cookies
 import { useNavigate } from 'react-router-dom';
+import showToast from './utils/ToastNotifier';
 
 
 
@@ -15,7 +16,7 @@ const useAxiosInstance = () => {
   const navigate = useNavigate();
 
   const axiosInstance = axios.create({
-    baseURL: process.env.REACT_APP_BASE_API_URL,
+    baseURL: process.env.REACT_APP_BASE_API_URL,  
   });
 
 
@@ -82,7 +83,7 @@ const useAxiosInstance = () => {
       }
 
       const { status, data } = error.response;
-
+      
       // If refresh token has expired (check status code and error message)
       if (status === 403 && data.error === 'Refresh token expired') {
         // Clear the user state (log the user out)
@@ -90,14 +91,32 @@ const useAxiosInstance = () => {
 
         console.log("refresh token is expired")
         if (is_admin) {
+          dispatch(clearUser())
           navigate("/admin/");
         } else if (is_owner) {
+          dispatch(clearUser())
           navigate("/theater/login/");
         } else if (is_user) {
+          dispatch(clearUser())
           navigate("/");
         }
         dispatch(clearUser()); // Replace this with your logout action
         // Navigate to the login page
+      }
+      
+      if (status === 401) {
+        showToast('error', "user is unauthorized")
+        if(is_admin){
+          dispatch(clearUser())
+          navigate("/admin/");
+
+        }else if(is_owner){
+          dispatch(clearUser())
+          navigate("theater/login/")
+        }else{
+          dispatch(clearUser())
+          navigate("/")
+        }
       }
     }
       // Handle any errors from the backend or network

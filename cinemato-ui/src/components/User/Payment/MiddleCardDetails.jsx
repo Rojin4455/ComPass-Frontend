@@ -70,38 +70,34 @@ function MiddleCardDetails({movie}) {
 
 
   return (
-    <div className="p-6  rounded-lg text-gray-800">
-      <h2 className="text-lg font-semibold mb-4">Pay Using Card</h2>
-
-      {/* Card Number Input */}
-      {/*  */}
-
-      <button
-  type="submit"
-  onClick={handleClick}
-  disabled={!isProceed || isLoading}
-  className={`w-full flex flex-col items-center p-4 font-semibold rounded-md transition-colors
-    ${isProceed && !isLoading ? 'bg-primary text-gray-200 hover:bg-secondary-dark cursor-pointer' : 'bg-gray-300 text-gray-400 cursor-not-allowed'}
-  `}
-  style={{ fontFamily: "Montserrat" }}
->
-  {isLoading ? (
-    <div className="flex items-center space-x-2">
-      <ImSpinner2 className="animate-spin text-gray-500" />
-      <span>Processing...</span>
-    </div>
-  ) : (
-    <>
-      <span className="text-lg">Verify & Pay</span>
-      <div className="flex items-center justify-center mt-1 text-xs text-gray-400">
-        pay with <BsStripe className="ml-1 text-blue-500 text-base" />
+    <div className="p-6 rounded-lg text-gray-800 bg-white">
+  <h2 className="text-lg font-semibold mb-4">Pay Using Card</h2>
+  <button
+    type="submit"
+    onClick={handleClick}
+    disabled={!isProceed || isLoading}
+    className={`w-full flex flex-col items-center p-4 font-semibold rounded-md transition-colors ${
+      isProceed && !isLoading
+        ? "bg-primary text-gray-200 hover:bg-secondary-dark cursor-pointer"
+        : "bg-gray-300 text-gray-400 cursor-not-allowed"
+    }`}
+  >
+    {isLoading ? (
+      <div className="flex items-center space-x-2">
+        <ImSpinner2 className="animate-spin text-gray-500" />
+        <span>Processing...</span>
       </div>
-    </>
-  )}
-</button>
+    ) : (
+      <>
+        <span className="text-lg">Verify & Pay</span>
+        <div className="flex items-center justify-center mt-1 text-xs text-gray-400">
+          Pay with <BsStripe className="ml-1 text-blue-500 text-base" />
+        </div>
+      </>
+    )}
+  </button>
+</div>
 
-
-    </div>
   );
 }
 

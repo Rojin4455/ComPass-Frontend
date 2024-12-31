@@ -67,16 +67,18 @@ function TopBar({title,isPayment}) {
 
 
   return (
-    <div className="fixed w-full flex justify-between items-center bg-gray-100 p-6 text-gray-800 z-20">
-      <div className="flex items-center space-x-2"
-        onClick={handleBack}
-      >
-        <IoChevronBack className="h-6 w-6 cursor-pointer" />
-        <h2 className="text-lg font-semibold">{title}</h2>
-      </div>
+<div className="fixed w-full flex justify-between items-center bg-gray-100 p-6 text-gray-800 z-20">
+  <div
+    className="flex items-center space-x-2 cursor-pointer"
+    onClick={handleBack}
+  >
+    <IoChevronBack className="h-6 w-6" />
+    <h2 className="text-lg font-semibold truncate">{title}</h2>
+  </div>
 
-      <IoClose className="h-6 w-6 cursor-pointer" />
-    </div>  )
+  <IoClose className="h-6 w-6 cursor-pointer" />
+</div>
+)
 }
 
 export default TopBar

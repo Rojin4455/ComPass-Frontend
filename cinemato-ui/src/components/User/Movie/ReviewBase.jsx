@@ -145,92 +145,101 @@ const ReviewBase = () => {
 
   return (
 
-    <div className="w-4/5 mx-auto px-8">
-        
-        <AddRatingModal setRatingModal={setRatingModal} ratingModal={ratingModal} movieId={movie.id} setIsReaction={setIsReaction}/>
-  <div className="flex justify-between items-center mb-6">
-    <h2 className="text-2xl font-bold">Top Reviews</h2>
+    <div className="w-11/12 mx-auto px-4 sm:px-6 lg:px-8">
+  <AddRatingModal 
+    setRatingModal={setRatingModal} 
+    ratingModal={ratingModal} 
+    movieId={movie.id} 
+    setIsReaction={setIsReaction} 
+  />
+  <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+    <h2 className="text-xl sm:text-2xl font-bold">Top Reviews</h2>
     <button
-          className="text-primary flex items-center gap-2"
-          onClick={() => setShowModal(true)}
-        >
-          See All Reviews <span>&gt;</span>
-        </button>
+      className="text-primary flex items-center gap-2 text-sm sm:text-base"
+      onClick={() => setShowModal(true)}
+    >
+      See All Reviews <span>&gt;</span>
+    </button>
   </div>
-  <div className=" flex justify-between w-2/5 gap-8 p-4 bg-gray-100 mb-4 rounded-lg"
-    
-  >
-    <div className="space-y-1">
-    {reviews.some((review) => review.isEditable) ? (
-    <>
-      <h2 className="text-xl font-base">You've already rated this movie</h2>
-      <h4 className="text-md font-thin">Thank you for your feedback!</h4>
-    </>
-  ) : (
-    <>
-      <h2 className="text-xl font-base">Add your rating & reviews</h2>
-      <h4 className="text-md font-thin">Your rating matters</h4>
-    </>
-  )}
+
+  <div className="flex flex-col sm:flex-row justify-between items-center w-full sm:w-2/3 gap-6 sm:gap-8 p-4 bg-gray-100 mb-6 rounded-lg">
+    <div className="space-y-1 text-center sm:text-left">
+      {reviews.some((review) => review.isEditable) ? (
+        <>
+          <h2 className="text-lg sm:text-xl font-medium">You've already rated this movie</h2>
+          <h4 className="text-sm sm:text-md font-thin">Thank you for your feedback!</h4>
+        </>
+      ) : (
+        <>
+          <h2 className="text-lg sm:text-xl font-medium">Add your rating & reviews</h2>
+          <h4 className="text-sm sm:text-md font-thin">Your rating matters</h4>
+        </>
+      )}
     </div>
     {!reviews.some((review) => review.isEditable) && (
-    <button className="px-4 rounded-md text-md border border-primary text-primary font-semibold hover:bg-primary hover:text-white transition-all transform hover:scale-110"
-    style={{ fontFamily: "Montserrat" }}
-    onClick={handleRatingModal}
-    > 
+      <button
+        className="px-4 py-2 rounded-md text-sm sm:text-md border border-primary text-primary font-semibold hover:bg-primary hover:text-white transition-all transform hover:scale-105"
+        style={{ fontFamily: "Montserrat" }}
+        onClick={handleRatingModal}
+      >
         Rate Now
-    </button>
+      </button>
     )}
   </div>
 
-  <p className="text-gray-600 mb-4">Summary of {reviews.length} reviews.</p>
+  <p className="text-gray-600 mb-4 text-sm sm:text-base">Summary of {reviews.length} reviews.</p>
 
   <div className="relative">
     <div className="flex gap-4 mb-6 overflow-x-auto scroll-smooth snap-x">
       {reviews.map((review, index) => (
         <div
-        key={index}
-        className="border rounded-lg p-4 w-[calc(50%-8px)] flex-shrink-0 snap-center relative"
-      >
-        <div className="flex justify-between items-start mb-3">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-gray-200 rounded-full"></div>
-            <div>
-              <p className="font-medium">{review.user}</p>
-              <p className="text-sm text-gray-500">
-                Booked on <span className="text-primary">{review.platform}</span>
-              </p>
+          key={index}
+          className="border rounded-lg p-4 min-w-[75%] sm:min-w-[calc(50%-8px)] flex-shrink-0 snap-center relative bg-white shadow-md"
+        >
+          <div className="flex justify-between items-start mb-3">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gray-200 rounded-full"></div>
+              <div>
+                <p className="font-medium text-sm sm:text-base">{review.user}</p>
+                <p className="text-xs sm:text-sm text-gray-500">
+                  Booked on <span className="text-primary">{review.platform}</span>
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center">
+              <span className="text-yellow-400 mr-1">★</span>
+              <span className="text-sm sm:text-base">{review.rating}/10</span>
             </div>
           </div>
-          <div className="flex items-center">
-            <span className="text-yellow-400 mr-1">★</span>
-            <span>{review.rating}/10</span>
+
+          <div className="mb-10">
+            <p className="text-gray-700 mb-2 text-sm sm:text-base">{review.hashtags.join(" ")}</p>
+            <p className="text-gray-800 text-sm sm:text-base">{review.content}</p>
           </div>
+
+          <ReviewActions 
+            review={review} 
+            isLoggedIn={isLoggedIn} 
+            handleReaction={handleReaction} 
+            likes={likes} 
+            dislikes={dislikes} 
+            isReaction={isReaction} 
+          />
         </div>
-      
-        <div className="mb-10">
-          <p className="text-gray-700 mb-2">{review.hashtags.join(" ")}</p>
-          <p className="text-gray-800">{review.content}</p>
-        </div>
-      
-       <ReviewActions review={review} isLoggedIn={isLoggedIn} handleReaction={handleReaction} likes={likes} dislikes={dislikes} isReaction={isReaction}/>
-      </div>
-      
       ))}
     </div>
-  
-  
-</div>
-<AllReviewModal
-        showModal={showModal}
-        setShowModal={setShowModal}
-        reviews={reviews}
-        isLoggedIn={isLoggedIn}
-        handleReaction={handleReaction}
-        isReaction={isReaction}
-      />
+  </div>
 
+  <AllReviewModal
+    showModal={showModal}
+    setShowModal={setShowModal}
+    reviews={reviews}
+    isLoggedIn={isLoggedIn}
+    handleReaction={handleReaction}
+    isReaction={isReaction}
+  />
 </div>
+
 
   );
 };

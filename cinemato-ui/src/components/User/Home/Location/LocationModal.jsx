@@ -7,10 +7,8 @@ import Select from "react-select";
 import { setLocation } from "../../../../slices/userLocationSlice";
 import { setLoading } from "../../../../slices/userSlice";
 import useAxiosInstance from "../../../../axiosConfig";
-import showToast from "../../../../utils/ToastNotifier";
-import "../../Profile/SidebarDetails/Bookings/cancelModal.css";
 
-function LocationModal() {
+const LocationModal = () => {
   const {
     ready,
     value,
@@ -19,13 +17,6 @@ function LocationModal() {
     clearSuggestions,
   } = usePlacesAutocomplete({});
 
-  console.log("something is triggered")
-  console.log('Full Environment:', process.env);
-
-  console.log('Backend URL:', process.env.REACT_APP_BASE_API_URL);
-
-
-
   const location = useSelector((state) => state.location);
   const dispatch = useDispatch();
   const axiosInstance = useAxiosInstance();
@@ -33,7 +24,6 @@ function LocationModal() {
 
   if (!location.showModal && !location.display) return null;
 
-  // Handle selection from react-select dropdown
   const handleSelect = async (selectedOption) => {
     const address = selectedOption.label;
     setValue(address, false);
@@ -84,8 +74,6 @@ function LocationModal() {
               display: false,
             })
           );
-        } else if (err.status === 406) {
-          console.error("Latitude or Longitude is missing.");
         }
       }
 
@@ -102,9 +90,9 @@ function LocationModal() {
   const customStyles = {
     control: (provided) => ({
       ...provided,
-      paddingLeft: "2.5rem", // Space for the icon
+      paddingLeft: "2.5rem",
       borderColor: "#d1d5db",
-      height: "48px",
+      minHeight: "48px",
       boxShadow: "none",
       "&:hover": {
         borderColor: "#2563eb",
@@ -114,70 +102,89 @@ function LocationModal() {
       ...provided,
       zIndex: 50,
     }),
+    container: (provided) => ({
+      ...provided,
+      width: '100%',
+    }),
   };
 
-  const options =
-    status === "OK"
-      ? data.map(({ description, place_id }) => ({
-          label: description,
-          value: place_id,
-        }))
-      : [];
+  const options = status === "OK"
+    ? data.map(({ description, place_id }) => ({
+        label: description,
+        value: place_id,
+      }))
+    : [];
+
+  const cities = [
+    "bengaluru", "kochi", "mumbai", "delhi", 
+    "kolkata", "chennai", "chandigrah", "hyderabad"
+  ];
 
   return (
-    <div className="fixed bg-[#7e7e7e90] w-full h-screen flex justify-center items-center p-5 top-0 z-20">
-      <div className="bg-white w-3/5 py-9 flex flex-col justify-around items-center relative animate-spring">
-        {location.display && (
-          <button
-            className="absolute top-4 right-4 text-gray-500 hover:text-gray-800"
-            onClick={handleClose}
-          >
-            <IoIosClose size={35} />
-          </button>
-        )}
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+      <div className="bg-white w-full max-w-4xl rounded-lg shadow-xl animate-spring overflow-y-auto max-h-[90vh]">
+        <div className="relative p-4 sm:p-6 md:p-8">
+          {/* Close button */}
+          {location.display && (
+            <button
+              className="absolute top-4 right-4 text-gray-500 hover:text-gray-800 transition-colors"
+              onClick={handleClose}
+              aria-label="Close modal"
+            >
+              <IoIosClose className="w-6 h-6 sm:w-8 sm:h-8" />
+            </button>
+          )}
 
-        <h1 className="font-semibold text-xl mb-4">SELECT YOUR CITY TO CONTINUE</h1>
+          {/* Header */}
+          <h1 className="text-center font-semibold text-lg sm:text-xl md:text-2xl mb-6">
+            SELECT YOUR CITY TO CONTINUE
+          </h1>
 
-        <div className="relative w-4/5 mb-6">
-          <div className="relative flex items-center w-full">
-            <FaLocationArrow className="absolute left-3 text-gray-400" />
-            <Select
-              options={options}
-              onChange={handleSelect}
-              styles={customStyles}
-              isDisabled={!ready}
-              placeholder="Select Your Location"
-              className="w-full"
-              onInputChange={(inputValue) => setValue(inputValue)}
-            />
+          {/* Location Search */}
+          <div className="w-full max-w-2xl mx-auto mb-8">
+            <div className="relative flex items-center">
+              <FaLocationArrow className="absolute left-3 text-gray-400 z-10" />
+              <Select
+                options={options}
+                onChange={handleSelect}
+                styles={customStyles}
+                isDisabled={!ready}
+                placeholder="Select Your Location"
+                onInputChange={(inputValue) => setValue(inputValue)}
+                className="w-full"
+              />
+            </div>
           </div>
-        </div>
 
-        <div className="flex flex-col text-center px-20 gap-6">
-          <h2 className="font-semibold text-base">POPULAR CITIES</h2>
-          <div className="grid grid-cols-4 gap-6">
-            {["bengaluru.jpg", "kochi.jpg", "mumbai.avif", "delhi.jpg", "kolkata.jpg", "chennai.avif", "chandigrah.avif", "hyderabad.jpg"].map((cityImg, index) => (
-              <div
-                key={index}
-                className="relative group cursor-pointer"
-                onClick={() => handleSelect({ label: cityImg.split(".")[0], value: cityImg.split(".")[0] })}
-              >
-                <img
-                  src={`/assets/${cityImg}`}
-                  alt={cityImg.split(".")[0]}
-                  className="w-full h-24 object-cover rounded-lg"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-60 rounded-lg"></div>
-                <h4 className="absolute bottom-2 left-1/2 transform -translate-x-1/2 text-white text-base font-medium opacity-90 group-hover:opacity-100">
-                  {cityImg.split(".")[0].charAt(0).toUpperCase() + cityImg.split(".")[0].slice(1)}
-                </h4>
-              </div>
-            ))}
+          {/* Popular Cities */}
+          <div className="px-4 sm:px-8 md:px-12">
+            <h2 className="text-center font-semibold text-base md:text-lg mb-6">
+              POPULAR CITIES
+            </h2>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
+              {cities.map((city) => (
+                <div
+                  key={city}
+                  className="relative group cursor-pointer rounded-lg overflow-hidden aspect-video sm:aspect-square transition-transform hover:scale-105"
+                  onClick={() => handleSelect({ label: city, value: city })}
+                >
+                  <img
+                    src={`/assets/${city}.${city === 'mumbai' || city === 'chennai' || city === 'chandigrah' ? 'avif' : 'jpg'}`}
+                    alt={city}
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent group-hover:from-black/90 transition-opacity" />
+                  <h4 className="absolute bottom-2 left-1/2 transform -translate-x-1/2 text-white text-sm sm:text-base font-medium text-center w-full px-2">
+                    {city.charAt(0).toUpperCase() + city.slice(1)}
+                  </h4>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
     </div>
   );
-}
+};
 
 export default LocationModal;

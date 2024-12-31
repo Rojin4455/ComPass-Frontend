@@ -69,19 +69,19 @@ function FullPage() {
 
     return (
       <MainLayout>
-      <div className="w-full flex flex-col">
-        <TopBar title={selectedMovie.title}/>
-  
-        <div className="flex flex-1 overflow-hidden mt-[6rem]">
-          <div className="flex-1 p-4 ">
-            <LeftSnacksList categories={categories} snacks={snacks} />
-          </div>
-  
-          <div className="w-1/3 p-4 bg-500">
-            <RightPriceDetails movie={selectedMovie} isPayment={isPayment}/>
-          </div>
-        </div>
-      </div>
+<div className="w-full flex flex-col">
+  <TopBar title={selectedMovie.title} />
+
+  <div className="flex flex-1 flex-col md:flex-row overflow-hidden mt-[6rem]">
+    <div className="flex-1 p-4">
+      <LeftSnacksList categories={categories} snacks={snacks} />
+    </div>
+
+    <div className="w-full md:w-1/3 p-4 bg-500">
+      <RightPriceDetails movie={selectedMovie} isPayment={isPayment} />
+    </div>
+  </div>
+</div>
       </MainLayout>
     )
   }

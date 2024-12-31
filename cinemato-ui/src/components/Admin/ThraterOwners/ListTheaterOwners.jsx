@@ -16,7 +16,7 @@ function ListTheaterOwners() {
   const [websocket, setWebsocket] = useState(null);
   const [isRead, setIsRead] = useState(false)
   const [isRequested, setIsRequested] = useState(false)
-
+  const webSocketUrl = process.env.REACT_APP_WEBSOCKET_URL
   useEffect(() => {
     const fetchOwners = async () => {
       try {
@@ -32,7 +32,7 @@ function ListTheaterOwners() {
   }, []);
 
   useEffect(() => {
-    const ws = new WebSocket('wss://cinemato.site/ws/notifications/');
+    const ws = new WebSocket(`${webSocketUrl}/ws/notifications/`);
 
     ws.onopen = () => {
       console.log('WebSocket Connected');
