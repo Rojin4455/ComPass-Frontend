@@ -52,6 +52,7 @@ const fetchTheaters = async () => {
             lng:lng,
             id:movie.id
         })
+        console.log("location theaters data called :-  ",response.data.data)
         setScheduledTheaters(response.data.data)
     } catch(err) {
         console.log("err",err)

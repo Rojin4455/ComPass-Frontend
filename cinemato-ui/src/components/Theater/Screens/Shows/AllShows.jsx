@@ -176,8 +176,9 @@ const AllShows = ({ screenId }) => {
     const handleShowTimeClick = async (theater, showTime, index, movie) => {
 
         const timeIndex = index.toString()+"0"
-        
+        console.log("screen detailssssssss123234: ",screenDetails)
         let screenName = screenDetails.screen.name
+        
         const allScreens = {
             [screenName] : times,
         }
@@ -188,7 +189,8 @@ const AllShows = ({ screenId }) => {
                 screen_name: screenName,
                 screen_time: showTime,
                 date: selectedDate,
-                movie_id:movie.id
+                movie_id:movie.id,
+                screen_id:screenDetails.screen.id,
 
             });
 

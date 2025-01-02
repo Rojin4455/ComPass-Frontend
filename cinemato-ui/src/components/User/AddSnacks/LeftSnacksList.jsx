@@ -73,105 +73,104 @@ function LeftSnacksList({ categories, snacks }) {
     
     return (
         <div className="flex flex-col items-center space-y-4">
-  <div className="flex items-center gap-2">
-    <h1 className="text-2xl font-semibold" style={{ fontFamily: "Montserrat" }}>
-      Grab a
-    </h1>
-    <h1
-      className="text-2xl font-semibold text-yellow-600"
-      style={{ fontFamily: "Montserrat" }}
-    >
-      Bite!
-    </h1>
-  </div>
-  <p className="text-sm text-gray-600 text-center">
-    Choose your favorite snacks
-  </p>
+    <div className="flex items-center gap-2">
+        <h1 style={{ fontFamily: "Montserrat" }} className="text-2xl font-semibold">
+            Grab a
+        </h1>
+        <h1 style={{ fontFamily: "Montserrat" }} className="text-2xl font-semibold text-yellow-600">
+            Bite!
+        </h1>
+    </div>
+    <p className="text-sm text-gray-600">Choose your favorite snacks</p>
 
-  <div className="flex flex-wrap justify-center space-x-2">
-    {categories.map((category, index) => (
-      <div
-        key={index}
-        className={`px-2 py-0.5 border border-gray-400 rounded-full cursor-pointer text-xs ${
-          category.name === selectedCategory
-            ? "bg-secondary text-gray-700"
-            : "text-gray-600 hover:bg-secondary hover:text-gray-600"
-        }`}
-        onClick={() => handleCategoryItems(category.id)}
-      >
-        {category.name}
-      </div>
-    ))}
-  </div>
-
-  <div className="overflow-y-auto h-96 w-full">
-    {selectedSnacks.length === 0 ? (
-      <div className="flex items-center justify-center h-full">
-        <p className="text-gray-500 text-md font-medium">
-          No snacks are available.
-        </p>
-      </div>
-    ) : (
-      <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
-        {selectedSnacks.map((snack, index) => {
-          const quantity = quantities[snack.id] || 0;
-          const isAdded = addedSnacks.some((s) => s.id === snack.id);
-
-          return (
+    <div className="flex space-x-2">
+        {categories.map((category, index) => (
             <div
-              key={index}
-              className="p-6 border rounded-lg flex items-center space-x-4 hover:shadow-lg transition-shadow duration-300 ease-in-out bg-white"
+                key={index}
+                className={`px-2 py-0.5 border border-gray-400 rounded-full cursor-pointer text-xs ${
+                    category.name === selectedCategory
+                        ? "bg-secondary text-gray-700"
+                        : "text-gray-600 hover:bg-secondary hover:text-gray-600"
+                }`}
+                onClick={() => handleCategoryItems(category.id)}
             >
-              <div className="w-16 h-16 bg-gray-100 rounded-lg flex-shrink-0 overflow-hidden">
-                <img
-                  src={snack.image_url}
-                  alt={`Snack ${index + 1}`}
-                  className="w-full h-full object-cover rounded-lg"
-                />
-              </div>
-
-              <div className="flex-1 overflow-hidden">
-                <h4 className="text-lg font-semibold text-gray-800 truncate">
-                  {snack.name}
-                </h4>
-                <p className="text-sm text-gray-500 truncate">
-                  {snack.description}
-                </p>
-                <p className="text-md font-bold text-gray-700 mt-1">
-                  ₹{parseFloat(snack.price).toFixed(2)}
-                </p>
-              </div>
-
-              {isAdded && quantity > 0 ? (
-                <div className="flex items-center space-x-2">
-                  <CiCircleMinus
-                    size={25}
-                    onClick={() => decrement(snack.id)}
-                    className="text-primary cursor-pointer"
-                  />
-                  <span className="text-md font-semibold text-gray-800">
-                    {quantity}
-                  </span>
-                  <CiCirclePlus
-                    size={25}
-                    onClick={() => increment(snack.id)}
-                    className="text-primary cursor-pointer"
-                  />
-                </div>
-              ) : (
-                <button
-                  onClick={() => handleAddClick(snack)}
-                  className="bg-white hover:bg-primary border hover:text-white border-primary text-primary text-sm font-semibold px-4 py-1 rounded-lg transition-colors duration-300 ease-in-out shadow-md"
-                >
-                  Add
-                </button>
-              )}
+                {category.name}
             </div>
-          );
-        })}
-      </div>
-    )}
-  </div>
+        ))}
+    </div>
+
+    <div className="overflow-y-auto h-96 w-full">
+        {selectedSnacks.length === 0 ? (
+            <div className="flex items-center justify-center h-full">
+                <p className="text-gray-500 text-md font-medium">No snacks are available.</p>
+            </div>
+        ) : (
+            <div
+                className="grid gap-4"
+                style={{
+                    gridTemplateColumns:
+                        "repeat(auto-fit, minmax(300px, 1fr))",
+                }}
+            >
+                {selectedSnacks.map((snack, index) => {
+                    const quantity = quantities[snack.id] || 0;
+                    const isAdded = addedSnacks.some((s) => s.id === snack.id);
+
+                    return (
+                        <div
+                            key={index}
+                            className="p-6 border rounded-lg flex items-center space-x-4 hover:shadow-lg transition-shadow duration-300 ease-in-out bg-white"
+                        >
+                            <div className="w-16 h-16 bg-gray-100 rounded-lg flex-shrink-0 overflow-hidden">
+                                <img
+                                    src={snack.image_url}
+                                    alt={`Snack ${index + 1}`}
+                                    className="w-full h-full object-cover rounded-lg"
+                                />
+                            </div>
+
+                            <div className="flex-1 overflow-hidden">
+                                <h4 className="text-lg font-semibold text-gray-800 truncate">
+                                    {snack.name}
+                                </h4>
+                                <p className="text-sm text-gray-500 truncate w-full overflow-hidden">
+                                    {snack.description}
+                                </p>
+                                <p className="text-md font-bold text-gray-700 mt-1">
+                                    ₹{parseFloat(snack.price).toFixed(2)}
+                                </p>
+                            </div>
+
+                            {isAdded && quantity > 0 ? (
+                                <div className="flex items-center space-x-2">
+                                    <CiCircleMinus
+                                        size={25}
+                                        onClick={() => decrement(snack.id)}
+                                        className="text-primary cursor-pointer"
+                                    />
+                                    <span className="text-md font-semibold text-gray-800">
+                                        {quantity}
+                                    </span>
+                                    <CiCirclePlus
+                                        size={25}
+                                        onClick={() => increment(snack.id)}
+                                        className="text-primary cursor-pointer"
+                                    />
+                                </div>
+                            ) : (
+                                <button
+                                    onClick={() => handleAddClick(snack)}
+                                    className="bg-white hover:bg-primary border hover:text-white border-primary text-primary text-sm font-semibold px-4 py-1 rounded-lg transition-colors duration-300 ease-in-out shadow-md"
+                                >
+                                    Add
+                                </button>
+                            )}
+                        </div>
+                    );
+                })}
+            </div>
+        )}
+    </div>
 </div>
 
     );

@@ -156,17 +156,18 @@ function SeatLayout() {
       </div>
     ));
   };
+  console.log("all screens", allScreens)
 
+  const handleShowTimeClick = async (showTime, index, screen, screenId) => {
 
-
-  const handleShowTimeClick = async (showTime, index, screen) => {
 
     try {
         const response = await axiosInstance.post('booking/seat-layout/', {
             theater_id: theaterId,
             screen_name: screen,
             screen_time: showTime,
-            date: formattedFrontendDate
+            date: formattedFrontendDate,
+            screen_id:screenId,
         });
 
         if (response.status === 200) {
@@ -255,7 +256,7 @@ const handleCheckout = async () => {
           times.map((timeSlot, index) => (
             <div
               key={index + screenIndex}
-              onClick={() => handleShowTimeClick(timeSlot[0], `${index}${screenIndex}`, screen)}
+              onClick={() => handleShowTimeClick(timeSlot[0], `${index}${screenIndex}`, screen, timeSlot[2])}
               className={`flex flex-col items-center p-2 rounded-md min-w-[80px] text-xs cursor-pointer transition-all duration-300 ease-in-out shadow-md ${
                 `${selectedTimeIndex}` === `${index}${screenIndex}`
                   ? "bg-secondary text-gray-700"

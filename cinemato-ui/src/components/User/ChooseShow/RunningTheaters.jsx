@@ -69,12 +69,14 @@ function RunningTheaters({ scheduledTheaters, dates, selectedDate }) {
     };
 
 
-    const handleShowTimeClick = async (theater, showTime, screenName, times, timeIndex, allScreens) => {
+    const handleShowTimeClick = async (theater, showTime, screenName, times, timeIndex, allScreens, showTimeOg) => {
+        console.log("running theaters user: ", showTimeOg)
         try {
             const response = await axiosInstance.post('booking/seat-layout/', {
                 theater_id: theater.id,
                 screen_name: screenName,
                 screen_time: showTime,
+                screen_id: showTimeOg.time[0][2],
                 date: formattedFrontendDate
             });
 
@@ -181,7 +183,8 @@ function RunningTheaters({ scheduledTheaters, dates, selectedDate }) {
                         screen,
                         theater.showtimes['time'],
                         `${timeIndex}${screnIndex}`,
-                        theater.showtimes.screen
+                        theater.showtimes.screen,
+                        theater.showtimes,
                     )
                 }
             >
