@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
 import { clearUser, setUser } from './slices/userSlice';
-import Cookies from 'js-cookie'; // You need this library to manage cookies
+import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
 import showToast from './utils/ToastNotifier';
 
@@ -16,15 +16,14 @@ const useAxiosInstance = () => {
   const navigate = useNavigate();
 
   const axiosInstance = axios.create({
-    baseURL: process.env.REACT_APP_BASE_API_URL,  
+    baseURL: process.env.REACT_APP_BASE_API_URL,
   });
 
 
 
   const getCsrfToken = () => {
-    return Cookies.get('csrftoken'); // This reads the csrftoken from cookies
+    return Cookies.get('csrftoken'); 
   };
-  // Request Interceptor
   axiosInstance.interceptors.request.use(
     (config) => {
       if (access_token) {

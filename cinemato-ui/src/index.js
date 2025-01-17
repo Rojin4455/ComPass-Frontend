@@ -23,7 +23,6 @@ root.render(
   <Elements stripe={stripePromise}>
     <PersistGate loading={null} persistor={persistor}>
       <App />
-      {/* <ToastNotifier/> */}
     </PersistGate>
     </Elements>
   </Provider>

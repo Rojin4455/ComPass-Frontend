@@ -160,7 +160,7 @@ function SeatLayout() {
 
   const handleShowTimeClick = async (showTime, index, screen, screenId) => {
 
-
+    
     try {
         const response = await axiosInstance.post('booking/seat-layout/', {
             theater_id: theaterId,

@@ -21,7 +21,6 @@ function AdminRoutes() {
   return (
     <Routes>
         <Route path={'/'} element={<AdminLogin/>}/>
-        
         <Route path={'/home/'} element={<AdminProtectedRoute><AdminHome/></AdminProtectedRoute>}/>
         <Route path={'/users/'} element={<AdminProtectedRoute><AdminUsers/></AdminProtectedRoute>}/>
         <Route path='/movies/' element={<AdminProtectedRoute><AdminMovies/></AdminProtectedRoute>}/>
