@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import 'tailwindcss/tailwind.css';
-import useAxiosInstance from '../../../../axiosConfig';
+// import useAxiosInstance from '../../../../axiosConfig';
+import useAxiosInstance from '../../../../axiosBaseConfig';
 // import GoogleButton from 'react-google-button';
 import { useEffect } from 'react';
 

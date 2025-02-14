@@ -52,7 +52,6 @@ function Banner({ movies }) {
       } else {
         console.error("Error response", trailersResponse);
       }
-
     } catch (err) {
       console.error("something went wrong in trailer", err);
     }

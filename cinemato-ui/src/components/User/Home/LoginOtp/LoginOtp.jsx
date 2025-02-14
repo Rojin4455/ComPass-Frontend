@@ -88,9 +88,6 @@ function LoginOtp({ isOpen, onClose, onSubmit, email, phone }) {
 
 
 
-                
-
-                
 
                 // onClose();
             } else {
