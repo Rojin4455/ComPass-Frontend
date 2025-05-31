@@ -69,7 +69,7 @@ function LeftSnacksList({ categories, snacks }) {
             }));
         }
     };
-
+    console.log("categoru id in drerere: ", categories)
     
     return (
         <div className="flex flex-col items-center space-y-4">
@@ -86,7 +86,7 @@ function LeftSnacksList({ categories, snacks }) {
     <div className="flex space-x-2">
         {categories.map((category, index) => (
             <div
-                key={index}
+                key={index+categories.id}
                 className={`px-2 py-0.5 border border-gray-400 rounded-full cursor-pointer text-xs ${
                     category.name === selectedCategory
                         ? "bg-secondary text-gray-700"
