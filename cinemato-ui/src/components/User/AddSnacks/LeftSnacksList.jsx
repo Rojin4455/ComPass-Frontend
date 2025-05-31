@@ -24,7 +24,7 @@ function LeftSnacksList({ categories, snacks }) {
         } else {
             const snackItems = snacks.filter((snack) => snack.category.id === catId)
             setSelectedSnacks(snackItems)
-            const cat = categories.filter((category) => category.id === catId)
+            const cat = uniqueCategories.filter((category) => category.id === catId)
             setSelectedCategory(cat[0].name)
         }
     }
@@ -70,6 +70,9 @@ function LeftSnacksList({ categories, snacks }) {
         }
     };
     console.log("categoru id in drerere: ", categories)
+    const uniqueCategories = Array.from(
+        new Map(categories.map(cat => [cat.id, cat])).values()
+      );
     
     return (
         <div className="flex flex-col items-center space-y-4">
@@ -84,9 +87,9 @@ function LeftSnacksList({ categories, snacks }) {
     <p className="text-sm text-gray-600">Choose your favorite snacks</p>
 
     <div className="flex space-x-2">
-        {categories.map((category, index) => (
+        {uniqueCategories.map((category, index) => (
             <div
-                key={index+categories.id}
+                key={index}
                 className={`px-2 py-0.5 border border-gray-400 rounded-full cursor-pointer text-xs ${
                     category.name === selectedCategory
                         ? "bg-secondary text-gray-700"
