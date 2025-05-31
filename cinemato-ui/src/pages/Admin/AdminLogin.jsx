@@ -114,9 +114,9 @@ function AdminLogin() {
       <div className="relative z-10 flex justify-center items-center h-full">
         <div className="bg-white rounded-lg shadow-lg p-8 w-full max-w-md min-h-[500px]">
           {/* Logo */}
-          <div className="flex justify-center mb-6">
+          {/* <div className="flex justify-center mb-6">
             <img src="../assets/logo-new1.png" alt="Logo" className="h-8 w-auto" />
-          </div>
+          </div> */}
           <div>
           <h2 className="text-xl font-bold mb-2 text-center mt-8">Verify Your Information</h2>
           <p className="mb-4 text-center text-sm">Login to your admin account</p>

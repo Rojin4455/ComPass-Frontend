@@ -71,9 +71,11 @@ function LoginOtp({ isOpen, onClose, onSubmit, email, phone }) {
 
       useEffect(() => {
         const getSubscription = async () => {
+            if(user){
           const subscriptionData = await fetchActiveSubscription();
           console.log("subscriptionssss: login", subscriptionData);
           dispatch(setUser({ subscription: subscriptionData }));
+            }
         };
     
         getSubscription();
