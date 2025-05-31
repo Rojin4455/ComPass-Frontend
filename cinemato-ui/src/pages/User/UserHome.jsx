@@ -82,7 +82,17 @@ function UserHome() {
     
   // },[location.display, location.lat,location.lng])
   
-
+  const fetchActiveSubscription = async () => {
+    try {
+      const response = await axiosInstance.get('subscription/active/');
+      console.log("active plans: ", response.data);
+      return response.data
+    } catch (error) {
+      console.error("Failed to fetch active subscription:", error);
+    }
+  };
+  
+  
 
 
   useEffect(() => {
@@ -101,7 +111,9 @@ function UserHome() {
           const refresh_token = token.refresh;
           const is_user = true
 
-          dispatch(setUser({ user, access_token, refresh_token,is_user, is_admin:false, is_owner:false }));
+          const subscription = fetchActiveSubscription()
+
+          dispatch(setUser({ user, access_token, refresh_token,is_user, is_admin:false, is_owner:false, subscription:subscription }));
 
           window.history.replaceState({}, document.title, window.location.pathname);
         } else {

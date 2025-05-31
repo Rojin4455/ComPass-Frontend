@@ -57,6 +57,30 @@ function LoginOtp({ isOpen, onClose, onSubmit, email, phone }) {
     //         }
     //     }
     // };
+
+    const fetchActiveSubscription = async () => {
+        try {
+          const response = await axiosInstance.get('subscription/active/');
+          console.log("active plans: ", response.data);
+          return response.data
+        } catch (error) {
+          console.error("Failed to fetch active subscription:", error);
+        }
+      };
+
+
+      useEffect(() => {
+        const getSubscription = async () => {
+          const subscriptionData = await fetchActiveSubscription();
+          console.log("subscriptionssss: login", subscriptionData);
+          dispatch(setUser({ subscription: subscriptionData }));
+        };
+    
+        getSubscription();
+      }, [user])
+      
+      
+
     const afterSubmit = async () => {
         
         try {
@@ -81,6 +105,8 @@ function LoginOtp({ isOpen, onClose, onSubmit, email, phone }) {
                 const is_user = true
                 const is_admin = false
                 const is_owner = false
+                
+
                 dispatch(setUser({user,access_token,refresh_token,is_user, is_admin, is_owner}))
                 showToast("success","OTP verification success");
                 onClose();

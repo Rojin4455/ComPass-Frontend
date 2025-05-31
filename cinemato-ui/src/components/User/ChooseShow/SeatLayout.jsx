@@ -18,7 +18,14 @@ import { MdOutlineEdit } from "react-icons/md";
 function SeatLayout() {
   const location = useLocation()
   const dispatch = useDispatch()
+  const {subscription} = useSelector((state) => state.user)
+  console.log("subscription in selected seats: ", subscription)
+  // const { subscription } = useSelector((state) => state.user);
 
+
+
+
+  
   const [seatData,setSeatData] = useState(location.state.seats)
 
   // const selectedTimeIndex = location.state.selectedTimeIndex
@@ -112,6 +119,12 @@ function SeatLayout() {
   
       dispatch(setBooking({selectedSeats:linearSeats}))
   };
+
+
+
+
+
+
 
   
 
@@ -233,8 +246,47 @@ const handleCheckout = async () => {
 
 }
 
+const isSubscriptionValidToday = (subscription) => {
+  console.log("subbbb: ", subscription)
+  if (!subscription || subscription.status !== "ACTIVE") return false;
+
+  const today = new Date();
+  const endDate = new Date(subscription.end_date);
+
+  if (today > endDate) return false;
+
+  const dayOfWeek = today.toLocaleDateString("en-US", { weekday: "short" }).toUpperCase();
+  const validDays = subscription.plan.valid_days;
+
+  return validDays.includes("ALL") || validDays.includes(dayOfWeek);
+};
 
 
+
+const isValidSubscription = isSubscriptionValidToday(subscription);
+const totalSeats = selectedSeats.length;
+const ticketPrice = parseFloat(selectedSeats[0]?.seat.tier_price || 0);
+const convenienceFeeRate = 0.05;
+
+let discountAmount = 0;
+
+if (isValidSubscription) {
+  const discountLimit = Math.min(
+    totalSeats,
+    subscription.plan.daily_ticket_limit
+  );
+  const perTicketDiscount = parseFloat(subscription.plan.max_discount_per_ticket);
+  discountAmount = discountLimit * perTicketDiscount;
+}
+
+console.log("sub is valid: ", isValidSubscription)
+
+const baseTotal = totalSeats * ticketPrice;
+console.log("base prive: ", baseTotal)
+const convenienceFee = baseTotal * convenienceFeeRate;
+console.log("cnveniance ", convenienceFee)
+const grandTotal = baseTotal + convenienceFee - discountAmount;
+console.log("grand prive: ", grandTotal)
 
   return (
 <div className="container mx-auto sm:p-4 flex flex-col lg:flex-row gap-4">
@@ -381,24 +433,40 @@ const handleCheckout = async () => {
         <div className="border-t border-gray-300 mb-4"></div>
 
         <div>
-          <h5 className="text-sm font-semibold text-gray-700 mb-2">Tickets</h5>
-          <div className="flex justify-between text-xs text-gray-500 mb-2">
-            <p>{selectedSeats.length} x {selectedSeats[0].seat.tier_price}</p>
-            <p className="font-semibold text-gray-800">
-              Total: ₹{selectedSeats.length * parseInt(selectedSeats[0].seat.tier_price)}
-            </p>
-          </div>
-        </div>
+  <h5 className="text-sm font-semibold text-gray-700 mb-2">Tickets</h5>
+  <div className="flex justify-between text-xs text-gray-500 mb-2">
+  <p>{totalSeats} x ₹{ticketPrice}</p>
+  <p className="font-semibold text-gray-800">
+    Total: ₹{baseTotal.toFixed(2)}
+  </p>
+</div>
+
+  {/* Convenience Fee Calculation */}
+  <div className="flex justify-between text-xs text-gray-500 mb-2">
+  <p>Convenience Fee (5%)</p>
+  <p className="font-semibold text-gray-800">
+    ₹{convenienceFee.toFixed(2)}
+  </p>
+</div>
+
+{isValidSubscription && (
+  <div className="flex justify-between text-xs text-green-600 mb-2">
+    <p>Compass Discount</p>
+    <p className="font-semibold">- ₹{discountAmount.toFixed(2)}</p>
+  </div>
+)}
+</div>
+
 
         <div className="mt-6">
           <div className="border-t border-gray-300 mb-4"></div>
-
           <div className="flex justify-between items-center mb-4">
-            <p className="text-base font-semibold text-gray-700">Grand Total</p>
-            <p className="text-base font-semibold text-gray-800">
-              ₹{(selectedSeats.length * selectedSeats[0].seat.tier_price).toFixed(2)}
-            </p>
-          </div>
+  <p className="text-base font-semibold text-gray-700">Grand Total</p>
+  <p className="text-base font-semibold text-gray-800">
+    ₹{grandTotal.toFixed(2)}
+  </p>
+</div>
+
 
           <button
             className="w-full bg-primary hover:bg-primaryhover text-white font-semibold py-2 rounded-md transition duration-300"

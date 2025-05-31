@@ -11,6 +11,7 @@ const initialState = {
     is_admin: null,
     is_user:null,
     is_owner:null,
+    subscription:null,
 };
 
 const userSlice = createSlice({
@@ -26,6 +27,7 @@ const userSlice = createSlice({
             state.is_admin = action.payload.is_admin || state.is_admin;
             state.is_user = action.payload.is_user || state.is_user;
             state.is_owner = action.payload.is_owner || state.is_owner;
+            state.subscription = action.payload.subscription || state.subscription;
             
         },
         clearUser: (state) => {
@@ -37,6 +39,7 @@ const userSlice = createSlice({
             state.is_admin = null
             state.is_user = null
             state.is_owner = null
+            state.subscription=null
         },
         setLoading: (state) => {
             state.status = 'loading';

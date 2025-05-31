@@ -11,6 +11,7 @@ import { useDispatch } from 'react-redux'
 import useAxiosInstance from '../../axiosConfig'
 import { setUser } from '../../slices/userSlice'
 import MyBookings from '../../components/User/Profile/SidebarDetails/Bookings/MyBookings'
+import Hi5Subscription from '../../components/User/Profile/SidebarDetails/ProfileDetails/Hi5Subscription'
 
 
 function UserProfile() {
@@ -51,6 +52,8 @@ function UserProfile() {
           return <ProfileEdit />;
       case "myBookings":
           return <MyBookings />;
+      case "hi5pass":
+            return <Hi5Subscription />;
       default:
         return <div>Select an option from the sidebar</div>;
     }

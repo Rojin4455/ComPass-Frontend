@@ -1,6 +1,6 @@
 import React,{useState} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { IoPerson, IoNotifications, IoLogOut } from "react-icons/io5";
+import { IoPerson, IoNotifications, IoLogOut, IoTicket } from "react-icons/io5";
 import { setContent } from '../../../../slices/userProfileSlice';
 import { RiMovie2Fill } from "react-icons/ri";
 
@@ -47,11 +47,11 @@ function Sidebar() {
                 </li>
                 <li className='cursor-pointer'>
                     <div
-                        className={getClassNames('movieAlerts')}
-                        onClick={() => dispatch(setContent({ content: 'movieAlerts' }))}
+                        className={getClassNames('hi5pass')}
+                        onClick={() => dispatch(setContent({ content: 'hi5pass' }))}
                     >
-                        <IoNotifications className="mr-2" />
-                        Movie Alerts
+                        <IoTicket className="mr-2" />
+                        ComPas Pass
                     </div>
                 </li>
                 <li className='cursor-pointer'>

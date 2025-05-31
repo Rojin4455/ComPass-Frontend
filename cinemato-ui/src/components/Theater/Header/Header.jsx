@@ -98,16 +98,16 @@ function Header(props) {
         </div>
 
         {/* Center: Logo */}
-        <div className=" flex-col">
+        {/* <div className=" flex-col">
             <img
-              src="/assets/logo-new1.png"
+              src="/assets/hi5_logo.jpg"
               alt="Logo"
               className="w-40"
             />
             <div className='flex justify-end'>
             <p className='text-xs text-secondary font-serif'>Owner Side</p>
             </div>
-        </div>
+        </div> */}
 
         {/* Right side: Admin Profile */}
         <div className="relative flex items-center gap-4">

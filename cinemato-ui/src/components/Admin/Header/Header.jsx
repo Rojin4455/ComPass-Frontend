@@ -96,13 +96,13 @@ function Header(props) {
         </div>
 
         {/* Center: Logo */}
-        <div className="flex-grow flex justify-center items-center">
+        {/* <div className="flex-grow flex justify-center items-center">
             <img
               src="../../assets/logo-adminside.png"
               alt="Logo"
               className="w-40"
             />
-          </div>
+          </div> */}
 
         {/* Right side: Admin Profile */}
         <div className="relative flex items-center gap-4">

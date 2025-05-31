@@ -157,12 +157,12 @@ function Header({page}) {
 
       <div className="flex-grow flex justify-center items-center"
       >
-  <img
-    src="/assets/logo-new1.png"
+  {/* <img
+    src="/assets/hi5_logo.jpg"
     alt="Logo"
-    className="h-6 sm:h-5 lg:h-10 object-contain"
+    className="h-10 sm:h-8 lg:h-12 object-contain"
     onClick={handleClick}
-  />
+  /> */}
 </div>
 
 
