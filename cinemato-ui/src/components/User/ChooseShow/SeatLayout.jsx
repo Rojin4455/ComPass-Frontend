@@ -452,7 +452,7 @@ console.log("grand prive: ", grandTotal)
 
 {isValidSubscription && (
   <div className="flex justify-between text-xs text-green-600 mb-2">
-    <p>Compas Discount</p>
+    <p>Compas Fare</p>
     <p className="font-semibold">- ₹{discountAmount.toFixed(2)}</p>
   </div>
 )}
@@ -460,7 +460,7 @@ console.log("grand prive: ", grandTotal)
 
 {isValidSubscription && (
   <div className="flex justify-between text-xs text-green-600 mb-2">
-    <p>Merchant Discount</p>
+    <p>Compas Discount</p>
     <p className="font-semibold">- ₹{merchantDiscount.toFixed(2)}</p>
   </div>
 )}

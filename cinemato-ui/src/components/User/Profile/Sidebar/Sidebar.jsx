@@ -51,7 +51,7 @@ function Sidebar() {
                         onClick={() => dispatch(setContent({ content: 'hi5pass' }))}
                     >
                         <IoTicket className="mr-2" />
-                        ComPas Pass
+                        ComPas - Commercial Pass
                     </div>
                 </li>
                 <li className='cursor-pointer'>
