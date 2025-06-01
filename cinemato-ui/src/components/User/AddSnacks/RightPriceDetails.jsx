@@ -52,15 +52,18 @@ function RightPriceDetails({ movie, isPayment }) {
   };
 
   const getSubscriptionDiscount = (subscription, seatCount) => {
-    if (!isSubscriptionActive(subscription)) return 0;
-
+    if (!isSubscriptionActive(subscription)) return { discount: 0, merchantDiscount: 0 };
+  
     const {
       daily_ticket_limit,
       max_discount_per_ticket
     } = subscription.plan;
-
+  
     const eligibleTickets = Math.min(daily_ticket_limit, seatCount);
-    return eligibleTickets * parseFloat(max_discount_per_ticket);
+    return {
+      discount: eligibleTickets * parseFloat(max_discount_per_ticket),
+      merchantDiscount: eligibleTickets * 89
+    };
   };
 
   // Totals
@@ -68,8 +71,9 @@ function RightPriceDetails({ movie, isPayment }) {
   const seatTotal = selectedSeats.length * seatPrice;
   const convenienceFee = seatTotal * 0.05;
   const snacksTotal = addedSnacks.reduce((total, snack) => total + (quantities[snack.id] * parseFloat(snack.price)), 0);
-  const discount = getSubscriptionDiscount(subscription, selectedSeats.length);
-  const grandTotal = seatTotal + convenienceFee + snacksTotal - discount;
+  const {discount,merchantDiscount} = getSubscriptionDiscount(subscription, selectedSeats.length);
+  
+  const grandTotal = seatTotal + convenienceFee + snacksTotal - discount - merchantDiscount;
 
   return (
     <div className="border p-6 rounded-lg shadow-md bg-white">
@@ -155,6 +159,13 @@ function RightPriceDetails({ movie, isPayment }) {
           <div className="flex justify-between text-xs text-green-700 font-semibold mt-4 mb-2">
             <p>Compass Discount</p>
             <p>- ₹{discount.toFixed(2)}</p>
+          </div>
+        )}
+
+{merchantDiscount > 0 && (
+          <div className="flex justify-between text-xs text-green-700 font-semibold mt-4 mb-2">
+            <p>Merchant Discount</p>
+            <p>- ₹{merchantDiscount.toFixed(2)}</p>
           </div>
         )}
 

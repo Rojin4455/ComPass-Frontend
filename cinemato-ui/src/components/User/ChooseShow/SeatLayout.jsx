@@ -269,7 +269,7 @@ const ticketPrice = parseFloat(selectedSeats[0]?.seat.tier_price || 0);
 const convenienceFeeRate = 0.05;
 
 let discountAmount = 0;
-
+let merchantDiscount = 0
 if (isValidSubscription) {
   const discountLimit = Math.min(
     totalSeats,
@@ -277,6 +277,7 @@ if (isValidSubscription) {
   );
   const perTicketDiscount = parseFloat(subscription.plan.max_discount_per_ticket);
   discountAmount = discountLimit * perTicketDiscount;
+  merchantDiscount = discountLimit * 89
 }
 
 console.log("sub is valid: ", isValidSubscription)
@@ -285,7 +286,7 @@ const baseTotal = totalSeats * ticketPrice;
 console.log("base prive: ", baseTotal)
 const convenienceFee = baseTotal * convenienceFeeRate;
 console.log("cnveniance ", convenienceFee)
-const grandTotal = baseTotal + convenienceFee - discountAmount;
+const grandTotal = baseTotal + convenienceFee - discountAmount - merchantDiscount;
 console.log("grand prive: ", grandTotal)
 
   return (
@@ -453,6 +454,14 @@ console.log("grand prive: ", grandTotal)
   <div className="flex justify-between text-xs text-green-600 mb-2">
     <p>Compass Discount</p>
     <p className="font-semibold">- ₹{discountAmount.toFixed(2)}</p>
+  </div>
+)}
+
+
+{isValidSubscription && (
+  <div className="flex justify-between text-xs text-green-600 mb-2">
+    <p>Merchant Discount</p>
+    <p className="font-semibold">- ₹{merchantDiscount.toFixed(2)}</p>
   </div>
 )}
 </div>
