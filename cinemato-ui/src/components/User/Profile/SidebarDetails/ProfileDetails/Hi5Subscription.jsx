@@ -263,7 +263,8 @@ const SubscriptionPlans = () => {
                       <CheckCircle className="h-4 w-4 text-green-600" />
                     </div>
                     <div>
-                      <p className="font-medium text-gray-900">₹{selectedPlan.max_discount_per_ticket} Discount</p>
+                      {/* <p className="font-medium text-gray-900">₹{selectedPlan.max_discount_per_ticket} Discount</p> */}
+                      <p className="font-medium text-gray-900">₹89 Discount</p>
                       <p className="text-sm text-gray-600">per ticket</p>
                     </div>
                   </div>
