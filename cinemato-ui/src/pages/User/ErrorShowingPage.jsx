@@ -99,7 +99,7 @@ const ErrorShowingPage = () => {
       </div>
 
       {/* Footer Text */}
-      <p className="text-xs">© 2024 Cinemato. All rights reserved.</p>
+      <p className="text-xs">© 2024 ComPas. All rights reserved.</p>
     </div>
   </footer>
 </div>

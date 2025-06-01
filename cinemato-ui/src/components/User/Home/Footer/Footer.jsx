@@ -77,7 +77,7 @@ const Footer = () => {
 
       {/* Bottom Section */}
       <div className="bg-gray-800 text-gray-500 text-sm text-center py-4">
-        <p>&copy; {new Date().getFullYear()} Cinemato. All rights reserved.</p>
+        <p>&copy; {new Date().getFullYear()} ComPas. All rights reserved.</p>
       </div>
     </footer>
   );

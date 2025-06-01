@@ -88,7 +88,7 @@ const ReviewBase = () => {
                       user: response.data.userReview.user?.email
                         ? response.data.userReview.user.email.split("@")[0]
                         : "Anonymous User",
-                      platform: "cinemato",
+                      platform: "compas",
                       rating: parseFloat(response.data.userReview.rating),
                       hashtags: response.data.userReview.hashtags.map(
                         (hashtag) => `#${hashtag.heading}`
@@ -109,7 +109,7 @@ const ReviewBase = () => {
                   user: review.user?.email
                     ? review.user.email.split("@")[0]
                     : "Anonymous User",
-                  platform: "cinemato",
+                  platform: "compas",
                   rating: parseFloat(review.rating),
                   hashtags: review.hashtags.map((hashtag) => `#${hashtag.heading}`),
                   content: review.content || "No review content provided",
