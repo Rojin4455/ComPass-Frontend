@@ -264,7 +264,7 @@ const SubscriptionPlans = () => {
                     </div>
                     <div>
                       {/* <p className="font-medium text-gray-900">₹{selectedPlan.max_discount_per_ticket} Discount</p> */}
-                      <p className="font-medium text-gray-900">₹89 Discount</p>
+                      <p className="font-medium text-gray-900">Upto ₹89 Discount</p>
                       <p className="text-sm text-gray-600">per ticket</p>
                     </div>
                   </div>
