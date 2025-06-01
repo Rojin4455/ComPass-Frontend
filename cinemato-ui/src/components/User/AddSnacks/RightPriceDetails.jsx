@@ -157,7 +157,7 @@ function RightPriceDetails({ movie, isPayment }) {
 
         {discount > 0 && (
           <div className="flex justify-between text-xs text-green-700 font-semibold mt-4 mb-2">
-            <p>Compass Discount</p>
+            <p>Compas Discount</p>
             <p>- ₹{discount.toFixed(2)}</p>
           </div>
         )}
